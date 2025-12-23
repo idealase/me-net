@@ -28,6 +28,13 @@ export default defineConfig({
         'src/components/graph/edges.ts',
         'src/components/graph/legend.ts',
         'src/components/graph/index.ts',
+        // UI form components - render HTML and bind events, tested via integration/E2E
+        'src/components/forms/BehaviourForm.ts',
+        'src/components/forms/OutcomeForm.ts',
+        'src/components/forms/ValueForm.ts',
+        'src/components/forms/LinkForm.ts',
+        'src/components/forms/NodeDetailPanel.ts',
+        'src/components/forms/index.ts',
       ],
       thresholds: {
         statements: 80,
