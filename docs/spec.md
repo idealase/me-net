@@ -3,6 +3,10 @@
 > **Version:** MVP  
 > **Last updated:** 2025-12-23
 
+**Status:** MVP shipped; capture, validation, insights, and export implemented per this spec.
+
+**Quick Start:** See [docs/quick-start.md](docs/quick-start.md) to install, run, and model your first network.
+
 ---
 
 ## 1. Purpose
@@ -38,7 +42,7 @@ The network is **not a tree**:
 
 ---
 
-## 4. Functional Requirements
+## 4. Functional Requirements (Implemented)
 
 ### 4.1 Capture & Edit (CRUD)
 
@@ -51,6 +55,7 @@ The network is **not a tree**:
 | C-5 | User can **edit** any entity's attributes. |
 | C-6 | User can **delete** any entity; deleting a node removes its incident links. |
 | C-7 | The app prevents duplicate labels within the same entity type (case-insensitive). |
+| C-8 | Data persists locally between sessions (localStorage JSON). |
 
 ### 4.2 "Why Ladder" Capture Mode
 
@@ -62,6 +67,7 @@ The network is **not a tree**:
 | W-4 | User can respond with an existing Value, a new Value, or another Outcome (intermediate). |
 | W-5 | User can stop the ladder at any point; incomplete ladders are saved with nodes flagged as *unexplained*. |
 | W-6 | The ladder flow supports adding multiple Outcomes per Behaviour and multiple Values per Outcome. |
+| W-7 | Ladder supports inline creation of Outcomes/Values and links them immediately. |
 
 ### 4.3 Validation & Diagnostics
 
@@ -86,7 +92,7 @@ The network is **not a tree**:
 | VZ-5 | Clicking a node opens a **detail panel** showing attributes and connected neighbours. |
 | VZ-6 | User can **filter** the view by node type (Behaviour / Outcome / Value). |
 | VZ-7 | User can **search** nodes by label substring. |
-| VZ-8 | User can toggle a **"highlight high-leverage behaviours"** mode. |
+| VZ-8 | User can toggle **highlight modes**: high-leverage behaviours, fragile values, or conflicts. |
 | VZ-9 | A **legend** explains node shapes, edge colours, and encoding rules. |
 
 ### 4.5 Insights
@@ -107,6 +113,7 @@ The network is **not a tree**:
 | E-1 | User can export the **full network** to a portable data file. The format must preserve all entities and attributes, be human-readable, and support re-import. |
 | E-2 | User can export a **summary report** containing: top leverage behaviours, orphan values, conflict behaviours, and suggested next modelling steps. |
 | E-3 | Exported files include a timestamp and version identifier. |
+| E-4 | Importing a network replaces the current in-memory network (user-confirmed). |
 
 ---
 
@@ -127,10 +134,21 @@ The network is **not a tree**:
 
 | Aspect | Decision | Rationale |
 |--------|----------|----------|
-| **Platform** | Web application | Accessible, no installation, works offline via Service Worker. |
+| **Platform** | Web application | Accessible, no installation, works offline. |
 | **Data Persistence** | JSON in localStorage | Simple, human-readable, portable, no backend required. |
 | **Visualisation** | D3.js | Industry-standard, flexible, well-documented, supports custom layouts. |
 | **Thresholds** | Fixed defaults | Reduces complexity; tuning deferred to v1. |
+
+---
+
+## 5.2 Implementation Notes
+
+- **Data integrity:** Duplicate labels blocked per type; single link per (source, target); deleting a node cascades to its links.
+- **Persistence:** Network state and warning state persist in localStorage; import/export uses the same JSON shape.
+- **Validation UI:** Warnings can be snoozed or dismissed; warning types map to [src/validation](../src/validation).
+- **Insights UI:** Leverage, fragility, and conflict surface in the Insights panel with ranked lists and explanations.
+- **Filters:** Search, node/edge toggles, and highlight modes update the D3 rendering in real time.
+- **Accessibility:** Keyboard navigation for forms, Escape-to-clear search, focus rings on nodes, and ARIA labels on primary controls.
 
 ---
 

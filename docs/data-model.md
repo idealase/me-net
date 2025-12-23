@@ -38,7 +38,7 @@ A **Behaviour** is a concrete, repeatable action the user performs.
 | `id` | Unique identifier | Yes | Stable reference across sessions. |
 | `label` | Text (≤ 100 chars) | Yes | Human-readable name. Must be unique among Behaviours (case-insensitive). |
 | `frequency` | Enum or free text | Yes | How often the behaviour occurs. Suggested enum: `daily`, `weekly`, `monthly`, `occasionally`, `rarely`. Free text allowed. |
-| `cost` | Enum | Yes | Perceived effort/friction. Suggested enum: `trivial`, `low`, `medium`, `high`, `very high`. |
+| `cost` | Enum | Yes | Perceived effort/friction. Enum: `trivial`, `low`, `medium`, `high`, `very-high`. |
 | `contextTags` | List of text | No | Optional tags for filtering (e.g., "morning", "work", "social"). |
 | `notes` | Text | No | Free-form notes. |
 | `createdAt` | Timestamp | Yes | Auto-set on creation. |
@@ -55,6 +55,8 @@ A **Behaviour** is a concrete, repeatable action the user performs.
   notes: "After dinner, around the neighbourhood."
 }
 ```
+
+**Enum storage:** All enums are stored as lowercase tokens; multi-word values use hyphens (e.g., `very-high`, `somewhat-neglected`). UI labels may differ for readability.
 
 ---
 
@@ -89,8 +91,8 @@ A **Value** is a higher-order motivation that feels non-instrumental—a termina
 |-----------|------|----------|-------------|
 | `id` | Unique identifier | Yes | Stable reference. |
 | `label` | Text (≤ 100 chars) | Yes | Human-readable name. Must be unique among Values (case-insensitive). |
-| `importance` | Enum | Yes | How important this value is in practice. Suggested enum: `critical`, `high`, `medium`, `low`. |
-| `neglect` | Enum | Yes | How unmet/neglected this value currently feels. Suggested enum: `severely neglected`, `somewhat neglected`, `adequately met`, `well satisfied`. |
+| `importance` | Enum | Yes | How important this value is in practice. Enum: `critical`, `high`, `medium`, `low`. |
+| `neglect` | Enum | Yes | How unmet/neglected this value currently feels. Enum: `severely-neglected`, `somewhat-neglected`, `adequately-met`, `well-satisfied`. |
 | `notes` | Text | No | Clarification or personal meaning. |
 | `createdAt` | Timestamp | Yes | Auto-set on creation. |
 | `updatedAt` | Timestamp | Yes | Auto-set on any edit. |
@@ -101,7 +103,7 @@ A **Value** is a higher-order motivation that feels non-instrumental—a termina
   id: "v-001",
   label: "Peace of mind",
   importance: "high",
-  neglect: "somewhat neglected",
+  neglect: "somewhat-neglected",
   notes: "Feeling calm and in control."
 }
 ```
@@ -271,10 +273,10 @@ Below is a sample network expressed in a portable text format for illustration.
 ### Values
 | id | label | importance | neglect |
 |----|-------|------------|---------|
-| v-001 | Peace of mind | high | somewhat neglected |
-| v-002 | Health | critical | adequately met |
-| v-003 | Energy | high | somewhat neglected |
-| v-004 | Achievement | medium | adequately met |
+| v-001 | Peace of mind | high | somewhat-neglected |
+| v-002 | Health | critical | adequately-met |
+| v-003 | Energy | high | somewhat-neglected |
+| v-004 | Achievement | medium | adequately-met |
 
 ### Links (Behaviour → Outcome)
 | sourceId | targetId | valence | reliability |

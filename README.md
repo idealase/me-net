@@ -36,8 +36,9 @@ Behaviours produce Outcomes; Outcomes serve Values. Links can be **positive** (h
 2. **"Why Ladder" mode** — Guided prompts to walk from a Behaviour → Outcomes → Values.
 3. **Network Validation** — Surface warnings for orphan values, unexplained behaviours, or contradictory links.
 4. **Interactive Visualisation** — Explore the network graph with filters, search, and node details.
-5. **Insights Dashboard** — View leverage scores, fragile values, and conflict behaviours.
-6. **Export** — Save the network and generate a summary report.
+5. **Insights Dashboard** — View leverage scores, fragile values (including orphans), and conflict behaviours with explanations.
+6. **Filter & Highlight** — Search, toggle node/edge types, and highlight high leverage, fragile values, or conflicts.
+7. **Export/Import** — Save the network (JSON) or summary report; import replaces the in-memory network.
 
 ---
 
@@ -52,6 +53,7 @@ Behaviours produce Outcomes; Outcomes serve Values. Links can be **positive** (h
 | [Metrics & Insights](docs/metrics-and-insights.md) | Algorithms for leverage, fragility, conflict. |
 | [Backlog](docs/backlog.md) | Phased roadmap: MVP → v1 → v2. |
 | [Glossary](docs/glossary.md) | Canonical definitions for all terms. |
+| [Quick Start](docs/quick-start.md) | Install, run, and model your first network. |
 
 ---
 
@@ -77,7 +79,20 @@ Behaviours produce Outcomes; Outcomes serve Values. Links can be **positive** (h
 
 ## Getting Started
 
-> *Detailed setup instructions to be added during implementation.*
+1. Install dependencies:
+	```bash
+	npm install
+	```
+2. Run locally (Vite dev server):
+	```bash
+	npm run dev
+	```
+	Open the printed URL (default http://localhost:5173).
+3. In the app: add your first Behaviour (or use **Why Ladder** for guidance), link Outcomes and Values, and explore the graph.
+4. Open **Insights** for leverage/fragility/conflicts; open **Validation** to resolve warnings.
+5. Export JSON or a summary report; import restores a saved network.
+
+See [docs/quick-start.md](docs/quick-start.md) for a fuller walkthrough and commands for tests/lint/typecheck.
 
 ---
 

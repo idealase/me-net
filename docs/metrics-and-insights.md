@@ -240,11 +240,7 @@ $$
 \text{ConflictIndex}(B) = \min(\text{PositiveInfluence}(B), \text{NegativeInfluence}(B))
 $$
 
-Alternative (geometric mean):
-
-$$
-\text{ConflictIndex}(B) = \sqrt{\text{PositiveInfluence}(B) \times \text{NegativeInfluence}(B)}
-$$
+Implementation uses the **minimum** formulation to reflect the weaker side of the trade-off.
 
 ### 6.3 Interpretation
 
@@ -293,7 +289,7 @@ MVP uses **fixed thresholds** (not user-configurable). User tuning deferred to v
 
 | Metric | Threshold | Use |
 |--------|-----------|-----|
-| **High leverage** | Top 5 or top 25% (whichever is smaller) | Highlight in insights panel |
+| **High leverage** | Top 5 (positive leverage only) | Highlight in insights panel |
 | **Fragile value** | Fragility > 3.0 | Flag with warning |
 | **Conflict behaviour (Value-level)** | ConflictIndex > 0.5 | Flag with warning |
 | **Conflict behaviour (Outcome-level)** | Any negative Behaviour→Outcome link | Flag with warning |

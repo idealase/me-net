@@ -3,6 +3,8 @@
 > **Version:** MVP  
 > **Last updated:** 2025-12-23
 
+**Status:** Core MVP shipped on 2025-12-23. Items below for v1/v2 are retained as future ideas; they are not scheduled.
+
 This document defines the **phased product backlog** for M-E Net. Each phase represents a coherent release milestone with clear scope boundaries.
 
 ---
