@@ -23,7 +23,7 @@ These are derived from the network structure, link attributes, and node attribut
 
 ## 2. Numeric Mappings
 
-To compute scores, qualitative attributes must be mapped to numeric values. The mappings below are **illustrative defaults**; implementers may tune or expose them as settings.
+To compute scores, qualitative attributes must be mapped to numeric values. The mappings below are **fixed defaults for MVP**. User-configurable thresholds are deferred to v1.
 
 ### 2.1 Link Reliability (Behaviour → Outcome)
 
@@ -289,13 +289,14 @@ $$
 
 ## 8. Thresholds & Defaults
 
-MVP uses **fixed thresholds**; post-MVP may allow user tuning.
+MVP uses **fixed thresholds** (not user-configurable). User tuning deferred to v1.
 
 | Metric | Threshold | Use |
 |--------|-----------|-----|
-| **High leverage** | Top 5 or top 25% | Highlight in insights panel |
+| **High leverage** | Top 5 or top 25% (whichever is smaller) | Highlight in insights panel |
 | **Fragile value** | Fragility > 3.0 | Flag with warning |
-| **Conflict behaviour** | ConflictIndex > 0.5 | Flag with warning |
+| **Conflict behaviour (Value-level)** | ConflictIndex > 0.5 | Flag with warning |
+| **Conflict behaviour (Outcome-level)** | Any negative Behaviour→Outcome link | Flag with warning |
 
 ---
 

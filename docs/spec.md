@@ -70,9 +70,10 @@ The network is **not a tree**:
 | V-1 | The app detects **Orphan Values**: Values with no incoming path from any Behaviour (via Outcomes). |
 | V-2 | The app detects **Unexplained Behaviours**: Behaviours with no outgoing links. |
 | V-3 | The app detects **Floating Outcomes**: Outcomes with no downstream links to Values. |
-| V-4 | The app detects **Contradictory Links**: a Behaviour or Outcome with both strong positive and strong negative edges to the same downstream node. |
-| V-5 | Validation results are displayed as warnings/alerts, not blocking errors. |
-| V-6 | User can dismiss or snooze a warning for a specific node. |
+| V-4 | The app detects **Outcome-level Conflicts**: Behaviours with negative Behaviour→Outcome links (immediate harm). |
+| V-5 | The app detects **Value-level Conflicts**: Behaviours with positive paths to some Values and negative paths to other Values (trade-offs). |
+| V-6 | Validation results are displayed as warnings/alerts, not blocking errors. |
+| V-7 | User can dismiss or snooze a warning for a specific node. |
 
 ### 4.4 Visualisation
 
@@ -114,10 +115,22 @@ The network is **not a tree**:
 | ID | Requirement |
 |----|-------------|
 | NF-1 | The app runs entirely **offline**; no network calls required for core functionality. |
-| NF-2 | Data is persisted **locally** between sessions. |
+| NF-2 | Data is persisted **locally** between sessions using **JSON in browser localStorage**. |
 | NF-3 | The app should load and render a network of up to **200 nodes / 500 edges** without perceptible lag (< 1 second). |
 | NF-4 | The UI must be accessible via keyboard navigation. |
 | NF-5 | All user-visible text should be externalisable for future localisation. |
+| NF-6 | The app is a **web application** running in modern browsers (Chrome, Firefox, Safari, Edge). |
+
+---
+
+## 5.1 Technical Decisions (MVP)
+
+| Aspect | Decision | Rationale |
+|--------|----------|----------|
+| **Platform** | Web application | Accessible, no installation, works offline via Service Worker. |
+| **Data Persistence** | JSON in localStorage | Simple, human-readable, portable, no backend required. |
+| **Visualisation** | D3.js | Industry-standard, flexible, well-documented, supports custom layouts. |
+| **Thresholds** | Fixed defaults | Reduces complexity; tuning deferred to v1. |
 
 ---
 
@@ -128,6 +141,7 @@ The network is **not a tree**:
 - Automated inference of values from freeform text.
 - Recommendation engine beyond displaying computed metrics.
 - Mobile-native app (responsive web acceptable).
+- User-configurable thresholds for metrics (fixed defaults only).
 
 ---
 

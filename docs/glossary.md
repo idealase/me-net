@@ -226,11 +226,21 @@ An Outcome with **no outgoing links** to any Value. The outcome exists but isn't
 
 ---
 
-### Contradictory Link / Conflict
+### Outcome-level Conflict
 
-A situation where:
-- The same node has both a strong positive and strong negative edge to the same downstream node, OR
-- A Behaviour has downstream paths where one path is strongly positive and another is strongly negative to the same Value.
+A Behaviour with at least one **negative Behaviour→Outcome link**. The behaviour directly harms an outcome (e.g., "Late-night work" negatively affects "Better sleep").
+
+---
+
+### Value-level Conflict
+
+A Behaviour with downstream paths where some paths are **positive** and others are **negative** to different Values. The behaviour creates a trade-off (e.g., helps "Achievement" but hurts "Health").
+
+---
+
+### Conflict (General)
+
+Either an Outcome-level Conflict or a Value-level Conflict. The app flags both types in the validation panel.
 
 ---
 
@@ -342,6 +352,26 @@ A human-readable document containing:
 
 ---
 
+## Technical Terms (MVP)
+
+### JSON (JavaScript Object Notation)
+
+A lightweight, human-readable data format used for persisting the network in browser localStorage.
+
+---
+
+### localStorage
+
+Browser-provided storage that persists data locally between sessions. M-E Net uses localStorage to save the network as JSON.
+
+---
+
+### D3.js
+
+A JavaScript library for creating interactive data visualisations. M-E Net uses D3.js to render the network diagram.
+
+---
+
 ## Abbreviations
 
 | Abbreviation | Meaning |
@@ -351,6 +381,8 @@ A human-readable document containing:
 | **CRUD** | Create, Read, Update, Delete |
 | **UI** | User Interface |
 | **UX** | User Experience |
+| **JSON** | JavaScript Object Notation |
+| **D3** | Data-Driven Documents (D3.js) |
 
 ---
 

@@ -3,7 +3,9 @@
 > **Version:** MVP  
 > **Last updated:** 2025-12-23
 
-This document defines the **conceptual data model** for M-E Net. It describes entities, their attributes, relationships, and invariants. Implementation details (database schema, serialisation format) are intentionally deferred.
+This document defines the **conceptual data model** for M-E Net. It describes entities, their attributes, relationships, and invariants.
+
+**Implementation Decision (MVP):** Data is persisted as **JSON in browser localStorage**. The JSON format is human-readable and supports export/import for backup and portability.
 
 ---
 

@@ -5,6 +5,8 @@
 
 This document specifies the **visual semantics** and **interaction rules** for M-E Net's network visualisation. It defines *what* must be communicated visually, not *how* it must be styled (colours/fonts are illustrative, not mandated).
 
+**Implementation Decision (MVP):** Visualisation is implemented using **D3.js** for its flexibility, extensive documentation, and support for custom force-directed and layered layouts.
+
 ---
 
 ## 1. Design Principles

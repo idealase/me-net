@@ -1,9 +1,21 @@
 # Backlog — M-E Net
 
 > **Version:** MVP  
-> **Last updated:** 2024-12-23
+> **Last updated:** 2025-12-23
 
 This document defines the **phased product backlog** for M-E Net. Each phase represents a coherent release milestone with clear scope boundaries.
+
+---
+
+## Technical Decisions (MVP)
+
+| Aspect | Decision |
+|--------|----------|
+| **Platform** | Web application (browser-based, offline-capable) |
+| **Data Persistence** | JSON in browser localStorage |
+| **Visualisation** | D3.js |
+| **Thresholds** | Fixed defaults (not user-configurable) |
+| **Conflict Detection** | All levels (Outcome-level and Value-level) |
 
 ---
 
@@ -50,8 +62,9 @@ This document defines the **phased product backlog** for M-E Net. Each phase rep
 | V-1 | Detect and display Orphan Values. | Orphan values flagged in validation panel. |
 | V-2 | Detect and display Unexplained Behaviours. | Unexplained behaviours flagged. |
 | V-3 | Detect and display Floating Outcomes. | Floating outcomes flagged. |
-| V-4 | Detect Contradictory Links / Conflict Behaviours. | Conflict behaviours flagged with explanation. |
-| V-5 | Snooze / Dismiss warnings. | User can snooze (time-limited) or dismiss (permanent until re-trigger) warnings. |
+| V-4 | Detect Outcome-level Conflicts (negative Behaviour→Outcome links). | Behaviours with negative immediate effects flagged. |
+| V-5 | Detect Value-level Conflicts (mixed positive/negative downstream effects). | Conflict behaviours flagged with explanation of trade-offs. |
+| V-6 | Snooze / Dismiss warnings. | User can snooze (time-limited) or dismiss (permanent until re-trigger) warnings. |
 
 ### Visualisation
 
@@ -134,6 +147,99 @@ This document defines the **phased product backlog** for M-E Net. Each phase rep
 |------|-------------|-----------|
 | v1-12 | Import network from file (merge or replace). | Restore backups; migrate between devices. |
 | v1-13 | Duplicate a Behaviour (clone with links). | Speed up entry of similar behaviours. |
+
+### Settings
+
+| Item | Description | Rationale |
+|------|-------------|-----------|
+| v1-14 | User-configurable thresholds (leverage, fragility, conflict). | Allow personalisation of insight sensitivity. |
+| v1-15 | Customisable numeric mappings (cost, importance, etc.). | Advanced users may want to tune weights. |
+
+---
+
+## MVP Development Plan
+
+> **Total estimated duration:** 8–10 weeks (solo developer) / 5–6 weeks (2 developers)
+
+### Sprint 0: Project Setup (Week 1)
+
+| Task | Description | Deliverable |
+|------|-------------|-------------|
+| S0-1 | Initialise web project (Vite, React or vanilla JS). | Build tooling configured. |
+| S0-2 | Set up linting, formatting, testing framework. | Code quality baseline. |
+| S0-3 | Create JSON schema for data model. | `schema.json` defining Behaviours, Outcomes, Values, Links. |
+| S0-4 | Implement localStorage persistence layer. | `save()` / `load()` functions with JSON serialisation. |
+| S0-5 | Set up basic HTML/CSS shell with responsive layout. | App skeleton renders. |
+
+### Sprint 1: Data Model & CRUD (Weeks 2–3)
+
+| Task | Description | Deliverable |
+|------|-------------|-------------|
+| S1-1 | Implement Behaviour CRUD (create, read, update, delete). | Behaviours persist across sessions. |
+| S1-2 | Implement Outcome CRUD. | Outcomes persist. |
+| S1-3 | Implement Value CRUD. | Values persist. |
+| S1-4 | Implement Link CRUD (Behaviour→Outcome, Outcome→Value). | Links persist with valence, reliability/strength. |
+| S1-5 | Enforce uniqueness constraints (duplicate label prevention). | UI feedback on duplicates. |
+| S1-6 | Implement cascade delete (node deletion removes links). | Referential integrity maintained. |
+
+### Sprint 2: Visualisation with D3.js (Weeks 4–5)
+
+| Task | Description | Deliverable |
+|------|-------------|-------------|
+| S2-1 | Integrate D3.js; render nodes in layered layout. | Behaviours/Outcomes/Values displayed in 3 columns. |
+| S2-2 | Render edges with valence distinction (solid/dashed, colour). | Positive vs negative edges distinguishable. |
+| S2-3 | Encode edge strength visually (thickness/opacity). | Strong vs weak links visible. |
+| S2-4 | Implement zoom and pan. | User can navigate large networks. |
+| S2-5 | Implement node click → detail panel. | Clicking node shows attributes and neighbours. |
+| S2-6 | Implement legend. | Legend explains visual encoding. |
+
+### Sprint 3: Capture & Why Ladder (Week 6)
+
+| Task | Description | Deliverable |
+|------|-------------|-------------|
+| S3-1 | Build "Add Behaviour" form with autocomplete for tags. | Full Behaviour creation UI. |
+| S3-2 | Build "Add Outcome" and "Add Value" forms. | Full node creation UI. |
+| S3-3 | Build "Add Link" UI with autocomplete for existing nodes. | Link creation with attributes. |
+| S3-4 | Implement "Why Ladder" guided flow. | Start from Behaviour → prompt for Outcomes → prompt for Values. |
+| S3-5 | Allow inline creation of new nodes during ladder. | Seamless capture experience. |
+
+### Sprint 4: Validation & Insights (Weeks 7–8)
+
+| Task | Description | Deliverable |
+|------|-------------|-------------|
+| S4-1 | Implement Orphan Value detection. | Orphan values flagged. |
+| S4-2 | Implement Unexplained Behaviour detection. | Unexplained behaviours flagged. |
+| S4-3 | Implement Floating Outcome detection. | Floating outcomes flagged. |
+| S4-4 | Implement Outcome-level conflict detection (negative B→O links). | Outcome conflicts flagged. |
+| S4-5 | Implement Value-level conflict detection (mixed downstream effects). | Value conflicts flagged. |
+| S4-6 | Build validation panel with snooze/dismiss. | Warnings displayed and manageable. |
+| S4-7 | Compute Leverage Score per Behaviour. | Scores calculated correctly. |
+| S4-8 | Compute Fragility Score per Value. | Scores calculated correctly. |
+| S4-9 | Compute Conflict Index per Behaviour. | Scores calculated correctly. |
+| S4-10 | Build Insights panel (top leverage, fragile values, conflicts). | Insights displayed with explanations. |
+
+### Sprint 5: Filtering, Search & Export (Weeks 9–10)
+
+| Task | Description | Deliverable |
+|------|-------------|-------------|
+| S5-1 | Implement filter by node type. | Show/hide Behaviours, Outcomes, Values. |
+| S5-2 | Implement search by label. | Matching nodes highlighted. |
+| S5-3 | Implement "highlight high-leverage" mode. | Top behaviours emphasised, others dimmed. |
+| S5-4 | Export full network to JSON file (download). | Data exportable. |
+| S5-5 | Import network from JSON file. | Data re-importable without loss. |
+| S5-6 | Export summary report (Markdown or text). | Report with insights and suggestions. |
+| S5-7 | Final polish: keyboard navigation, accessibility review. | Accessibility baseline met. |
+| S5-8 | End-to-end testing against success criteria. | All SC-1 through SC-5 pass. |
+
+### Milestones
+
+| Milestone | Sprint | Description |
+|-----------|--------|-------------|
+| **M1: Data Foundation** | End of Sprint 1 | All entities persist; CRUD works. |
+| **M2: Visual Prototype** | End of Sprint 2 | Network renders interactively with D3. |
+| **M3: Capture Complete** | End of Sprint 3 | Why Ladder flow works end-to-end. |
+| **M4: Insights Ready** | End of Sprint 4 | Validation and metrics computed. |
+| **M5: MVP Complete** | End of Sprint 5 | All MVP features; ready for use. |
 
 ---
 

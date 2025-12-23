@@ -64,9 +64,20 @@ Behaviours produce Outcomes; Outcomes serve Values. Links can be **positive** (h
 
 ---
 
+## Technical Decisions (MVP)
+
+| Aspect | Decision |
+|--------|----------|
+| **Platform** | Web application (browser-based, offline-capable) |
+| **Data Persistence** | JSON files stored in browser localStorage |
+| **Visualisation** | D3.js for interactive network rendering |
+| **Thresholds** | Fixed defaults (not user-configurable in MVP) |
+
+---
+
 ## Getting Started
 
-> *Implementation details to be added once tech stack is chosen.*
+> *Detailed setup instructions to be added during implementation.*
 
 ---
 
