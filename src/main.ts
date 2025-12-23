@@ -4,6 +4,7 @@
 
 import './styles/main.css';
 
+import { FilterPanel, type FilterState } from './components/filters';
 import {
   BehaviourForm,
   BehaviourFormData,
@@ -35,6 +36,11 @@ import { createEmptyNetwork } from './data/network';
 import { addOutcome, deleteOutcome, updateOutcome } from './data/outcomes';
 import { loadNetwork, saveNetwork } from './data/storage';
 import { addValue, deleteValue, updateValue } from './data/values';
+import {
+  getConflictBehaviours,
+  getFragileValues,
+  getTopLeverageBehaviours,
+} from './metrics';
 import type { Behaviour, Link, Network, Node, Outcome, Value } from './types';
 import { WarningState, createEmptyWarningState } from './validation';
 
@@ -71,6 +77,7 @@ let detailPanel: NodeDetailPanel | null = null;
 let whyLadderInstance: WhyLadder | null = null;
 let validationPanel: ValidationPanel | null = null;
 let insightsPanel: InsightsPanel | null = null;
+let filterPanel: FilterPanel | null = null;
 let warningState: WarningState = createEmptyWarningState();
 
 const WARNING_STATE_KEY = 'me-net-warnings';
@@ -110,6 +117,7 @@ function updateNetwork(newNetwork: Network): void {
   detailPanel?.setNetwork(newNetwork);
   validationPanel?.setNetwork(newNetwork);
   insightsPanel?.setNetwork(newNetwork);
+  filterPanel?.setNetwork(newNetwork);
   // Clear ladder instance when network changes externally (if active)
   if (whyLadderInstance) {
     whyLadderInstance = null;
@@ -463,6 +471,129 @@ function handleDeleteLink(linkId: string): void {
   }
 }
 
+/**
+ * Handle filter state changes from FilterPanel.
+ */
+function handleFilterChange(filter: FilterState): void {
+  if (!graph) return;
+
+  // Apply node type visibility
+  graph.setNodeTypeVisibility('behaviour', filter.nodeTypes.behaviour);
+  graph.setNodeTypeVisibility('outcome', filter.nodeTypes.outcome);
+  graph.setNodeTypeVisibility('value', filter.nodeTypes.value);
+
+  // Apply valence visibility
+  graph.setValenceVisibility('positive', filter.valence.positive);
+  graph.setValenceVisibility('negative', filter.valence.negative);
+
+  // Apply search query
+  graph.setSearchQuery(filter.searchQuery);
+
+  // Apply highlight mode
+  applyHighlightMode(filter.highlightMode);
+}
+
+/**
+ * Apply highlight mode to the graph.
+ */
+function applyHighlightMode(mode: FilterState['highlightMode']): void {
+  if (!graph) return;
+
+  if (mode === 'none') {
+    graph.clearHighlights();
+    return;
+  }
+
+  let nodeIds: Set<string>;
+
+  const collectDownstreamFromBehaviour = (behaviourId: string): Set<string> => {
+    const ids = new Set<string>();
+    ids.add(behaviourId);
+
+    // Behaviour -> Outcome
+    const outcomeIds = state.network.links
+      .filter((l) => l.type === 'behaviour-outcome' && l.sourceId === behaviourId)
+      .map((l) => l.targetId);
+    for (const outcomeId of outcomeIds) {
+      ids.add(outcomeId);
+    }
+
+    // Outcome -> Value
+    for (const outcomeId of outcomeIds) {
+      const valueIds = state.network.links
+        .filter((l) => l.type === 'outcome-value' && l.sourceId === outcomeId)
+        .map((l) => l.targetId);
+      for (const valueId of valueIds) {
+        ids.add(valueId);
+      }
+    }
+
+    return ids;
+  };
+
+  const collectUpstreamToValue = (valueId: string): Set<string> => {
+    const ids = new Set<string>();
+    ids.add(valueId);
+
+    // Outcome -> Value (incoming)
+    const outcomeIds = state.network.links
+      .filter((l) => l.type === 'outcome-value' && l.targetId === valueId)
+      .map((l) => l.sourceId);
+    for (const outcomeId of outcomeIds) {
+      ids.add(outcomeId);
+    }
+
+    // Behaviour -> Outcome (incoming)
+    for (const outcomeId of outcomeIds) {
+      const behaviourIds = state.network.links
+        .filter((l) => l.type === 'behaviour-outcome' && l.targetId === outcomeId)
+        .map((l) => l.sourceId);
+      for (const behaviourId of behaviourIds) {
+        ids.add(behaviourId);
+      }
+    }
+
+    return ids;
+  };
+
+  switch (mode) {
+    case 'leverage': {
+      const topBehaviours = getTopLeverageBehaviours(state.network, 5);
+      nodeIds = new Set();
+      for (const item of topBehaviours) {
+        for (const id of collectDownstreamFromBehaviour(item.behaviour.id)) {
+          nodeIds.add(id);
+        }
+      }
+      break;
+    }
+    case 'fragile': {
+      const fragileValues = getFragileValues(state.network);
+      nodeIds = new Set();
+      for (const item of fragileValues) {
+        for (const id of collectUpstreamToValue(item.value.id)) {
+          nodeIds.add(id);
+        }
+      }
+      break;
+    }
+    case 'conflicts': {
+      const conflicts = getConflictBehaviours(state.network);
+      nodeIds = new Set();
+      for (const item of conflicts) {
+        for (const id of collectDownstreamFromBehaviour(item.behaviour.id)) {
+          nodeIds.add(id);
+        }
+      }
+      break;
+    }
+    default:
+      nodeIds = new Set();
+  }
+
+  graph.setHighlightedNodes(nodeIds);
+}
+
 // ============================================================================
 // Rendering
 // ============================================================================
@@ -681,6 +812,9 @@ function init(): void {
       <main class="app-main">
         <aside id="sidebar" class="sidebar">
           <div class="sidebar-content">
+            <h2 class="sidebar-title">Filters</h2>
+            <div class="sidebar-filter-container"></div>
+            <hr class="sidebar-divider" />
             <h2 class="sidebar-title">Add / Edit</h2>
             <div class="sidebar-form-container"></div>
             <hr class="sidebar-divider" />
@@ -783,6 +917,19 @@ function init(): void {
       callbacks: {
         onNavigateToNode: (nodeId): void => {
           selectNode(nodeId);
+        },
+      },
+    });
+  }
+
+  // Initialize filter panel
+  const filterContainer = document.querySelector('.sidebar-filter-container');
+  if (filterContainer) {
+    filterPanel = new FilterPanel(filterContainer as HTMLElement, {
+      network: state.network,
+      callbacks: {
+        onFilterChange: (filter: FilterState): void => {
+          handleFilterChange(filter);
         },
       },
     });

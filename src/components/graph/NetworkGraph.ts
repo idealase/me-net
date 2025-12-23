@@ -9,7 +9,6 @@ import * as d3 from 'd3';
 
 import type { Network } from '@/types';
 
-
 import { getConnectedEdgeIds, getConnectedNodeIds, networkToGraphData } from './data';
 import { renderEdges, updateEdgePaths } from './edges';
 import { applyLayeredLayout, sortNodesByConnectivity } from './layout';
@@ -54,8 +53,11 @@ export class NetworkGraph {
       selectedNodeId: null,
       hoveredNodeId: null,
       hoveredEdgeId: null,
-      highlightedNodeIds: new Set(),
-      dimmingEnabled: false,
+      hoverHighlightedNodeIds: new Set(),
+      modeHighlightedNodeIds: new Set(),
+      searchQuery: '',
+      nodeTypeVisibility: { behaviour: true, outcome: true, value: true },
+      valenceVisibility: { positive: true, negative: true },
     };
 
     // Create SVG
@@ -123,6 +125,8 @@ export class NetworkGraph {
     }
 
     this.render();
+    // Re-apply current selection/filter state to new DOM elements
+    this.updateSelectionState();
   }
 
   /**
@@ -198,8 +202,7 @@ export class NetworkGraph {
    */
   public clearSelection(): void {
     this.interactionState.selectedNodeId = null;
-    this.interactionState.highlightedNodeIds.clear();
-    this.interactionState.dimmingEnabled = false;
+    this.interactionState.hoverHighlightedNodeIds.clear();
     this.updateSelectionState();
   }
 
@@ -222,6 +225,57 @@ export class NetworkGraph {
    */
   public setOnBackgroundClick(callback: () => void): void {
     this.onBackgroundClick = callback;
+  }
+
+  /**
+   * Set search query for filtering nodes.
+   */
+  public setSearchQuery(query: string): void {
+    this.interactionState.searchQuery = query;
+    // When search is active, disable hover highlighting to avoid fighting states.
+    if (query.trim() !== '') {
+      this.interactionState.hoverHighlightedNodeIds.clear();
+    }
+    this.updateSelectionState();
+  }
+
+  /**
+   * Set node type visibility.
+   */
+  public setNodeTypeVisibility(
+    nodeType: 'behaviour' | 'outcome' | 'value',
+    visible: boolean
+  ): void {
+    this.interactionState.nodeTypeVisibility[nodeType] = visible;
+    this.updateSelectionState();
+  }
+
+  /**
+   * Set edge valence visibility.
+   */
+  public setValenceVisibility(valence: 'positive' | 'negative', visible: boolean): void {
+    this.interactionState.valenceVisibility[valence] = visible;
+    this.updateSelectionState();
+  }
+
+  /**
+   * Set highlighted node IDs (for highlight modes).
+   */
+  public setHighlightedNodes(nodeIds: Set<string>): void {
+    this.interactionState.modeHighlightedNodeIds = nodeIds;
+    // Disable hover highlight while an explicit mode is active.
+    if (nodeIds.size > 0) {
+      this.interactionState.hoverHighlightedNodeIds.clear();
+    }
+    this.updateSelectionState();
+  }
+
+  /**
+   * Clear all highlights.
+   */
+  public clearHighlights(): void {
+    this.interactionState.modeHighlightedNodeIds.clear();
+    this.updateSelectionState();
   }
 
   /**
@@ -320,14 +374,38 @@ export class NetworkGraph {
    */
   private updateSelectionState(): void {
     const selectedId = this.interactionState.selectedNodeId;
-    const highlightedIds = this.interactionState.highlightedNodeIds;
+    const { nodeTypeVisibility, valenceVisibility, searchQuery } = this.interactionState;
+    const searchActive = searchQuery.trim() !== '';
+
+    const nodeById = new Map(this.graphData.nodes.map((n) => [n.id, n] as const));
+
+    const modeHighlightedIds = this.interactionState.modeHighlightedNodeIds;
+    const hoverHighlightedIds = this.interactionState.hoverHighlightedNodeIds;
+    const modeActive = modeHighlightedIds.size > 0;
+    const hoverActive = !modeActive && !searchActive && hoverHighlightedIds.size > 0;
+
+    const activeHighlightedIds = modeActive ? modeHighlightedIds : hoverActive ? hoverHighlightedIds : new Set<string>();
 
     // Update node styling
     this.nodeSelection?.each(function (d) {
       const group = d3.select(this);
       const isSelected = d.id === selectedId;
-      const isHighlighted = highlightedIds.has(d.id);
-      const isDimmed = highlightedIds.size > 0 && !isHighlighted && d.id !== selectedId;
+      const typeEnabled = nodeTypeVisibility[d.type];
+      const matchesSearch = !searchActive || d.label.toLowerCase().includes(searchQuery.toLowerCase().trim());
+
+      const isHighlighted = activeHighlightedIds.has(d.id) || (searchActive && matchesSearch);
+
+      // Dimming rules:
+      // - Node type filter: disable -> dim node but keep it visible
+      // - Search: active -> dim non-matches
+      // - Highlight mode: active -> dim nodes not in mode set
+      // - Hover highlight: active (and no search/mode) -> dim nodes not in hover set
+      const dimByType = !typeEnabled;
+      const dimBySearch = searchActive && !matchesSearch;
+      const dimByMode = modeActive && !modeHighlightedIds.has(d.id);
+      const dimByHover = hoverActive && !hoverHighlightedIds.has(d.id) && d.id !== selectedId;
+
+      const isDimmed = !isSelected && (dimByType || dimBySearch || dimByMode || dimByHover);
 
       group.classed('selected', isSelected);
       group.classed('highlighted', isHighlighted);
@@ -347,12 +425,41 @@ export class NetworkGraph {
       const edge = d3.select(this);
       const sourceId = typeof d.source === 'string' ? d.source : d.source.id;
       const targetId = typeof d.target === 'string' ? d.target : d.target.id;
-      const isConnected =
-        sourceId === selectedId ||
-        targetId === selectedId ||
-        highlightedIds.has(sourceId) ||
-        highlightedIds.has(targetId);
-      const isDimmed = highlightedIds.size > 0 && !isConnected;
+
+      const sourceNode = nodeById.get(sourceId);
+      const targetNode = nodeById.get(targetId);
+
+      // Determine if edge should be hidden due to filters
+      const valenceEnabled = valenceVisibility[d.valence];
+      const sourceTypeEnabled = sourceNode ? nodeTypeVisibility[sourceNode.type] : true;
+      const targetTypeEnabled = targetNode ? nodeTypeVisibility[targetNode.type] : true;
+
+      const isHidden = !valenceEnabled || !sourceTypeEnabled || !targetTypeEnabled;
+      edge.classed('filtered-hidden', isHidden);
+      if (isHidden) {
+        edge.style('display', 'none');
+        return;
+      }
+      edge.style('display', null);
+
+      // Dimming rules:
+      // - Highlight mode: dim edges when neither endpoint is highlighted
+      // - Search: dim edges when neither endpoint matches search
+      // - Hover highlight: dim edges when not connected to hovered/selected neighborhood
+      const isConnectedToSelected = sourceId === selectedId || targetId === selectedId;
+      const isConnectedToActiveHighlight =
+        activeHighlightedIds.has(sourceId) || activeHighlightedIds.has(targetId);
+
+      const dimByModeEdge = modeActive && !isConnectedToActiveHighlight && !isConnectedToSelected;
+
+      const q = searchQuery.toLowerCase().trim();
+      const sourceMatchesSearch = !searchActive || (sourceNode?.label.toLowerCase().includes(q) ?? false);
+      const targetMatchesSearch = !searchActive || (targetNode?.label.toLowerCase().includes(q) ?? false);
+      const dimBySearchEdge = searchActive && !sourceMatchesSearch && !targetMatchesSearch;
+
+      const dimByHoverEdge = hoverActive && !isConnectedToActiveHighlight && !isConnectedToSelected;
+
+      const isDimmed = dimByModeEdge || dimBySearchEdge || dimByHoverEdge;
 
       edge.classed('dimmed', isDimmed);
       edge.attr('opacity', isDimmed ? 0.15 : null);
@@ -363,11 +470,14 @@ export class NetworkGraph {
    * Highlight nodes connected to the given node.
    */
   private highlightConnected(nodeId: string): void {
+    // Don't override active search/highlight mode.
+    if (this.interactionState.modeHighlightedNodeIds.size > 0) return;
+    if (this.interactionState.searchQuery.trim() !== '') return;
+
     const connectedNodes = getConnectedNodeIds(this.graphData, nodeId);
     const connectedEdges = getConnectedEdgeIds(this.graphData, nodeId);
 
-    this.interactionState.highlightedNodeIds = new Set([nodeId, ...connectedNodes]);
-    this.interactionState.dimmingEnabled = true;
+    this.interactionState.hoverHighlightedNodeIds = new Set([nodeId, ...connectedNodes]);
 
     this.updateSelectionState();
 
@@ -379,8 +489,7 @@ export class NetworkGraph {
    * Clear all highlighting.
    */
   private clearHighlight(): void {
-    this.interactionState.highlightedNodeIds.clear();
-    this.interactionState.dimmingEnabled = false;
+    this.interactionState.hoverHighlightedNodeIds.clear();
     this.updateSelectionState();
   }
 
