@@ -134,12 +134,37 @@ export type LayoutConfig = LayeredLayoutConfig | ForceLayoutConfig;
 // Interaction State
 // ============================================================================
 
+/**
+ * Node type visibility filter.
+ */
+export interface NodeTypeVisibility {
+  behaviour: boolean;
+  outcome: boolean;
+  value: boolean;
+}
+
+/**
+ * Edge valence visibility filter.
+ */
+export interface ValenceVisibility {
+  positive: boolean;
+  negative: boolean;
+}
+
 export interface GraphInteractionState {
   selectedNodeId: string | null;
   hoveredNodeId: string | null;
   hoveredEdgeId: string | null;
-  highlightedNodeIds: Set<string>;
-  dimmingEnabled: boolean;
+  /** Nodes highlighted due to hover (connected neighborhood). */
+  hoverHighlightedNodeIds: Set<string>;
+  /** Nodes highlighted due to an explicit highlight mode (filters panel). */
+  modeHighlightedNodeIds: Set<string>;
+  /** Search query for filtering nodes */
+  searchQuery: string;
+  /** Node type visibility */
+  nodeTypeVisibility: NodeTypeVisibility;
+  /** Edge valence visibility */
+  valenceVisibility: ValenceVisibility;
 }
 
 // ============================================================================

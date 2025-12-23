@@ -44,6 +44,9 @@ export default defineConfig({
         // Insights UI component - tested via integration/E2E
         'src/components/insights/InsightsPanel.ts',
         'src/components/insights/index.ts',
+        // Filter UI component - tested via integration/E2E
+        'src/components/filters/FilterPanel.ts',
+        'src/components/filters/index.ts',
         // Metrics index (just re-exports) - tested via unit tests on actual modules
         'src/metrics/index.ts',
       ],
