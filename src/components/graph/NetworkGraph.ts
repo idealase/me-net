@@ -40,6 +40,7 @@ export class NetworkGraph {
   private zoom: d3.ZoomBehavior<SVGSVGElement, unknown>;
   private edgeSelection: d3.Selection<SVGPathElement, GraphEdge, SVGGElement, unknown> | null = null;
   private nodeSelection: d3.Selection<SVGGElement, AnyGraphNode, SVGGElement, unknown> | null = null;
+  private keydownHandler: ((event: KeyboardEvent) => void) | null = null;
 
   // Event callbacks
   private onNodeClick?: (node: AnyGraphNode) => void;
@@ -89,6 +90,18 @@ export class NetworkGraph {
 
     this.svg.call(this.zoom);
 
+    this.keydownHandler = (event: KeyboardEvent): void => {
+      if (event.key !== 'Escape') return;
+      const target = event.target as HTMLElement | null;
+      const tagName = target?.tagName?.toLowerCase();
+      if (tagName && (tagName === 'input' || tagName === 'textarea' || tagName === 'select')) {
+        return;
+      }
+      this.clearSelection();
+      this.onBackgroundClick?.();
+    };
+    document.addEventListener('keydown', this.keydownHandler);
+
     // Background click handler
     this.svg.on('click', (event: MouseEvent) => {
       if (event.target === this.svg.node()) {
@@ -110,6 +123,20 @@ export class NetworkGraph {
    */
   public setNetwork(network: Network): void {
     this.graphData = networkToGraphData(network);
+
+    const nodeLookup = new Map(this.graphData.nodes.map((node) => [node.id, node] as const));
+    for (const edge of this.graphData.edges) {
+      const sourceId = typeof edge.source === 'string' ? edge.source : edge.source.id;
+      const targetId = typeof edge.target === 'string' ? edge.target : edge.target.id;
+      const sourceNode = nodeLookup.get(sourceId);
+      const targetNode = nodeLookup.get(targetId);
+      if (sourceNode) {
+        edge.source = sourceNode;
+      }
+      if (targetNode) {
+        edge.target = targetNode;
+      }
+    }
 
     // Sort nodes to minimize edge crossings
     sortNodesByConnectivity(this.graphData);
@@ -282,6 +309,9 @@ export class NetworkGraph {
    * Destroy the graph and clean up.
    */
   public destroy(): void {
+    if (this.keydownHandler) {
+      document.removeEventListener('keydown', this.keydownHandler);
+    }
     this.svg.remove();
   }
 
@@ -296,6 +326,11 @@ export class NetworkGraph {
     this.renderEdges();
     this.renderNodes();
     this.updatePositions();
+  }
+
+  private buildNodeAriaLabel(node: AnyGraphNode): string {
+    const typeLabel = `${node.type.charAt(0).toUpperCase()}${node.type.slice(1)}`;
+    return `${typeLabel} node ${node.label}. Press Enter to select.`;
   }
 
   /**
@@ -326,7 +361,16 @@ export class NetworkGraph {
     selection.exit().remove();
 
     // Enter
-    const nodeEnter = selection.enter().append('g').attr('class', 'node').style('cursor', 'pointer');
+    const nodeEnter = selection
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+      .attr('tabindex', 0)
+      .attr('role', 'button')
+      .attr('focusable', 'true')
+      .attr('aria-keyshortcuts', 'Enter Space')
+      .attr('aria-label', (d) => this.buildNodeAriaLabel(d))
+      .style('cursor', 'pointer');
 
     // Render shapes and labels
     renderNodeShape(nodeEnter, this.options.theme);
@@ -334,6 +378,12 @@ export class NetworkGraph {
 
     // Merge
     this.nodeSelection = nodeEnter.merge(selection);
+    this.nodeSelection
+      .attr('tabindex', 0)
+      .attr('role', 'button')
+      .attr('focusable', 'true')
+      .attr('aria-keyshortcuts', 'Enter Space')
+      .attr('aria-label', (d) => this.buildNodeAriaLabel(d));
 
     // Event handlers
     this.nodeSelection
@@ -341,6 +391,23 @@ export class NetworkGraph {
         event.stopPropagation();
         this.selectNode(d.id);
         this.onNodeClick?.(d);
+      })
+      .on('keydown', (event: KeyboardEvent, d: AnyGraphNode) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          this.selectNode(d.id);
+          this.onNodeClick?.(d);
+        }
+      })
+      .on('focus', (_event: FocusEvent, d: AnyGraphNode) => {
+        this.interactionState.hoveredNodeId = d.id;
+        this.highlightConnected(d.id);
+        this.onNodeHover?.(d);
+      })
+      .on('blur', () => {
+        this.interactionState.hoveredNodeId = null;
+        this.clearHighlight();
+        this.onNodeHover?.(null);
       })
       .on('mouseenter', (_event: MouseEvent, d: AnyGraphNode) => {
         this.interactionState.hoveredNodeId = d.id;
@@ -410,6 +477,7 @@ export class NetworkGraph {
       group.classed('selected', isSelected);
       group.classed('highlighted', isHighlighted);
       group.classed('dimmed', isDimmed);
+      group.attr('aria-pressed', isSelected ? 'true' : 'false');
 
       group
         .select('.node-shape')

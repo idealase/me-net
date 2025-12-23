@@ -4,6 +4,7 @@
 
 import './styles/main.css';
 
+import { EmptyState } from './components/empty';
 import { FilterPanel, type FilterState } from './components/filters';
 import {
   BehaviourForm,
@@ -24,6 +25,7 @@ import { NetworkGraph } from './components/graph';
 import { InsightsPanel } from './components/insights';
 import { LadderSession, WhyLadder } from './components/ladder';
 import { ValidationPanel } from './components/validation';
+import { WelcomeScreen } from './components/welcome';
 import { addBehaviour, deleteBehaviour, updateBehaviour } from './data/behaviours';
 import {
   downloadNetworkAsJson,
@@ -37,7 +39,7 @@ import {
   updateBehaviourOutcomeLink,
   updateOutcomeValueLink,
 } from './data/links';
-import { createEmptyNetwork } from './data/network';
+import { createEmptyNetwork, isNetworkEmpty } from './data/network';
 import { addOutcome, deleteOutcome, updateOutcome } from './data/outcomes';
 import { loadNetwork, saveNetwork } from './data/storage';
 import { addValue, deleteValue, updateValue } from './data/values';
@@ -84,8 +86,16 @@ let validationPanel: ValidationPanel | null = null;
 let insightsPanel: InsightsPanel | null = null;
 let filterPanel: FilterPanel | null = null;
 let warningState: WarningState = createEmptyWarningState();
+let welcomeScreen: WelcomeScreen | null = null;
+let emptyState: EmptyState | null = null;
+let messagesContainer: HTMLElement | null = null;
+let hasDismissedWelcome = false;
 
 const WARNING_STATE_KEY = 'me-net-warnings';
+const WELCOME_DISMISSED_KEY = 'me-net-welcome-dismissed';
+const MESSAGE_TIMEOUT_MS = 8000;
+
+type MessageType = 'info' | 'success' | 'error';
 
 // ============================================================================
 // Warning State Persistence
@@ -112,21 +122,138 @@ function saveWarningState(): void {
 }
 
 // ============================================================================
+// Messaging & Onboarding Helpers
+// ============================================================================
+
+function showAppMessage(type: MessageType, message: string): void {
+  if (!messagesContainer) return;
+
+  const messageEl = document.createElement('div');
+  messageEl.className = `app-message app-message-${type}`;
+  messageEl.setAttribute('role', type === 'error' ? 'alert' : 'status');
+
+  const textSpan = document.createElement('span');
+  textSpan.textContent = message;
+  messageEl.appendChild(textSpan);
+
+  const dismissButton = document.createElement('button');
+  dismissButton.type = 'button';
+  dismissButton.className = 'app-message-close';
+  dismissButton.setAttribute('aria-label', 'Dismiss message');
+  dismissButton.textContent = '×';
+  dismissButton.addEventListener('click', () => {
+    messageEl.remove();
+  });
+
+  messageEl.appendChild(dismissButton);
+  messagesContainer.appendChild(messageEl);
+
+  window.setTimeout(() => {
+    if (messageEl.parentElement === messagesContainer) {
+      messageEl.remove();
+    }
+  }, MESSAGE_TIMEOUT_MS);
+}
+
+function loadWelcomeState(): void {
+  try {
+    hasDismissedWelcome = localStorage.getItem(WELCOME_DISMISSED_KEY) === 'true';
+  } catch {
+    hasDismissedWelcome = false;
+  }
+}
+
+function setWelcomeDismissed(): void {
+  if (hasDismissedWelcome) return;
+  hasDismissedWelcome = true;
+  try {
+    localStorage.setItem(WELCOME_DISMISSED_KEY, 'true');
+  } catch {
+    // Ignore storage errors
+  }
+  welcomeScreen?.hide();
+}
+
+function updateWelcomeVisibility(): void {
+  if (!welcomeScreen) return;
+  if (!hasDismissedWelcome && isNetworkEmpty(state.network)) {
+    welcomeScreen.show();
+  } else {
+    welcomeScreen.hide();
+  }
+}
+
+function updateEmptyStateVisibility(): void {
+  if (!emptyState) return;
+  if (!hasDismissedWelcome && isNetworkEmpty(state.network)) {
+    emptyState.hide();
+    return;
+  }
+  if (isNetworkEmpty(state.network)) {
+    emptyState.show();
+  } else {
+    emptyState.hide();
+  }
+}
+
+function triggerImportDialog(): void {
+  document.getElementById('import-file-input')?.click();
+}
+
+function handleWelcomeStart(): void {
+  setWelcomeDismissed();
+  emptyState?.hide();
+  showCreateBehaviourForm();
+}
+
+function handleWelcomeImport(): void {
+  setWelcomeDismissed();
+  emptyState?.hide();
+  triggerImportDialog();
+}
+
+function handleEmptyStateAddBehaviour(): void {
+  setWelcomeDismissed();
+  emptyState?.hide();
+  showCreateBehaviourForm();
+}
+
+function handleEmptyStateWhyLadder(): void {
+  setWelcomeDismissed();
+  emptyState?.hide();
+  showWhyLadder();
+}
+
+function handleEmptyStateImport(): void {
+  setWelcomeDismissed();
+  emptyState?.hide();
+  triggerImportDialog();
+}
+
+// ============================================================================
 // State Management
 // ============================================================================
 
 function updateNetwork(newNetwork: Network): void {
   state.network = newNetwork;
-  saveNetwork(newNetwork);
+  const saveResult = saveNetwork(newNetwork);
+  if (!saveResult.success && saveResult.error) {
+    showAppMessage('error', saveResult.error);
+  }
   graph?.setNetwork(newNetwork);
   detailPanel?.setNetwork(newNetwork);
   validationPanel?.setNetwork(newNetwork);
   insightsPanel?.setNetwork(newNetwork);
   filterPanel?.setNetwork(newNetwork);
+  if (!hasDismissedWelcome && !isNetworkEmpty(newNetwork)) {
+    setWelcomeDismissed();
+  }
   // Clear ladder instance when network changes externally (if active)
   if (whyLadderInstance) {
     whyLadderInstance = null;
   }
+  updateEmptyStateVisibility();
+  updateWelcomeVisibility();
 }
 
 function selectNode(nodeId: string | null): void {
@@ -211,6 +338,7 @@ function hideForm(): void {
   state.ladderBehaviourId = null;
   whyLadderInstance = null;
   renderSidebar();
+  updateEmptyStateVisibility();
 }
 
 // ============================================================================
@@ -637,10 +765,10 @@ function handleImportFile(event: Event): void {
         updateNetwork(result.network);
         // Re-render UI
         renderSidebar();
-        alert('Network imported successfully!');
+        showAppMessage('success', 'Network imported successfully.');
       }
     } else {
-      alert(`Import failed: ${result.error ?? 'Unknown error'}`);
+      showAppMessage('error', result.error ?? 'Import failed due to an unknown error.');
     }
 
     // Reset file input so same file can be imported again
@@ -816,20 +944,20 @@ function renderSidebar(): void {
         <div class="sidebar-placeholder">
           <p>Add nodes to build your network:</p>
           <div class="add-buttons">
-            <button class="btn btn-behaviour" id="btn-add-behaviour">+ Behaviour</button>
-            <button class="btn btn-outcome" id="btn-add-outcome">+ Outcome</button>
-            <button class="btn btn-value" id="btn-add-value">+ Value</button>
+            <button class="btn btn-behaviour" id="btn-add-behaviour" aria-label="Add behaviour">Add Behaviour</button>
+            <button class="btn btn-outcome" id="btn-add-outcome" aria-label="Add outcome">Add Outcome</button>
+            <button class="btn btn-value" id="btn-add-value" aria-label="Add value">Add Value</button>
           </div>
           <hr class="sidebar-divider" />
           <p>Add connections:</p>
           <div class="add-buttons">
-            <button class="btn btn-link" id="btn-add-bo-link">+ Behaviour → Outcome</button>
-            <button class="btn btn-link" id="btn-add-ov-link">+ Outcome → Value</button>
+            <button class="btn btn-link" id="btn-add-bo-link" aria-label="Add behaviour to outcome link">Behaviour → Outcome Link</button>
+            <button class="btn btn-link" id="btn-add-ov-link" aria-label="Add outcome to value link">Outcome → Value Link</button>
           </div>
           <hr class="sidebar-divider" />
           <p>Guided capture:</p>
           <div class="add-buttons">
-            <button class="btn btn-ladder" id="btn-why-ladder">🪜 Why Ladder</button>
+            <button class="btn btn-ladder" id="btn-why-ladder" aria-label="Start Why Ladder capture">🪜 Why Ladder</button>
           </div>
         </div>
       `;
@@ -851,25 +979,27 @@ function renderSidebar(): void {
 function init(): void {
   const app = document.getElementById('app');
   if (!app) return;
+  loadWelcomeState();
 
   // Create app structure with sidebar
   app.innerHTML = `
     <div class="app-container">
-      <header class="app-header">
+      <header class="app-header" role="banner">
         <h1>M-E Net</h1>
         <p class="subtitle">Means–Ends Network</p>
-        <div class="toolbar">
-          <button id="btn-fit" class="btn">Fit to View</button>
-          <button id="btn-reset" class="btn">Reset Zoom</button>
+        <div class="toolbar" role="toolbar" aria-label="Graph controls">
+          <button id="btn-fit" class="btn" aria-label="Fit entire network to view">Fit to View</button>
+          <button id="btn-reset" class="btn" aria-label="Reset zoom level">Reset Zoom</button>
           <span class="toolbar-separator"></span>
-          <button id="btn-export-json" class="btn btn-export">Export JSON</button>
-          <button id="btn-export-report" class="btn btn-export">Export Report</button>
-          <button id="btn-import" class="btn btn-import">Import</button>
-          <input type="file" id="import-file-input" accept=".json" style="display: none;" />
+          <button id="btn-export-json" class="btn btn-export" aria-label="Export network as JSON">Export JSON</button>
+          <button id="btn-export-report" class="btn btn-export" aria-label="Export summary report">Export Report</button>
+          <button id="btn-import" class="btn btn-import" aria-label="Import network data">Import</button>
+          <input type="file" id="import-file-input" accept=".json" style="display: none;" aria-hidden="true" />
         </div>
       </header>
-      <main class="app-main">
-        <aside id="sidebar" class="sidebar">
+      <div id="app-messages" class="app-messages" role="region" aria-live="polite" aria-atomic="false"></div>
+      <main class="app-main" role="main" aria-label="Network workspace">
+        <aside id="sidebar" class="sidebar" aria-label="Network controls">
           <div class="sidebar-content">
             <h2 class="sidebar-title">Filters</h2>
             <div class="sidebar-filter-container"></div>
@@ -884,15 +1014,31 @@ function init(): void {
             <div class="sidebar-insights-container"></div>
           </div>
         </aside>
-        <div id="graph-container" class="graph-container"></div>
-        <aside id="detail-panel" class="detail-panel hidden"></aside>
+        <div id="graph-container" class="graph-container" role="region" aria-label="Network diagram"></div>
+        <aside id="detail-panel" class="detail-panel hidden" aria-label="Node details panel"></aside>
       </main>
+      <div id="overlay-root" class="overlay-root" aria-live="assertive"></div>
     </div>
   `;
+  messagesContainer = document.getElementById('app-messages');
 
   // Initialize graph
   const graphContainer = document.getElementById('graph-container');
   if (!graphContainer) return;
+
+  const overlayRoot = document.getElementById('overlay-root');
+  if (overlayRoot) {
+    welcomeScreen = new WelcomeScreen(overlayRoot, {
+      onGetStarted: handleWelcomeStart,
+      onImportData: handleWelcomeImport,
+    });
+  }
+
+  emptyState = new EmptyState(graphContainer, {
+    onAddBehaviour: handleEmptyStateAddBehaviour,
+    onStartWhyLadder: handleEmptyStateWhyLadder,
+    onImportData: handleEmptyStateImport,
+  });
 
   const rect = graphContainer.getBoundingClientRect();
   graph = new NetworkGraph(graphContainer, {
@@ -902,8 +1048,16 @@ function init(): void {
 
   // Load network data
   const result = loadNetwork();
+  if (!result.success && result.error) {
+    showAppMessage('error', result.error);
+  }
   state.network = result.success && result.data ? result.data : createEmptyNetwork();
   graph.setNetwork(state.network);
+  if (!isNetworkEmpty(state.network)) {
+    setWelcomeDismissed();
+  }
+  updateEmptyStateVisibility();
+  updateWelcomeVisibility();
 
   // Load warning state
   warningState = loadWarningState();
@@ -1005,7 +1159,7 @@ function init(): void {
   document.getElementById('btn-export-json')?.addEventListener('click', handleExportJson);
   document.getElementById('btn-export-report')?.addEventListener('click', handleExportReport);
   document.getElementById('btn-import')?.addEventListener('click', (): void => {
-    document.getElementById('import-file-input')?.click();
+    triggerImportDialog();
   });
   document.getElementById('import-file-input')?.addEventListener('change', handleImportFile);
 

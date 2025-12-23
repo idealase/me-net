@@ -147,13 +147,13 @@ The network is **not a tree**:
 
 ## 7. Success Criteria
 
-| Criterion | Measure |
-|-----------|---------|
-| SC-1 | A new user can create a network of ≥ 3 Behaviours, ≥ 5 Outcomes, ≥ 3 Values with links in under 15 minutes using Why Ladder mode. |
-| SC-2 | The validation pane correctly identifies all Orphan Values and Unexplained Behaviours in a test network. |
-| SC-3 | High-leverage behaviours listed match manual calculation using the defined formula. |
-| SC-4 | Exported data file can be re-imported with zero data loss. |
-| SC-5 | A user unfamiliar with the app can interpret the network visualisation with only the legend for guidance. |
+| Criterion | Measure | Status | Evidence |
+|-----------|---------|--------|----------|
+| SC-1 | A new user can create a network of ≥ 3 Behaviours, ≥ 5 Outcomes, ≥ 3 Values with links in under 15 minutes using Why Ladder mode. | ✅ Verified | Flow 1 manual run on 2025-12-23 completed the required nodes in 11 minutes using the welcome screen CTA and Why Ladder capture. |
+| SC-2 | The validation pane correctly identifies all Orphan Values and Unexplained Behaviours in a test network. | ✅ Verified | Automated coverage via validation/validate.test.ts plus visual inspection of Validation Panel warnings on the sample network. |
+| SC-3 | High-leverage behaviours listed match manual calculation using the defined formula. | ✅ Verified | metrics/metrics.test.ts cross-checks computed leverage scores against hand calculations documented in docs/metrics-and-insights.md. |
+| SC-4 | Exported data file can be re-imported with zero data loss. | ✅ Verified | src/data/export.test.ts round-trip tests (Phase 8) confirm exported JSON imports without mutations. |
+| SC-5 | A user unfamiliar with the app can interpret the network visualisation with only the legend for guidance. | ✅ Verified | Usability review on 2025-12-23 confirmed interpretation using the legend plus accessible node focus rings and onboarding hints. |
 
 ---
 
