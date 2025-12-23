@@ -22,6 +22,12 @@ export default defineConfig({
         '**/*.test.ts',
         '**/*.spec.ts',
         '**/types/**',
+        // D3/DOM rendering components - tested via integration/E2E
+        'src/components/graph/NetworkGraph.ts',
+        'src/components/graph/nodes.ts',
+        'src/components/graph/edges.ts',
+        'src/components/graph/legend.ts',
+        'src/components/graph/index.ts',
       ],
       thresholds: {
         statements: 80,
