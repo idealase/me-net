@@ -64,7 +64,15 @@ body {
 .toolbar {
   margin-left: auto;
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+}
+
+.toolbar-separator {
+  width: 1px;
+  height: 1.5rem;
+  background: #d1d5db;
+  margin: 0 0.25rem;
 }
 
 .btn {
@@ -86,6 +94,26 @@ body {
 
 .btn:active {
   background: #f3f4f6;
+}
+
+.btn-export {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-export:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+}
+
+.btn-import {
+  color: var(--color-value);
+  border-color: var(--color-value);
+}
+
+.btn-import:hover {
+  background: #ecfdf5;
+  border-color: #059669;
 }
 
 /* Main Content */
