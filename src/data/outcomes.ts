@@ -4,7 +4,7 @@
  * Functions for creating, reading, updating, and deleting Outcomes.
  */
 
-import type { Outcome, Network } from '@/types';
+import type { Outcome, Network, CrudResult } from '@/types';
 import { generateId, now } from '@/utils/id';
 
 // ============================================================================
@@ -19,12 +19,6 @@ export interface CreateOutcomeInput {
 export interface UpdateOutcomeInput {
   label?: string;
   notes?: string;
-}
-
-export interface CrudResult<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
 }
 
 // ============================================================================

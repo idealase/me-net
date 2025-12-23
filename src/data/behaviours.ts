@@ -4,7 +4,7 @@
  * Functions for creating, reading, updating, and deleting Behaviours.
  */
 
-import type { Behaviour, Network, Cost, Frequency } from '@/types';
+import type { Behaviour, Network, Cost, Frequency, CrudResult } from '@/types';
 import { generateId, now } from '@/utils/id';
 
 // ============================================================================
@@ -25,12 +25,6 @@ export interface UpdateBehaviourInput {
   cost?: Cost;
   contextTags?: string[];
   notes?: string;
-}
-
-export interface CrudResult<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
 }
 
 // ============================================================================

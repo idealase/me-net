@@ -133,3 +133,13 @@ export interface ValueMetrics {
   supportStrength: number;
   supportingBehaviours: string[];
 }
+
+// ============================================================================
+// CRUD Result
+// ============================================================================
+
+export interface CrudResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}

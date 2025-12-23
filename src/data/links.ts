@@ -13,6 +13,7 @@ import type {
   Valence,
   Reliability,
   Strength,
+  CrudResult,
 } from '@/types';
 import { generateId, now } from '@/utils/id';
 
@@ -42,12 +43,6 @@ export interface UpdateBehaviourOutcomeLinkInput {
 export interface UpdateOutcomeValueLinkInput {
   valence?: Valence;
   strength?: Strength;
-}
-
-export interface CrudResult<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
 }
 
 // ============================================================================

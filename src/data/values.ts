@@ -4,7 +4,7 @@
  * Functions for creating, reading, updating, and deleting Values.
  */
 
-import type { Value, Network, Importance, Neglect } from '@/types';
+import type { Value, Network, Importance, Neglect, CrudResult } from '@/types';
 import { generateId, now } from '@/utils/id';
 
 // ============================================================================
@@ -23,12 +23,6 @@ export interface UpdateValueInput {
   importance?: Importance;
   neglect?: Neglect;
   notes?: string;
-}
-
-export interface CrudResult<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
 }
 
 // ============================================================================
