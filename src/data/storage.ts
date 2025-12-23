@@ -6,6 +6,7 @@
  */
 
 import type { Network } from '@/types';
+
 import { createEmptyNetwork } from './network';
 
 // ============================================================================
@@ -68,7 +69,7 @@ export function loadNetwork(): StorageResult<Network> {
     }
 
     // Parse JSON
-    const parsed = JSON.parse(json);
+    const parsed: unknown = JSON.parse(json);
 
     // Validate structure
     const validation = validateNetworkStructure(parsed);
