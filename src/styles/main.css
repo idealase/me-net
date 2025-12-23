@@ -16,6 +16,11 @@
   padding: 0;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: var(--font-family);
   background-color: var(--color-bg);
@@ -23,6 +28,143 @@ body {
   line-height: 1.6;
 }
 
+#app {
+  height: 100%;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-header {
+  flex-shrink: 0;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.app-header .subtitle {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.toolbar {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn:active {
+  background: #f3f4f6;
+}
+
+/* Main Content */
+.app-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.graph-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.graph-container svg {
+  display: block;
+}
+
+/* Detail Panel */
+.detail-panel {
+  width: 320px;
+  background: white;
+  border-left: 1px solid #e5e7eb;
+  overflow-y: auto;
+  transition: transform 0.2s ease;
+}
+
+.detail-panel.hidden {
+  display: none;
+}
+
+.panel-content {
+  padding: 1.5rem;
+}
+
+.panel-content h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.panel-content p {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.panel-content strong {
+  color: #6b7280;
+}
+
+/* Graph Styling */
+.network-graph {
+  cursor: grab;
+}
+
+.network-graph:active {
+  cursor: grabbing;
+}
+
+.network-graph .node {
+  transition: opacity 0.2s ease;
+}
+
+.network-graph .node.dimmed {
+  opacity: 0.3;
+}
+
+.network-graph .edge {
+  transition: opacity 0.2s ease;
+}
+
+.network-graph .edge.dimmed {
+  opacity: 0.15;
+}
+
+/* Legacy container styles */
 .container {
   max-width: 1200px;
   margin: 0 auto;
