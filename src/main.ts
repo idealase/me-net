@@ -21,6 +21,7 @@ import {
 } from './components/forms';
 import { NetworkGraph } from './components/graph';
 import { LadderSession, WhyLadder } from './components/ladder';
+import { ValidationPanel } from './components/validation';
 import { addBehaviour, deleteBehaviour, updateBehaviour } from './data/behaviours';
 import {
   addBehaviourOutcomeLink,
@@ -34,6 +35,7 @@ import { addOutcome, deleteOutcome, updateOutcome } from './data/outcomes';
 import { loadNetwork, saveNetwork } from './data/storage';
 import { addValue, deleteValue, updateValue } from './data/values';
 import type { Behaviour, Link, Network, Node, Outcome, Value } from './types';
+import { WarningState, createEmptyWarningState } from './validation';
 
 // ============================================================================
 // Application State
@@ -66,6 +68,34 @@ const state: AppState = {
 let graph: NetworkGraph | null = null;
 let detailPanel: NodeDetailPanel | null = null;
 let whyLadderInstance: WhyLadder | null = null;
+let validationPanel: ValidationPanel | null = null;
+let warningState: WarningState = createEmptyWarningState();
+
+const WARNING_STATE_KEY = 'me-net-warnings';
+
+// ============================================================================
+// Warning State Persistence
+// ============================================================================
+
+function loadWarningState(): WarningState {
+  try {
+    const data = localStorage.getItem(WARNING_STATE_KEY);
+    if (data !== null && data !== '') {
+      return JSON.parse(data) as WarningState;
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return createEmptyWarningState();
+}
+
+function saveWarningState(): void {
+  try {
+    localStorage.setItem(WARNING_STATE_KEY, JSON.stringify(warningState));
+  } catch {
+    // Ignore storage errors
+  }
+}
 
 // ============================================================================
 // State Management
@@ -76,6 +106,7 @@ function updateNetwork(newNetwork: Network): void {
   saveNetwork(newNetwork);
   graph?.setNetwork(newNetwork);
   detailPanel?.setNetwork(newNetwork);
+  validationPanel?.setNetwork(newNetwork);
   // Clear ladder instance when network changes externally (if active)
   if (whyLadderInstance) {
     whyLadderInstance = null;
@@ -649,6 +680,9 @@ function init(): void {
           <div class="sidebar-content">
             <h2 class="sidebar-title">Add / Edit</h2>
             <div class="sidebar-form-container"></div>
+            <hr class="sidebar-divider" />
+            <h2 class="sidebar-title">Validation</h2>
+            <div class="sidebar-validation-container"></div>
           </div>
         </aside>
         <div id="graph-container" class="graph-container"></div>
@@ -671,6 +705,9 @@ function init(): void {
   const result = loadNetwork();
   state.network = result.success && result.data ? result.data : createEmptyNetwork();
   graph.setNetwork(state.network);
+
+  // Load warning state
+  warningState = loadWarningState();
 
   // Initialize detail panel
   const detailPanelEl = document.getElementById('detail-panel');
@@ -703,6 +740,31 @@ function init(): void {
         },
         onDeleteLink: (linkId): void => handleDeleteLink(linkId),
         onClose: (): void => selectNode(null),
+      },
+    });
+  }
+
+  // Initialize validation panel
+  const validationContainer = document.querySelector('.sidebar-validation-container');
+  if (validationContainer) {
+    validationPanel = new ValidationPanel(validationContainer as HTMLElement, {
+      network: state.network,
+      warningState,
+      callbacks: {
+        onSnooze: (_warningId): void => {
+          // Save warning state to localStorage
+          saveWarningState();
+        },
+        onDismiss: (_warningId): void => {
+          saveWarningState();
+        },
+        onUndismiss: (_warningId): void => {
+          saveWarningState();
+        },
+        onNavigateToNode: (nodeId): void => {
+          selectNode(nodeId);
+          // TODO: Add focusOnNode to NetworkGraph for smooth pan/zoom
+        },
       },
     });
   }
