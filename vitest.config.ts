@@ -50,6 +50,11 @@ export default defineConfig({
         // Metrics index (just re-exports) - tested via unit tests on actual modules
         'src/metrics/index.ts',
       ],
+      // Exclude specific browser DOM-dependent functions from export module
+      coverageExclude: [
+        '**/downloadNetworkAsJson',
+        '**/downloadSummaryReport',
+      ],
       thresholds: {
         statements: 80,
         branches: 80,

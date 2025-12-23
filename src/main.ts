@@ -26,6 +26,11 @@ import { LadderSession, WhyLadder } from './components/ladder';
 import { ValidationPanel } from './components/validation';
 import { addBehaviour, deleteBehaviour, updateBehaviour } from './data/behaviours';
 import {
+  downloadNetworkAsJson,
+  downloadSummaryReport,
+  importNetworkFromFile,
+} from './data/export';
+import {
   addBehaviourOutcomeLink,
   addOutcomeValueLink,
   deleteLink,
@@ -595,6 +600,55 @@ function applyHighlightMode(mode: FilterState['highlightMode']): void {
 }
 
 // ============================================================================
+// Export / Import Handlers
+// ============================================================================
+
+function handleExportJson(): void {
+  downloadNetworkAsJson(state.network);
+}
+
+function handleExportReport(): void {
+  const topLeverage = getTopLeverageBehaviours(state.network, 5);
+  const fragileValues = getFragileValues(state.network);
+  const conflictBehaviours = getConflictBehaviours(state.network);
+
+  downloadSummaryReport(state.network, topLeverage, fragileValues, conflictBehaviours);
+}
+
+function handleImportFile(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+
+  void importNetworkFromFile(file).then((result) => {
+    if (result.success && result.network) {
+      // Confirm before replacing
+      const nodeCount =
+        result.network.behaviours.length +
+        result.network.outcomes.length +
+        result.network.values.length;
+      const linkCount = result.network.links.length;
+
+      const confirmed = confirm(
+        `Import network with ${nodeCount} nodes and ${linkCount} links?\n\nThis will replace your current network.`
+      );
+
+      if (confirmed) {
+        updateNetwork(result.network);
+        // Re-render UI
+        renderSidebar();
+        alert('Network imported successfully!');
+      }
+    } else {
+      alert(`Import failed: ${result.error ?? 'Unknown error'}`);
+    }
+
+    // Reset file input so same file can be imported again
+    input.value = '';
+  });
+}
+
+// ============================================================================
 // Rendering
 // ============================================================================
 
@@ -807,6 +861,11 @@ function init(): void {
         <div class="toolbar">
           <button id="btn-fit" class="btn">Fit to View</button>
           <button id="btn-reset" class="btn">Reset Zoom</button>
+          <span class="toolbar-separator"></span>
+          <button id="btn-export-json" class="btn btn-export">Export JSON</button>
+          <button id="btn-export-report" class="btn btn-export">Export Report</button>
+          <button id="btn-import" class="btn btn-import">Import</button>
+          <input type="file" id="import-file-input" accept=".json" style="display: none;" />
         </div>
       </header>
       <main class="app-main">
@@ -941,6 +1000,14 @@ function init(): void {
   // Toolbar buttons
   document.getElementById('btn-fit')?.addEventListener('click', (): void => graph?.fitToView());
   document.getElementById('btn-reset')?.addEventListener('click', (): void => graph?.resetZoom());
+
+  // Export/Import buttons
+  document.getElementById('btn-export-json')?.addEventListener('click', handleExportJson);
+  document.getElementById('btn-export-report')?.addEventListener('click', handleExportReport);
+  document.getElementById('btn-import')?.addEventListener('click', (): void => {
+    document.getElementById('import-file-input')?.click();
+  });
+  document.getElementById('import-file-input')?.addEventListener('change', handleImportFile);
 
   // Graph interaction handlers
   graph.setOnNodeClick((graphNode): void => {
