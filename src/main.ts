@@ -777,6 +777,72 @@ function handleImportFile(event: Event): void {
 }
 
 // ============================================================================
+// Layout Helpers
+// ============================================================================
+
+function resizeGraphToContainer(): void {
+  const graphContainer = document.getElementById('graph-container');
+  if (!graphContainer || !graph) return;
+
+  const rect = graphContainer.getBoundingClientRect();
+  graph.resize(rect.width || 800, rect.height || 600);
+}
+
+function setupSidebarResizers(): void {
+  const sidebar = document.getElementById('sidebar') as HTMLElement | null;
+  const detailPanelEl = document.getElementById('detail-panel') as HTMLElement | null;
+  const graphContainer = document.getElementById('graph-container') as HTMLElement | null;
+  const leftResizer = document.getElementById('sidebar-resizer') as HTMLElement | null;
+  const rightResizer = document.getElementById('detail-resizer') as HTMLElement | null;
+
+  if (!sidebar || !detailPanelEl || !graphContainer) return;
+
+  const initHorizontalResizer = (handle: HTMLElement, side: 'left' | 'right'): void => {
+    const minWidth = 220;
+    const maxWidth = 560;
+
+    handle.addEventListener('mousedown', (event: MouseEvent): void => {
+      event.preventDefault();
+
+      const targetPanel = side === 'left' ? sidebar : detailPanelEl;
+      const startX = event.clientX;
+      const startWidth = targetPanel.getBoundingClientRect().width;
+
+      handle.classList.add('sidebar-resizer-active');
+
+      const onMouseMove = (moveEvent: MouseEvent): void => {
+        const deltaX = moveEvent.clientX - startX;
+        let newWidth = side === 'left' ? startWidth + deltaX : startWidth - deltaX;
+        if (Number.isNaN(newWidth)) return;
+
+        if (newWidth < minWidth) newWidth = minWidth;
+        if (newWidth > maxWidth) newWidth = maxWidth;
+
+        targetPanel.style.width = `${newWidth}px`;
+        resizeGraphToContainer();
+      };
+
+      const onMouseUp = (): void => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        handle.classList.remove('sidebar-resizer-active');
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  };
+
+  if (leftResizer) {
+    initHorizontalResizer(leftResizer, 'left');
+  }
+
+  if (rightResizer) {
+    initHorizontalResizer(rightResizer, 'right');
+  }
+}
+
+// ============================================================================
 // Rendering
 // ============================================================================
 
@@ -1014,7 +1080,9 @@ function init(): void {
             <div class="sidebar-insights-container"></div>
           </div>
         </aside>
+        <div id="sidebar-resizer" class="sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize left sidebar"></div>
         <div id="graph-container" class="graph-container" role="region" aria-label="Network diagram"></div>
+        <div id="detail-resizer" class="sidebar-resizer" role="separator" aria-orientation="vertical" aria-label="Resize detail panel"></div>
         <aside id="detail-panel" class="detail-panel hidden" aria-label="Node details panel"></aside>
       </main>
       <div id="overlay-root" class="overlay-root" aria-live="assertive"></div>
@@ -1175,13 +1243,15 @@ function init(): void {
     selectNode(null);
   });
 
+  // Sidebar resizers
+  setupSidebarResizers();
+
   // Handle window resize
   let resizeTimeout: number;
   window.addEventListener('resize', (): void => {
     clearTimeout(resizeTimeout);
     resizeTimeout = window.setTimeout((): void => {
-      const newRect = graphContainer.getBoundingClientRect();
-      graph?.resize(newRect.width || 800, newRect.height || 600);
+      resizeGraphToContainer();
     }, 100);
   });
 

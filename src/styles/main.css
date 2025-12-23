@@ -280,7 +280,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 280px;
+  width: 320px;
   background: white;
   border-right: 1px solid #e5e7eb;
   overflow-y: auto;
@@ -411,10 +411,11 @@ body {
 
 /* Detail Panel */
 .detail-panel {
-  width: 320px;
+  width: 360px;
   background: white;
   border-left: 1px solid #e5e7eb;
   overflow-y: auto;
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 }
 
@@ -441,6 +442,19 @@ body {
 
 .panel-content strong {
   color: #6b7280;
+}
+
+/* Sidebar Resizers */
+.sidebar-resizer {
+  width: 6px;
+  cursor: col-resize;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.sidebar-resizer:hover,
+.sidebar-resizer.sidebar-resizer-active {
+  background: rgba(148, 163, 184, 0.4);
 }
 
 /* Panel Header */

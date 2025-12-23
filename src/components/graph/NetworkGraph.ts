@@ -36,7 +36,7 @@ export class NetworkGraph {
   private options: GraphOptions;
   private graphData: GraphData;
   private interactionState: GraphInteractionState;
-  private forceSimulation: d3.Simulation<AnyGraphNode, GraphEdge, undefined> | null = null;
+  private forceSimulation: d3.Simulation<AnyGraphNode, GraphEdge> | null = null;
 
   private zoom: d3.ZoomBehavior<SVGSVGElement, unknown>;
   private edgeSelection: d3.Selection<SVGPathElement, GraphEdge, SVGGElement, unknown> | null = null;
@@ -620,6 +620,8 @@ export class NetworkGraph {
   private startForceSimulation(): void {
     if (this.graphData.nodes.length === 0) return;
 
+    if (this.options.layout.type !== 'force') return;
+
     const layout = this.options.layout;
     const theme = this.options.theme;
     const linkForce = d3
@@ -643,7 +645,7 @@ export class NetworkGraph {
     const centerForce = d3.forceCenter(this.options.width / 2, this.options.height / 2);
 
     this.forceSimulation = d3
-      .forceSimulation<AnyGraphNode>(this.graphData.nodes)
+      .forceSimulation<AnyGraphNode, GraphEdge>(this.graphData.nodes)
       .force('link', linkForce)
       .force('charge', chargeForce)
       .force('collision', collisionForce)
@@ -683,8 +685,8 @@ export class NetworkGraph {
         d.fx = event.x;
         d.fy = event.y;
       })
-      .on('end', (_event, d) => {
-        if (!this.forceSimulation?.active()) {
+      .on('end', (event, d) => {
+        if (!event.active) {
           this.forceSimulation?.alphaTarget(0);
         }
         // Keep the node pinned where the user dropped it

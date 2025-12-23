@@ -1,0 +1,2123 @@
+{
+  "version": "1.0.0",
+  "exportedAt": "2025-12-23T10:00:00.000Z",
+  "behaviours": [
+    {
+      "id": "b-001",
+      "type": "behaviour",
+      "label": "Daily deep-work block on highest-leverage client project",
+      "notes": "Protects a 90–120 minute block for focused work on the single most leveraged client deliverable, with notifications off and a clear objective.",
+      "createdAt": "2025-12-01T09:00:00.000Z",
+      "updatedAt": "2025-12-21T18:00:00.000Z",
+      "frequency": "daily",
+      "cost": "medium",
+      "contextTags": ["work", "executive", "focus", "ai-consulting"]
+    },
+    {
+      "id": "b-002",
+      "type": "behaviour",
+      "label": "Weekly strategic review and roadmap for all clients",
+      "notes": "Reviews open engagements, risks, and opportunities; updates a single page per client with next moves, scope, and expected impact.",
+      "createdAt": "2025-12-01T09:00:01.000Z",
+      "updatedAt": "2025-12-21T18:00:01.000Z",
+      "frequency": "weekly",
+      "cost": "medium",
+      "contextTags": ["work", "planning", "ai-consulting"]
+    },
+    {
+      "id": "b-003",
+      "type": "behaviour",
+      "label": "Proactive stakeholder 1:1s with client sponsors",
+      "notes": "Holds recurring 1:1s with economic buyers and key stakeholders to clarify objectives, manage expectations, and surface hidden constraints.",
+      "createdAt": "2025-12-01T09:00:02.000Z",
+      "updatedAt": "2025-12-21T18:00:02.000Z",
+      "frequency": "weekly",
+      "cost": "medium",
+      "contextTags": ["work", "relationships", "ai-consulting"]
+    },
+    {
+      "id": "b-004",
+      "type": "behaviour",
+      "label": "Curated reading of AI research and industry reports",
+      "notes": "Maintains a short, high-signal reading queue of research papers, newsletters, and market analyses, captured with brief summaries.",
+      "createdAt": "2025-12-01T09:00:03.000Z",
+      "updatedAt": "2025-12-21T18:00:03.000Z",
+      "frequency": "daily",
+      "cost": "low",
+      "contextTags": ["work", "learning", "ai", "research"]
+    },
+    {
+      "id": "b-005",
+      "type": "behaviour",
+      "label": "Publishing long-form thought pieces or internal memos",
+      "notes": "Writes structured essays or memos on AI strategy, risks, and implementation patterns to clarify thinking and demonstrate expertise.",
+      "createdAt": "2025-12-01T09:00:04.000Z",
+      "updatedAt": "2025-12-21T18:00:04.000Z",
+      "frequency": "monthly",
+      "cost": "high",
+      "contextTags": ["work", "writing", "visibility", "ai-consulting"]
+    },
+    {
+      "id": "b-006",
+      "type": "behaviour",
+      "label": "Speaking at conferences, podcasts, or panels",
+      "notes": "Accepts a small number of high-leverage speaking opportunities that reach ideal clients and peers, with careful preparation.",
+      "createdAt": "2025-12-01T09:00:05.000Z",
+      "updatedAt": "2025-12-21T18:00:05.000Z",
+      "frequency": "occasionally",
+      "cost": "very-high",
+      "contextTags": ["work", "visibility", "networking"]
+    },
+    {
+      "id": "b-007",
+      "type": "behaviour",
+      "label": "Blocking no-meeting deep-work mornings three times per week",
+      "notes": "Protects specific mornings in the calendar from meetings to ensure uninterrupted time for design, modeling, and writing.",
+      "createdAt": "2025-12-01T09:00:06.000Z",
+      "updatedAt": "2025-12-21T18:00:06.000Z",
+      "frequency": "weekly",
+      "cost": "trivial",
+      "contextTags": ["work", "boundaries", "focus"]
+    },
+    {
+      "id": "b-008",
+      "type": "behaviour",
+      "label": "End-of-day shutdown ritual and tomorrow planning",
+      "notes": "Closes loops by capturing open tasks, choosing three priorities for tomorrow, and reviewing the calendar to avoid surprises.",
+      "createdAt": "2025-12-01T09:00:07.000Z",
+      "updatedAt": "2025-12-21T18:00:07.000Z",
+      "frequency": "daily",
+      "cost": "trivial",
+      "contextTags": ["work", "planning", "mental-health"]
+    },
+    {
+      "id": "b-009",
+      "type": "behaviour",
+      "label": "Late-night email triage in bed",
+      "notes": "Checks and responds to work email in bed before sleep, often reopening loops and reactivating work-related worries.",
+      "createdAt": "2025-12-01T09:00:08.000Z",
+      "updatedAt": "2025-12-21T18:00:08.000Z",
+      "frequency": "daily",
+      "cost": "low",
+      "contextTags": ["work", "boundary-violations", "sleep"]
+    },
+    {
+      "id": "b-010",
+      "type": "behaviour",
+      "label": "Weekly 1:1s with direct reports",
+      "notes": "Runs structured 1:1s with reports to remove blockers, clarify priorities, and support their development.",
+      "createdAt": "2025-12-01T09:00:09.000Z",
+      "updatedAt": "2025-12-21T18:00:09.000Z",
+      "frequency": "weekly",
+      "cost": "medium",
+      "contextTags": ["work", "management", "leadership"]
+    },
+    {
+      "id": "b-011",
+      "type": "behaviour",
+      "label": "Delegating and documenting repeatable processes",
+      "notes": "Turns ad-hoc tasks into documented checklists or SOPs and hands them off where possible.",
+      "createdAt": "2025-12-01T09:00:10.000Z",
+      "updatedAt": "2025-12-21T18:00:10.000Z",
+      "frequency": "weekly",
+      "cost": "medium",
+      "contextTags": ["work", "systems", "leverage"]
+    },
+    {
+      "id": "b-012",
+      "type": "behaviour",
+      "label": "Daily 45-minute strength and mobility training",
+      "notes": "Combines strength, mobility, and light cardio to build resilience and reduce pain from long hours at a desk.",
+      "createdAt": "2025-12-01T09:00:11.000Z",
+      "updatedAt": "2025-12-21T18:00:11.000Z",
+      "frequency": "daily",
+      "cost": "medium",
+      "contextTags": ["health", "exercise"]
+    },
+    {
+      "id": "b-013",
+      "type": "behaviour",
+      "label": "Evening family dinner without devices",
+      "notes": "Sits down for shared dinner with partner and kids, with phones and laptops out of sight.",
+      "createdAt": "2025-12-01T09:00:12.000Z",
+      "updatedAt": "2025-12-21T18:00:12.000Z",
+      "frequency": "daily",
+      "cost": "low",
+      "contextTags": ["family", "rituals"]
+    },
+    {
+      "id": "b-014",
+      "type": "behaviour",
+      "label": "Weekend planning session with partner",
+      "notes": "Reviews the upcoming week’s logistics, commitments, and childcare with partner, aligning expectations and adjusting load.",
+      "createdAt": "2025-12-01T09:00:13.000Z",
+      "updatedAt": "2025-12-21T18:00:13.000Z",
+      "frequency": "weekly",
+      "cost": "low",
+      "contextTags": ["family", "planning", "domestic"]
+    },
+    {
+      "id": "b-015",
+      "type": "behaviour",
+      "label": "Batch-processing household admin and bills",
+      "notes": "Groups recurring admin like bills, paperwork, and renewals into one focused block instead of scattering them through the week.",
+      "createdAt": "2025-12-01T09:00:14.000Z",
+      "updatedAt": "2025-12-21T18:00:14.000Z",
+      "frequency": "weekly",
+      "cost": "low",
+      "contextTags": ["domestic", "finance", "systems"]
+    },
+    {
+      "id": "b-016",
+      "type": "behaviour",
+      "label": "Maintaining shared calendar and chore board",
+      "notes": "Keeps a shared digital calendar and a visible chore board up to date to reduce coordination overhead.",
+      "createdAt": "2025-12-01T09:00:15.000Z",
+      "updatedAt": "2025-12-21T18:00:15.000Z",
+      "frequency": "weekly",
+      "cost": "low",
+      "contextTags": ["domestic", "systems", "family"]
+    },
+    {
+      "id": "b-017",
+      "type": "behaviour",
+      "label": "Daily 15-minute mindfulness or breathwork",
+      "notes": "Practices a short, simple meditation or breathwork protocol to down-regulate and notice cognitive/emotional load.",
+      "createdAt": "2025-12-01T09:00:16.000Z",
+      "updatedAt": "2025-12-21T18:00:16.000Z",
+      "frequency": "daily",
+      "cost": "trivial",
+      "contextTags": ["health", "mental-health", "mindfulness"]
+    },
+    {
+      "id": "b-018",
+      "type": "behaviour",
+      "label": "Weekly therapy or coaching session",
+      "notes": "Works with a therapist/coach to process stress, challenge blind spots, and refine narratives about work and family.",
+      "createdAt": "2025-12-01T09:00:17.000Z",
+      "updatedAt": "2025-12-21T18:00:17.000Z",
+      "frequency": "weekly",
+      "cost": "high",
+      "contextTags": ["mental-health", "growth"]
+    },
+    {
+      "id": "b-019",
+      "type": "behaviour",
+      "label": "Strict sleep window and wind-down routine",
+      "notes": "Keeps a consistent sleep schedule with a 60-minute wind-down that excludes work and bright screens.",
+      "createdAt": "2025-12-01T09:00:18.000Z",
+      "updatedAt": "2025-12-21T18:00:18.000Z",
+      "frequency": "daily",
+      "cost": "low",
+      "contextTags": ["health", "sleep"]
+    },
+    {
+      "id": "b-020",
+      "type": "behaviour",
+      "label": "Saying yes to every interesting work opportunity",
+      "notes": "Reflexively accepts new projects, collaborations, and advisory roles without first rebalancing commitments.",
+      "createdAt": "2025-12-01T09:00:19.000Z",
+      "updatedAt": "2025-12-21T18:00:19.000Z",
+      "frequency": "occasionally",
+      "cost": "medium",
+      "contextTags": ["work", "overcommitment"]
+    },
+    {
+      "id": "b-021",
+      "type": "behaviour",
+      "label": "Weekly long-form journaling and self-review",
+      "notes": "Writes several pages reflecting on wins, failures, emotions, and strategic direction across work, family, and health.",
+      "createdAt": "2025-12-01T09:00:20.000Z",
+      "updatedAt": "2025-12-21T18:00:20.000Z",
+      "frequency": "weekly",
+      "cost": "low",
+      "contextTags": ["mental-health", "reflection"]
+    },
+    {
+      "id": "b-022",
+      "type": "behaviour",
+      "label": "Playing piano or guitar improvisation",
+      "notes": "Spends unstructured time improvising on an instrument, focusing on texture, mood, and play rather than performance.",
+      "createdAt": "2025-12-01T09:00:21.000Z",
+      "updatedAt": "2025-12-21T18:00:21.000Z",
+      "frequency": "weekly",
+      "cost": "low",
+      "contextTags": ["hobby", "music", "creative"]
+    },
+    {
+      "id": "b-023",
+      "type": "behaviour",
+      "label": "Reading literary fiction or essays before bed",
+      "notes": "Reads non-work writing that is aesthetically rich and reflective, as a bridge between the day and sleep.",
+      "createdAt": "2025-12-01T09:00:22.000Z",
+      "updatedAt": "2025-12-21T18:00:22.000Z",
+      "frequency": "daily",
+      "cost": "trivial",
+      "contextTags": ["hobby", "reading", "wind-down"]
+    },
+    {
+      "id": "b-024",
+      "type": "behaviour",
+      "label": "Weekend hikes or long walks in nature",
+      "notes": "Spends several hours outdoors walking or hiking, ideally with family or a close friend.",
+      "createdAt": "2025-12-01T09:00:23.000Z",
+      "updatedAt": "2025-12-21T18:00:23.000Z",
+      "frequency": "weekly",
+      "cost": "medium",
+      "contextTags": ["health", "hobby", "nature"]
+    },
+    {
+      "id": "b-025",
+      "type": "behaviour",
+      "label": "Hosting small dinner salons with friends",
+      "notes": "Invites a small group for dinner and structured conversation about ideas, books, and current problems.",
+      "createdAt": "2025-12-01T09:00:24.000Z",
+      "updatedAt": "2025-12-21T18:00:24.000Z",
+      "frequency": "monthly",
+      "cost": "high",
+      "contextTags": ["social", "community", "intellectual"]
+    },
+    {
+      "id": "b-026",
+      "type": "behaviour",
+      "label": "Tinkering with personal coding or maker projects",
+      "notes": "Builds small tools, prototypes, or physical projects for curiosity rather than work ROI.",
+      "createdAt": "2025-12-01T09:00:25.000Z",
+      "updatedAt": "2025-12-21T18:00:25.000Z",
+      "frequency": "weekly",
+      "cost": "low",
+      "contextTags": ["hobby", "making", "coding"]
+    },
+    {
+      "id": "b-027",
+      "type": "behaviour",
+      "label": "Quarterly solo retreat day without devices",
+      "notes": "Takes a day alone offline with notebook and books to review life direction and reset priorities.",
+      "createdAt": "2025-12-01T09:00:26.000Z",
+      "updatedAt": "2025-12-21T18:00:26.000Z",
+      "frequency": "occasionally",
+      "cost": "medium",
+      "contextTags": ["mental-health", "reflection", "strategy"]
+    },
+    {
+      "id": "b-028",
+      "type": "behaviour",
+      "label": "Learning non-work topics like art, history, or philosophy",
+      "notes": "Regularly studies subjects unrelated to AI or consulting to broaden perspective and feed creativity.",
+      "createdAt": "2025-12-01T09:00:27.000Z",
+      "updatedAt": "2025-12-21T18:00:27.000Z",
+      "frequency": "weekly",
+      "cost": "low",
+      "contextTags": ["learning", "hobby", "diversity"]
+    },
+    {
+      "id": "b-029",
+      "type": "behaviour",
+      "label": "Traveling with family to new places",
+      "notes": "Plans and takes trips together to explore new environments, food, and cultures.",
+      "createdAt": "2025-12-01T09:00:28.000Z",
+      "updatedAt": "2025-12-21T18:00:28.000Z",
+      "frequency": "occasionally",
+      "cost": "high",
+      "contextTags": ["family", "adventure", "travel"]
+    },
+    {
+      "id": "b-030",
+      "type": "behaviour",
+      "label": "Impulsive social media scrolling between tasks",
+      "notes": "Frequently opens social apps between tasks for stimulation, fragmenting attention and eroding focus.",
+      "createdAt": "2025-12-01T09:00:29.000Z",
+      "updatedAt": "2025-12-21T18:00:29.000Z",
+      "frequency": "daily",
+      "cost": "trivial",
+      "contextTags": ["distraction", "digital"]
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "o-001",
+      "type": "outcome",
+      "label": "Trusted strategic advisor to C-suite clients",
+      "notes": "Clients see them as a long-term partner on AI strategy rather than a tactical vendor, leading to influence over key decisions.",
+      "createdAt": "2025-12-01T09:10:00.000Z",
+      "updatedAt": "2025-12-21T18:10:00.000Z"
+    },
+    {
+      "id": "o-002",
+      "type": "outcome",
+      "label": "Pipeline of high-value AI consulting engagements",
+      "notes": "A steady flow of well-scoped, well-paid projects with clients that are good strategic fits.",
+      "createdAt": "2025-12-01T09:10:01.000Z",
+      "updatedAt": "2025-12-21T18:10:01.000Z"
+    },
+    {
+      "id": "o-003",
+      "type": "outcome",
+      "label": "Strong executive team relationships",
+      "notes": "Deep trust and open communication with internal and client executives, enabling honest conversations about risks and trade-offs.",
+      "createdAt": "2025-12-01T09:10:02.000Z",
+      "updatedAt": "2025-12-21T18:10:02.000Z"
+    },
+    {
+      "id": "o-004",
+      "type": "outcome",
+      "label": "Calm, predictable household routines",
+      "notes": "Mornings, evenings, and weekends run with low friction; everyone understands the basic rhythm and expectations.",
+      "createdAt": "2025-12-01T09:10:03.000Z",
+      "updatedAt": "2025-12-21T18:10:03.000Z"
+    },
+    {
+      "id": "o-005",
+      "type": "outcome",
+      "label": "High baseline physical energy",
+      "notes": "Most days feel physically energetic rather than sluggish, with fewer crashes and aches.",
+      "createdAt": "2025-12-01T09:10:04.000Z",
+      "updatedAt": "2025-12-21T18:10:04.000Z"
+    },
+    {
+      "id": "o-006",
+      "type": "outcome",
+      "label": "Resilient nervous system and stress tolerance",
+      "notes": "Stressful events are handled without frequent overwhelm or reactivity, with quick return to baseline.",
+      "createdAt": "2025-12-01T09:10:05.000Z",
+      "updatedAt": "2025-12-21T18:10:05.000Z"
+    },
+    {
+      "id": "o-007",
+      "type": "outcome",
+      "label": "Clear prioritisation across work and life domains",
+      "notes": "At any given time, they know what matters most and what can safely be ignored or deferred.",
+      "createdAt": "2025-12-01T09:10:06.000Z",
+      "updatedAt": "2025-12-21T18:10:06.000Z"
+    },
+    {
+      "id": "o-008",
+      "type": "outcome",
+      "label": "Deep industry and technical credibility",
+      "notes": "Peers and clients recognize them as a thoughtful, well-informed voice on AI technology and its business implications.",
+      "createdAt": "2025-12-01T09:10:07.000Z",
+      "updatedAt": "2025-12-21T18:10:07.000Z"
+    },
+    {
+      "id": "o-009",
+      "type": "outcome",
+      "label": "Well-run home finances and admin",
+      "notes": "Bills are paid, paperwork is up-to-date, and financial surprises are rare.",
+      "createdAt": "2025-12-01T09:10:08.000Z",
+      "updatedAt": "2025-12-21T18:10:08.000Z"
+    },
+    {
+      "id": "o-010",
+      "type": "outcome",
+      "label": "Rich, playful time with partner and kids",
+      "notes": "Regular pockets of connection that feel present, light, and fun rather than rushed or distracted.",
+      "createdAt": "2025-12-01T09:10:09.000Z",
+      "updatedAt": "2025-12-21T18:10:09.000Z"
+    },
+    {
+      "id": "o-011",
+      "type": "outcome",
+      "label": "Diverse, stimulating social circle",
+      "notes": "A mix of friends and peers from different domains who challenge and inspire new thinking.",
+      "createdAt": "2025-12-01T09:10:10.000Z",
+      "updatedAt": "2025-12-21T18:10:10.000Z"
+    },
+    {
+      "id": "o-012",
+      "type": "outcome",
+      "label": "Regular immersion in flow states",
+      "notes": "Frequent periods of deep absorption in work or hobbies, with a sense of effortlessness and satisfaction.",
+      "createdAt": "2025-12-01T09:10:11.000Z",
+      "updatedAt": "2025-12-21T18:10:11.000Z"
+    },
+    {
+      "id": "o-013",
+      "type": "outcome",
+      "label": "Creative portfolio outside of work",
+      "notes": "A small but growing body of creative work—music, writing, or projects—that is not tied to career outcomes.",
+      "createdAt": "2025-12-01T09:10:12.000Z",
+      "updatedAt": "2025-12-21T18:10:12.000Z"
+    },
+    {
+      "id": "o-014",
+      "type": "outcome",
+      "label": "Continual learning across disciplines",
+      "notes": "A steady accumulation of understanding in areas beyond AI, such as art, history, and philosophy.",
+      "createdAt": "2025-12-01T09:10:13.000Z",
+      "updatedAt": "2025-12-21T18:10:13.000Z"
+    },
+    {
+      "id": "o-015",
+      "type": "outcome",
+      "label": "Opportunities for mentorship and teaching",
+      "notes": "Regular chances to advise, teach, or mentor others in a way that feels meaningful and energising.",
+      "createdAt": "2025-12-01T09:10:14.000Z",
+      "updatedAt": "2025-12-21T18:10:14.000Z"
+    },
+    {
+      "id": "o-016",
+      "type": "outcome",
+      "label": "Periodic travel and micro-adventures",
+      "notes": "Life includes trips and small adventures that disrupt routine and create vivid memories.",
+      "createdAt": "2025-12-01T09:10:15.000Z",
+      "updatedAt": "2025-12-21T18:10:15.000Z"
+    },
+    {
+      "id": "o-017",
+      "type": "outcome",
+      "label": "Low-clutter, functional home environment",
+      "notes": "Spaces are easy to use, not overloaded with stuff, and support the activities that actually matter.",
+      "createdAt": "2025-12-01T09:10:16.000Z",
+      "updatedAt": "2025-12-21T18:10:16.000Z"
+    },
+    {
+      "id": "o-018",
+      "type": "outcome",
+      "label": "Good sleep quality and recovery",
+      "notes": "Sleep feels restorative, with relatively few nights of insomnia or restless waking.",
+      "createdAt": "2025-12-01T09:10:17.000Z",
+      "updatedAt": "2025-12-21T18:10:17.000Z"
+    },
+    {
+      "id": "o-019",
+      "type": "outcome",
+      "label": "Time buffers and slack in weekly schedule",
+      "notes": "The calendar has deliberate white space that can absorb overruns and surprises without constant rushing.",
+      "createdAt": "2025-12-01T09:10:18.000Z",
+      "updatedAt": "2025-12-21T18:10:18.000Z"
+    },
+    {
+      "id": "o-020",
+      "type": "outcome",
+      "label": "Fragmented attention and shallow work",
+      "notes": "Work blocks are riddled with context switching and low-impact tasks, making progress feel unsatisfying.",
+      "createdAt": "2025-12-01T09:10:19.000Z",
+      "updatedAt": "2025-12-21T18:10:19.000Z"
+    }
+  ],
+  "values": [
+    {
+      "id": "v-001",
+      "type": "value",
+      "label": "Impactful contribution to the AI ecosystem",
+      "notes": "Wants their work to meaningfully shape how organisations use AI in a safe, thoughtful, and effective way.",
+      "createdAt": "2025-12-01T09:20:00.000Z",
+      "updatedAt": "2025-12-21T18:20:00.000Z",
+      "importance": "critical",
+      "neglect": "somewhat-neglected"
+    },
+    {
+      "id": "v-002",
+      "type": "value",
+      "label": "Financial security and optionality",
+      "notes": "Values having enough wealth and stability to choose projects and pace without fear-driven decisions.",
+      "createdAt": "2025-12-01T09:20:01.000Z",
+      "updatedAt": "2025-12-21T18:20:01.000Z",
+      "importance": "critical",
+      "neglect": "adequately-met"
+    },
+    {
+      "id": "v-003",
+      "type": "value",
+      "label": "Deep family connection and presence",
+      "notes": "Cares about being emotionally available and actively involved in partner and children’s lives.",
+      "createdAt": "2025-12-01T09:20:02.000Z",
+      "updatedAt": "2025-12-21T18:20:02.000Z",
+      "importance": "critical",
+      "neglect": "somewhat-neglected"
+    },
+    {
+      "id": "v-004",
+      "type": "value",
+      "label": "Physical health and longevity",
+      "notes": "Wants a strong, resilient body that supports decades of active life and work.",
+      "createdAt": "2025-12-01T09:20:03.000Z",
+      "updatedAt": "2025-12-21T18:20:03.000Z",
+      "importance": "critical",
+      "neglect": "somewhat-neglected"
+    },
+    {
+      "id": "v-005",
+      "type": "value",
+      "label": "Mental clarity and emotional balance",
+      "notes": "Prioritises clear thinking, emotional regulation, and a feeling of inner steadiness.",
+      "createdAt": "2025-12-01T09:20:04.000Z",
+      "updatedAt": "2025-12-21T18:20:04.000Z",
+      "importance": "critical",
+      "neglect": "somewhat-neglected"
+    },
+    {
+      "id": "v-006",
+      "type": "value",
+      "label": "Autonomy and freedom over time",
+      "notes": "Wants high control over what they work on, when, and with whom.",
+      "createdAt": "2025-12-01T09:20:05.000Z",
+      "updatedAt": "2025-12-21T18:20:05.000Z",
+      "importance": "high",
+      "neglect": "adequately-met"
+    },
+    {
+      "id": "v-007",
+      "type": "value",
+      "label": "Mastery and intellectual growth",
+      "notes": "Feels alive when learning, synthesising, and pushing the edge of their competence.",
+      "createdAt": "2025-12-01T09:20:06.000Z",
+      "updatedAt": "2025-12-21T18:20:06.000Z",
+      "importance": "high",
+      "neglect": "adequately-met"
+    },
+    {
+      "id": "v-008",
+      "type": "value",
+      "label": "Joy, play, and aesthetic pleasure",
+      "notes": "Wants life to include beauty, playfulness, and experiences that are good for their own sake.",
+      "createdAt": "2025-12-01T09:20:07.000Z",
+      "updatedAt": "2025-12-21T18:20:07.000Z",
+      "importance": "high",
+      "neglect": "somewhat-neglected"
+    },
+    {
+      "id": "v-009",
+      "type": "value",
+      "label": "Contribution to community and mentees",
+      "notes": "Wants to help others grow, especially younger practitioners and peers in the AI space.",
+      "createdAt": "2025-12-01T09:20:08.000Z",
+      "updatedAt": "2025-12-21T18:20:08.000Z",
+      "importance": "high",
+      "neglect": "somewhat-neglected"
+    },
+    {
+      "id": "v-010",
+      "type": "value",
+      "label": "Integrity and ethical impact",
+      "notes": "Wants alignment between values and behaviour, especially around the societal implications of AI.",
+      "createdAt": "2025-12-01T09:20:09.000Z",
+      "updatedAt": "2025-12-21T18:20:09.000Z",
+      "importance": "critical",
+      "neglect": "adequately-met"
+    },
+    {
+      "id": "v-011",
+      "type": "value",
+      "label": "Adventure and exploration",
+      "notes": "Values novelty, exploration, and experiences that stretch comfort zones.",
+      "createdAt": "2025-12-01T09:20:10.000Z",
+      "updatedAt": "2025-12-21T18:20:10.000Z",
+      "importance": "medium",
+      "neglect": "severely-neglected"
+    },
+    {
+      "id": "v-012",
+      "type": "value",
+      "label": "Spiritual reflection and meaning",
+      "notes": "Wants time to reflect on larger questions of meaning, purpose, and orientation to life.",
+      "createdAt": "2025-12-01T09:20:11.000Z",
+      "updatedAt": "2025-12-21T18:20:11.000Z",
+      "importance": "medium",
+      "neglect": "severely-neglected"
+    },
+    {
+      "id": "v-013",
+      "type": "value",
+      "label": "Orderly, low-friction daily life",
+      "notes": "Prefers systems and environments that reduce unnecessary friction and decision fatigue.",
+      "createdAt": "2025-12-01T09:20:12.000Z",
+      "updatedAt": "2025-12-21T18:20:12.000Z",
+      "importance": "high",
+      "neglect": "adequately-met"
+    },
+    {
+      "id": "v-014",
+      "type": "value",
+      "label": "Creative self-expression",
+      "notes": "Cares about expressing their inner world through music, writing, or other media, even if it’s not public.",
+      "createdAt": "2025-12-01T09:20:13.000Z",
+      "updatedAt": "2025-12-21T18:20:13.000Z",
+      "importance": "medium",
+      "neglect": "somewhat-neglected"
+    }
+  ],
+  "links": [
+    {
+      "id": "l-b001-o001",
+      "type": "behaviour-outcome",
+      "sourceId": "b-001",
+      "targetId": "o-001",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:00.000Z",
+      "updatedAt": "2025-12-21T18:30:00.000Z"
+    },
+    {
+      "id": "l-b001-o008",
+      "type": "behaviour-outcome",
+      "sourceId": "b-001",
+      "targetId": "o-008",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:01.000Z",
+      "updatedAt": "2025-12-21T18:30:01.000Z"
+    },
+    {
+      "id": "l-b001-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-001",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:02.000Z",
+      "updatedAt": "2025-12-21T18:30:02.000Z"
+    },
+    {
+      "id": "l-b002-o002",
+      "type": "behaviour-outcome",
+      "sourceId": "b-002",
+      "targetId": "o-002",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:03.000Z",
+      "updatedAt": "2025-12-21T18:30:03.000Z"
+    },
+    {
+      "id": "l-b002-o007",
+      "type": "behaviour-outcome",
+      "sourceId": "b-002",
+      "targetId": "o-007",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:04.000Z",
+      "updatedAt": "2025-12-21T18:30:04.000Z"
+    },
+    {
+      "id": "l-b002-o019",
+      "type": "behaviour-outcome",
+      "sourceId": "b-002",
+      "targetId": "o-019",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:05.000Z",
+      "updatedAt": "2025-12-21T18:30:05.000Z"
+    },
+    {
+      "id": "l-b003-o001",
+      "type": "behaviour-outcome",
+      "sourceId": "b-003",
+      "targetId": "o-001",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:06.000Z",
+      "updatedAt": "2025-12-21T18:30:06.000Z"
+    },
+    {
+      "id": "l-b003-o002",
+      "type": "behaviour-outcome",
+      "sourceId": "b-003",
+      "targetId": "o-002",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:07.000Z",
+      "updatedAt": "2025-12-21T18:30:07.000Z"
+    },
+    {
+      "id": "l-b003-o003",
+      "type": "behaviour-outcome",
+      "sourceId": "b-003",
+      "targetId": "o-003",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:08.000Z",
+      "updatedAt": "2025-12-21T18:30:08.000Z"
+    },
+    {
+      "id": "l-b004-o008",
+      "type": "behaviour-outcome",
+      "sourceId": "b-004",
+      "targetId": "o-008",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:09.000Z",
+      "updatedAt": "2025-12-21T18:30:09.000Z"
+    },
+    {
+      "id": "l-b004-o014",
+      "type": "behaviour-outcome",
+      "sourceId": "b-004",
+      "targetId": "o-014",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:10.000Z",
+      "updatedAt": "2025-12-21T18:30:10.000Z"
+    },
+    {
+      "id": "l-b005-o001",
+      "type": "behaviour-outcome",
+      "sourceId": "b-005",
+      "targetId": "o-001",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:11.000Z",
+      "updatedAt": "2025-12-21T18:30:11.000Z"
+    },
+    {
+      "id": "l-b005-o002",
+      "type": "behaviour-outcome",
+      "sourceId": "b-005",
+      "targetId": "o-002",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:12.000Z",
+      "updatedAt": "2025-12-21T18:30:12.000Z"
+    },
+    {
+      "id": "l-b005-o008",
+      "type": "behaviour-outcome",
+      "sourceId": "b-005",
+      "targetId": "o-008",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:13.000Z",
+      "updatedAt": "2025-12-21T18:30:13.000Z"
+    },
+    {
+      "id": "l-b005-o013",
+      "type": "behaviour-outcome",
+      "sourceId": "b-005",
+      "targetId": "o-013",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:14.000Z",
+      "updatedAt": "2025-12-21T18:30:14.000Z"
+    },
+    {
+      "id": "l-b006-o002",
+      "type": "behaviour-outcome",
+      "sourceId": "b-006",
+      "targetId": "o-002",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:15.000Z",
+      "updatedAt": "2025-12-21T18:30:15.000Z"
+    },
+    {
+      "id": "l-b006-o008",
+      "type": "behaviour-outcome",
+      "sourceId": "b-006",
+      "targetId": "o-008",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:16.000Z",
+      "updatedAt": "2025-12-21T18:30:16.000Z"
+    },
+    {
+      "id": "l-b006-o011",
+      "type": "behaviour-outcome",
+      "sourceId": "b-006",
+      "targetId": "o-011",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:17.000Z",
+      "updatedAt": "2025-12-21T18:30:17.000Z"
+    },
+    {
+      "id": "l-b006-o015",
+      "type": "behaviour-outcome",
+      "sourceId": "b-006",
+      "targetId": "o-015",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:18.000Z",
+      "updatedAt": "2025-12-21T18:30:18.000Z"
+    },
+    {
+      "id": "l-b007-o001",
+      "type": "behaviour-outcome",
+      "sourceId": "b-007",
+      "targetId": "o-001",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:19.000Z",
+      "updatedAt": "2025-12-21T18:30:19.000Z"
+    },
+    {
+      "id": "l-b007-o007",
+      "type": "behaviour-outcome",
+      "sourceId": "b-007",
+      "targetId": "o-007",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:20.000Z",
+      "updatedAt": "2025-12-21T18:30:20.000Z"
+    },
+    {
+      "id": "l-b007-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-007",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:21.000Z",
+      "updatedAt": "2025-12-21T18:30:21.000Z"
+    },
+    {
+      "id": "l-b008-o007",
+      "type": "behaviour-outcome",
+      "sourceId": "b-008",
+      "targetId": "o-007",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:22.000Z",
+      "updatedAt": "2025-12-21T18:30:22.000Z"
+    },
+    {
+      "id": "l-b008-o018",
+      "type": "behaviour-outcome",
+      "sourceId": "b-008",
+      "targetId": "o-018",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:23.000Z",
+      "updatedAt": "2025-12-21T18:30:23.000Z"
+    },
+    {
+      "id": "l-b008-o019",
+      "type": "behaviour-outcome",
+      "sourceId": "b-008",
+      "targetId": "o-019",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:24.000Z",
+      "updatedAt": "2025-12-21T18:30:24.000Z"
+    },
+    {
+      "id": "l-b009-o018",
+      "type": "behaviour-outcome",
+      "sourceId": "b-009",
+      "targetId": "o-018",
+      "valence": "negative",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:25.000Z",
+      "updatedAt": "2025-12-21T18:30:25.000Z"
+    },
+    {
+      "id": "l-b009-o020",
+      "type": "behaviour-outcome",
+      "sourceId": "b-009",
+      "targetId": "o-020",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:26.000Z",
+      "updatedAt": "2025-12-21T18:30:26.000Z"
+    },
+    {
+      "id": "l-b009-o006",
+      "type": "behaviour-outcome",
+      "sourceId": "b-009",
+      "targetId": "o-006",
+      "valence": "negative",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:27.000Z",
+      "updatedAt": "2025-12-21T18:30:27.000Z"
+    },
+    {
+      "id": "l-b010-o003",
+      "type": "behaviour-outcome",
+      "sourceId": "b-010",
+      "targetId": "o-003",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:28.000Z",
+      "updatedAt": "2025-12-21T18:30:28.000Z"
+    },
+    {
+      "id": "l-b010-o015",
+      "type": "behaviour-outcome",
+      "sourceId": "b-010",
+      "targetId": "o-015",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:29.000Z",
+      "updatedAt": "2025-12-21T18:30:29.000Z"
+    },
+    {
+      "id": "l-b011-o002",
+      "type": "behaviour-outcome",
+      "sourceId": "b-011",
+      "targetId": "o-002",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:30.000Z",
+      "updatedAt": "2025-12-21T18:30:30.000Z"
+    },
+    {
+      "id": "l-b011-o007",
+      "type": "behaviour-outcome",
+      "sourceId": "b-011",
+      "targetId": "o-007",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:31.000Z",
+      "updatedAt": "2025-12-21T18:30:31.000Z"
+    },
+    {
+      "id": "l-b011-o019",
+      "type": "behaviour-outcome",
+      "sourceId": "b-011",
+      "targetId": "o-019",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:32.000Z",
+      "updatedAt": "2025-12-21T18:30:32.000Z"
+    },
+    {
+      "id": "l-b012-o005",
+      "type": "behaviour-outcome",
+      "sourceId": "b-012",
+      "targetId": "o-005",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:33.000Z",
+      "updatedAt": "2025-12-21T18:30:33.000Z"
+    },
+    {
+      "id": "l-b012-o006",
+      "type": "behaviour-outcome",
+      "sourceId": "b-012",
+      "targetId": "o-006",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:34.000Z",
+      "updatedAt": "2025-12-21T18:30:34.000Z"
+    },
+    {
+      "id": "l-b012-o018",
+      "type": "behaviour-outcome",
+      "sourceId": "b-012",
+      "targetId": "o-018",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:35.000Z",
+      "updatedAt": "2025-12-21T18:30:35.000Z"
+    },
+    {
+      "id": "l-b013-o004",
+      "type": "behaviour-outcome",
+      "sourceId": "b-013",
+      "targetId": "o-004",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:36.000Z",
+      "updatedAt": "2025-12-21T18:30:36.000Z"
+    },
+    {
+      "id": "l-b013-o010",
+      "type": "behaviour-outcome",
+      "sourceId": "b-013",
+      "targetId": "o-010",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:37.000Z",
+      "updatedAt": "2025-12-21T18:30:37.000Z"
+    },
+    {
+      "id": "l-b014-o004",
+      "type": "behaviour-outcome",
+      "sourceId": "b-014",
+      "targetId": "o-004",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:38.000Z",
+      "updatedAt": "2025-12-21T18:30:38.000Z"
+    },
+    {
+      "id": "l-b014-o009",
+      "type": "behaviour-outcome",
+      "sourceId": "b-014",
+      "targetId": "o-009",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:39.000Z",
+      "updatedAt": "2025-12-21T18:30:39.000Z"
+    },
+    {
+      "id": "l-b014-o017",
+      "type": "behaviour-outcome",
+      "sourceId": "b-014",
+      "targetId": "o-017",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:40.000Z",
+      "updatedAt": "2025-12-21T18:30:40.000Z"
+    },
+    {
+      "id": "l-b014-o019",
+      "type": "behaviour-outcome",
+      "sourceId": "b-014",
+      "targetId": "o-019",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:41.000Z",
+      "updatedAt": "2025-12-21T18:30:41.000Z"
+    },
+    {
+      "id": "l-b015-o004",
+      "type": "behaviour-outcome",
+      "sourceId": "b-015",
+      "targetId": "o-004",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:42.000Z",
+      "updatedAt": "2025-12-21T18:30:42.000Z"
+    },
+    {
+      "id": "l-b015-o009",
+      "type": "behaviour-outcome",
+      "sourceId": "b-015",
+      "targetId": "o-009",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:43.000Z",
+      "updatedAt": "2025-12-21T18:30:43.000Z"
+    },
+    {
+      "id": "l-b015-o017",
+      "type": "behaviour-outcome",
+      "sourceId": "b-015",
+      "targetId": "o-017",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:44.000Z",
+      "updatedAt": "2025-12-21T18:30:44.000Z"
+    },
+    {
+      "id": "l-b016-o004",
+      "type": "behaviour-outcome",
+      "sourceId": "b-016",
+      "targetId": "o-004",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:45.000Z",
+      "updatedAt": "2025-12-21T18:30:45.000Z"
+    },
+    {
+      "id": "l-b016-o017",
+      "type": "behaviour-outcome",
+      "sourceId": "b-016",
+      "targetId": "o-017",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:46.000Z",
+      "updatedAt": "2025-12-21T18:30:46.000Z"
+    },
+    {
+      "id": "l-b016-o019",
+      "type": "behaviour-outcome",
+      "sourceId": "b-016",
+      "targetId": "o-019",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:47.000Z",
+      "updatedAt": "2025-12-21T18:30:47.000Z"
+    },
+    {
+      "id": "l-b017-o006",
+      "type": "behaviour-outcome",
+      "sourceId": "b-017",
+      "targetId": "o-006",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:48.000Z",
+      "updatedAt": "2025-12-21T18:30:48.000Z"
+    },
+    {
+      "id": "l-b017-o005",
+      "type": "behaviour-outcome",
+      "sourceId": "b-017",
+      "targetId": "o-005",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:49.000Z",
+      "updatedAt": "2025-12-21T18:30:49.000Z"
+    },
+    {
+      "id": "l-b017-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-017",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:50.000Z",
+      "updatedAt": "2025-12-21T18:30:50.000Z"
+    },
+    {
+      "id": "l-b018-o006",
+      "type": "behaviour-outcome",
+      "sourceId": "b-018",
+      "targetId": "o-006",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:51.000Z",
+      "updatedAt": "2025-12-21T18:30:51.000Z"
+    },
+    {
+      "id": "l-b018-o007",
+      "type": "behaviour-outcome",
+      "sourceId": "b-018",
+      "targetId": "o-007",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:52.000Z",
+      "updatedAt": "2025-12-21T18:30:52.000Z"
+    },
+    {
+      "id": "l-b018-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-018",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:53.000Z",
+      "updatedAt": "2025-12-21T18:30:53.000Z"
+    },
+    {
+      "id": "l-b019-o018",
+      "type": "behaviour-outcome",
+      "sourceId": "b-019",
+      "targetId": "o-018",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:54.000Z",
+      "updatedAt": "2025-12-21T18:30:54.000Z"
+    },
+    {
+      "id": "l-b019-o005",
+      "type": "behaviour-outcome",
+      "sourceId": "b-019",
+      "targetId": "o-005",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:55.000Z",
+      "updatedAt": "2025-12-21T18:30:55.000Z"
+    },
+    {
+      "id": "l-b019-o006",
+      "type": "behaviour-outcome",
+      "sourceId": "b-019",
+      "targetId": "o-006",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:30:56.000Z",
+      "updatedAt": "2025-12-21T18:30:56.000Z"
+    },
+    {
+      "id": "l-b020-o002",
+      "type": "behaviour-outcome",
+      "sourceId": "b-020",
+      "targetId": "o-002",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:57.000Z",
+      "updatedAt": "2025-12-21T18:30:57.000Z"
+    },
+    {
+      "id": "l-b020-o020",
+      "type": "behaviour-outcome",
+      "sourceId": "b-020",
+      "targetId": "o-020",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:58.000Z",
+      "updatedAt": "2025-12-21T18:30:58.000Z"
+    },
+    {
+      "id": "l-b020-o004",
+      "type": "behaviour-outcome",
+      "sourceId": "b-020",
+      "targetId": "o-004",
+      "valence": "negative",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:30:59.000Z",
+      "updatedAt": "2025-12-21T18:30:59.000Z"
+    },
+    {
+      "id": "l-b020-o019",
+      "type": "behaviour-outcome",
+      "sourceId": "b-020",
+      "targetId": "o-019",
+      "valence": "negative",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:00.000Z",
+      "updatedAt": "2025-12-21T18:31:00.000Z"
+    },
+    {
+      "id": "l-b021-o007",
+      "type": "behaviour-outcome",
+      "sourceId": "b-021",
+      "targetId": "o-007",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:01.000Z",
+      "updatedAt": "2025-12-21T18:31:01.000Z"
+    },
+    {
+      "id": "l-b021-o006",
+      "type": "behaviour-outcome",
+      "sourceId": "b-021",
+      "targetId": "o-006",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:02.000Z",
+      "updatedAt": "2025-12-21T18:31:02.000Z"
+    },
+    {
+      "id": "l-b021-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-021",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:03.000Z",
+      "updatedAt": "2025-12-21T18:31:03.000Z"
+    },
+    {
+      "id": "l-b022-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-022",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:04.000Z",
+      "updatedAt": "2025-12-21T18:31:04.000Z"
+    },
+    {
+      "id": "l-b022-o013",
+      "type": "behaviour-outcome",
+      "sourceId": "b-022",
+      "targetId": "o-013",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:05.000Z",
+      "updatedAt": "2025-12-21T18:31:05.000Z"
+    },
+    {
+      "id": "l-b023-o018",
+      "type": "behaviour-outcome",
+      "sourceId": "b-023",
+      "targetId": "o-018",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:06.000Z",
+      "updatedAt": "2025-12-21T18:31:06.000Z"
+    },
+    {
+      "id": "l-b023-o014",
+      "type": "behaviour-outcome",
+      "sourceId": "b-023",
+      "targetId": "o-014",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:07.000Z",
+      "updatedAt": "2025-12-21T18:31:07.000Z"
+    },
+    {
+      "id": "l-b023-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-023",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:08.000Z",
+      "updatedAt": "2025-12-21T18:31:08.000Z"
+    },
+    {
+      "id": "l-b024-o005",
+      "type": "behaviour-outcome",
+      "sourceId": "b-024",
+      "targetId": "o-005",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:09.000Z",
+      "updatedAt": "2025-12-21T18:31:09.000Z"
+    },
+    {
+      "id": "l-b024-o010",
+      "type": "behaviour-outcome",
+      "sourceId": "b-024",
+      "targetId": "o-010",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:10.000Z",
+      "updatedAt": "2025-12-21T18:31:10.000Z"
+    },
+    {
+      "id": "l-b024-o016",
+      "type": "behaviour-outcome",
+      "sourceId": "b-024",
+      "targetId": "o-016",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:11.000Z",
+      "updatedAt": "2025-12-21T18:31:11.000Z"
+    },
+    {
+      "id": "l-b025-o011",
+      "type": "behaviour-outcome",
+      "sourceId": "b-025",
+      "targetId": "o-011",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:12.000Z",
+      "updatedAt": "2025-12-21T18:31:12.000Z"
+    },
+    {
+      "id": "l-b025-o015",
+      "type": "behaviour-outcome",
+      "sourceId": "b-025",
+      "targetId": "o-015",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:13.000Z",
+      "updatedAt": "2025-12-21T18:31:13.000Z"
+    },
+    {
+      "id": "l-b025-o016",
+      "type": "behaviour-outcome",
+      "sourceId": "b-025",
+      "targetId": "o-016",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:14.000Z",
+      "updatedAt": "2025-12-21T18:31:14.000Z"
+    },
+    {
+      "id": "l-b026-o013",
+      "type": "behaviour-outcome",
+      "sourceId": "b-026",
+      "targetId": "o-013",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:15.000Z",
+      "updatedAt": "2025-12-21T18:31:15.000Z"
+    },
+    {
+      "id": "l-b026-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-026",
+      "targetId": "o-012",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:16.000Z",
+      "updatedAt": "2025-12-21T18:31:16.000Z"
+    },
+    {
+      "id": "l-b026-o014",
+      "type": "behaviour-outcome",
+      "sourceId": "b-026",
+      "targetId": "o-014",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:17.000Z",
+      "updatedAt": "2025-12-21T18:31:17.000Z"
+    },
+    {
+      "id": "l-b027-o007",
+      "type": "behaviour-outcome",
+      "sourceId": "b-027",
+      "targetId": "o-007",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:18.000Z",
+      "updatedAt": "2025-12-21T18:31:18.000Z"
+    },
+    {
+      "id": "l-b027-o006",
+      "type": "behaviour-outcome",
+      "sourceId": "b-027",
+      "targetId": "o-006",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:19.000Z",
+      "updatedAt": "2025-12-21T18:31:19.000Z"
+    },
+    {
+      "id": "l-b027-o019",
+      "type": "behaviour-outcome",
+      "sourceId": "b-027",
+      "targetId": "o-019",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:20.000Z",
+      "updatedAt": "2025-12-21T18:31:20.000Z"
+    },
+    {
+      "id": "l-b028-o014",
+      "type": "behaviour-outcome",
+      "sourceId": "b-028",
+      "targetId": "o-014",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:21.000Z",
+      "updatedAt": "2025-12-21T18:31:21.000Z"
+    },
+    {
+      "id": "l-b028-o011",
+      "type": "behaviour-outcome",
+      "sourceId": "b-028",
+      "targetId": "o-011",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:22.000Z",
+      "updatedAt": "2025-12-21T18:31:22.000Z"
+    },
+    {
+      "id": "l-b029-o016",
+      "type": "behaviour-outcome",
+      "sourceId": "b-029",
+      "targetId": "o-016",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:23.000Z",
+      "updatedAt": "2025-12-21T18:31:23.000Z"
+    },
+    {
+      "id": "l-b029-o010",
+      "type": "behaviour-outcome",
+      "sourceId": "b-029",
+      "targetId": "o-010",
+      "valence": "positive",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:24.000Z",
+      "updatedAt": "2025-12-21T18:31:24.000Z"
+    },
+    {
+      "id": "l-b029-o004",
+      "type": "behaviour-outcome",
+      "sourceId": "b-029",
+      "targetId": "o-004",
+      "valence": "negative",
+      "reliability": "sometimes",
+      "createdAt": "2025-12-01T09:31:25.000Z",
+      "updatedAt": "2025-12-21T18:31:25.000Z"
+    },
+    {
+      "id": "l-b030-o020",
+      "type": "behaviour-outcome",
+      "sourceId": "b-030",
+      "targetId": "o-020",
+      "valence": "positive",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:26.000Z",
+      "updatedAt": "2025-12-21T18:31:26.000Z"
+    },
+    {
+      "id": "l-b030-o018",
+      "type": "behaviour-outcome",
+      "sourceId": "b-030",
+      "targetId": "o-018",
+      "valence": "negative",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:27.000Z",
+      "updatedAt": "2025-12-21T18:31:27.000Z"
+    },
+    {
+      "id": "l-b030-o012",
+      "type": "behaviour-outcome",
+      "sourceId": "b-030",
+      "targetId": "o-012",
+      "valence": "negative",
+      "reliability": "usually",
+      "createdAt": "2025-12-01T09:31:28.000Z",
+      "updatedAt": "2025-12-21T18:31:28.000Z"
+    },
+
+    {
+      "id": "l-o001-v001",
+      "type": "outcome-value",
+      "sourceId": "o-001",
+      "targetId": "v-001",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:00.000Z",
+      "updatedAt": "2025-12-21T18:40:00.000Z"
+    },
+    {
+      "id": "l-o001-v002",
+      "type": "outcome-value",
+      "sourceId": "o-001",
+      "targetId": "v-002",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:01.000Z",
+      "updatedAt": "2025-12-21T18:40:01.000Z"
+    },
+    {
+      "id": "l-o001-v007",
+      "type": "outcome-value",
+      "sourceId": "o-001",
+      "targetId": "v-007",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:02.000Z",
+      "updatedAt": "2025-12-21T18:40:02.000Z"
+    },
+    {
+      "id": "l-o001-v009",
+      "type": "outcome-value",
+      "sourceId": "o-001",
+      "targetId": "v-009",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:03.000Z",
+      "updatedAt": "2025-12-21T18:40:03.000Z"
+    },
+    {
+      "id": "l-o002-v002",
+      "type": "outcome-value",
+      "sourceId": "o-002",
+      "targetId": "v-002",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:04.000Z",
+      "updatedAt": "2025-12-21T18:40:04.000Z"
+    },
+    {
+      "id": "l-o002-v001",
+      "type": "outcome-value",
+      "sourceId": "o-002",
+      "targetId": "v-001",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:05.000Z",
+      "updatedAt": "2025-12-21T18:40:05.000Z"
+    },
+    {
+      "id": "l-o002-v006",
+      "type": "outcome-value",
+      "sourceId": "o-002",
+      "targetId": "v-006",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:06.000Z",
+      "updatedAt": "2025-12-21T18:40:06.000Z"
+    },
+    {
+      "id": "l-o003-v009",
+      "type": "outcome-value",
+      "sourceId": "o-003",
+      "targetId": "v-009",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:07.000Z",
+      "updatedAt": "2025-12-21T18:40:07.000Z"
+    },
+    {
+      "id": "l-o003-v002",
+      "type": "outcome-value",
+      "sourceId": "o-003",
+      "targetId": "v-002",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:08.000Z",
+      "updatedAt": "2025-12-21T18:40:08.000Z"
+    },
+    {
+      "id": "l-o003-v010",
+      "type": "outcome-value",
+      "sourceId": "o-003",
+      "targetId": "v-010",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:09.000Z",
+      "updatedAt": "2025-12-21T18:40:09.000Z"
+    },
+    {
+      "id": "l-o003-v003",
+      "type": "outcome-value",
+      "sourceId": "o-003",
+      "targetId": "v-003",
+      "valence": "positive",
+      "strength": "weak",
+      "createdAt": "2025-12-01T09:40:10.000Z",
+      "updatedAt": "2025-12-21T18:40:10.000Z"
+    },
+    {
+      "id": "l-o004-v013",
+      "type": "outcome-value",
+      "sourceId": "o-004",
+      "targetId": "v-013",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:11.000Z",
+      "updatedAt": "2025-12-21T18:40:11.000Z"
+    },
+    {
+      "id": "l-o004-v003",
+      "type": "outcome-value",
+      "sourceId": "o-004",
+      "targetId": "v-003",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:12.000Z",
+      "updatedAt": "2025-12-21T18:40:12.000Z"
+    },
+    {
+      "id": "l-o004-v005",
+      "type": "outcome-value",
+      "sourceId": "o-004",
+      "targetId": "v-005",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:13.000Z",
+      "updatedAt": "2025-12-21T18:40:13.000Z"
+    },
+    {
+      "id": "l-o005-v004",
+      "type": "outcome-value",
+      "sourceId": "o-005",
+      "targetId": "v-004",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:14.000Z",
+      "updatedAt": "2025-12-21T18:40:14.000Z"
+    },
+    {
+      "id": "l-o005-v005",
+      "type": "outcome-value",
+      "sourceId": "o-005",
+      "targetId": "v-005",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:15.000Z",
+      "updatedAt": "2025-12-21T18:40:15.000Z"
+    },
+    {
+      "id": "l-o005-v001",
+      "type": "outcome-value",
+      "sourceId": "o-005",
+      "targetId": "v-001",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:16.000Z",
+      "updatedAt": "2025-12-21T18:40:16.000Z"
+    },
+    {
+      "id": "l-o006-v005",
+      "type": "outcome-value",
+      "sourceId": "o-006",
+      "targetId": "v-005",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:17.000Z",
+      "updatedAt": "2025-12-21T18:40:17.000Z"
+    },
+    {
+      "id": "l-o006-v004",
+      "type": "outcome-value",
+      "sourceId": "o-006",
+      "targetId": "v-004",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:18.000Z",
+      "updatedAt": "2025-12-21T18:40:18.000Z"
+    },
+    {
+      "id": "l-o007-v006",
+      "type": "outcome-value",
+      "sourceId": "o-007",
+      "targetId": "v-006",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:19.000Z",
+      "updatedAt": "2025-12-21T18:40:19.000Z"
+    },
+    {
+      "id": "l-o007-v013",
+      "type": "outcome-value",
+      "sourceId": "o-007",
+      "targetId": "v-013",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:20.000Z",
+      "updatedAt": "2025-12-21T18:40:20.000Z"
+    },
+    {
+      "id": "l-o007-v001",
+      "type": "outcome-value",
+      "sourceId": "o-007",
+      "targetId": "v-001",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:21.000Z",
+      "updatedAt": "2025-12-21T18:40:21.000Z"
+    },
+    {
+      "id": "l-o008-v001",
+      "type": "outcome-value",
+      "sourceId": "o-008",
+      "targetId": "v-001",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:22.000Z",
+      "updatedAt": "2025-12-21T18:40:22.000Z"
+    },
+    {
+      "id": "l-o008-v007",
+      "type": "outcome-value",
+      "sourceId": "o-008",
+      "targetId": "v-007",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:23.000Z",
+      "updatedAt": "2025-12-21T18:40:23.000Z"
+    },
+    {
+      "id": "l-o008-v010",
+      "type": "outcome-value",
+      "sourceId": "o-008",
+      "targetId": "v-010",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:24.000Z",
+      "updatedAt": "2025-12-21T18:40:24.000Z"
+    },
+    {
+      "id": "l-o009-v002",
+      "type": "outcome-value",
+      "sourceId": "o-009",
+      "targetId": "v-002",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:25.000Z",
+      "updatedAt": "2025-12-21T18:40:25.000Z"
+    },
+    {
+      "id": "l-o009-v013",
+      "type": "outcome-value",
+      "sourceId": "o-009",
+      "targetId": "v-013",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:26.000Z",
+      "updatedAt": "2025-12-21T18:40:26.000Z"
+    },
+    {
+      "id": "l-o010-v003",
+      "type": "outcome-value",
+      "sourceId": "o-010",
+      "targetId": "v-003",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:27.000Z",
+      "updatedAt": "2025-12-21T18:40:27.000Z"
+    },
+    {
+      "id": "l-o010-v008",
+      "type": "outcome-value",
+      "sourceId": "o-010",
+      "targetId": "v-008",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:28.000Z",
+      "updatedAt": "2025-12-21T18:40:28.000Z"
+    },
+    {
+      "id": "l-o010-v011",
+      "type": "outcome-value",
+      "sourceId": "o-010",
+      "targetId": "v-011",
+      "valence": "positive",
+      "strength": "weak",
+      "createdAt": "2025-12-01T09:40:29.000Z",
+      "updatedAt": "2025-12-21T18:40:29.000Z"
+    },
+    {
+      "id": "l-o011-v009",
+      "type": "outcome-value",
+      "sourceId": "o-011",
+      "targetId": "v-009",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:30.000Z",
+      "updatedAt": "2025-12-21T18:40:30.000Z"
+    },
+    {
+      "id": "l-o011-v008",
+      "type": "outcome-value",
+      "sourceId": "o-011",
+      "targetId": "v-008",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:31.000Z",
+      "updatedAt": "2025-12-21T18:40:31.000Z"
+    },
+    {
+      "id": "l-o011-v011",
+      "type": "outcome-value",
+      "sourceId": "o-011",
+      "targetId": "v-011",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:32.000Z",
+      "updatedAt": "2025-12-21T18:40:32.000Z"
+    },
+    {
+      "id": "l-o012-v008",
+      "type": "outcome-value",
+      "sourceId": "o-012",
+      "targetId": "v-008",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:33.000Z",
+      "updatedAt": "2025-12-21T18:40:33.000Z"
+    },
+    {
+      "id": "l-o012-v014",
+      "type": "outcome-value",
+      "sourceId": "o-012",
+      "targetId": "v-014",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:34.000Z",
+      "updatedAt": "2025-12-21T18:40:34.000Z"
+    },
+    {
+      "id": "l-o012-v005",
+      "type": "outcome-value",
+      "sourceId": "o-012",
+      "targetId": "v-005",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:35.000Z",
+      "updatedAt": "2025-12-21T18:40:35.000Z"
+    },
+    {
+      "id": "l-o013-v014",
+      "type": "outcome-value",
+      "sourceId": "o-013",
+      "targetId": "v-014",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:36.000Z",
+      "updatedAt": "2025-12-21T18:40:36.000Z"
+    },
+    {
+      "id": "l-o013-v008",
+      "type": "outcome-value",
+      "sourceId": "o-013",
+      "targetId": "v-008",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:37.000Z",
+      "updatedAt": "2025-12-21T18:40:37.000Z"
+    },
+    {
+      "id": "l-o013-v007",
+      "type": "outcome-value",
+      "sourceId": "o-013",
+      "targetId": "v-007",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:38.000Z",
+      "updatedAt": "2025-12-21T18:40:38.000Z"
+    },
+    {
+      "id": "l-o014-v007",
+      "type": "outcome-value",
+      "sourceId": "o-014",
+      "targetId": "v-007",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:39.000Z",
+      "updatedAt": "2025-12-21T18:40:39.000Z"
+    },
+    {
+      "id": "l-o014-v012",
+      "type": "outcome-value",
+      "sourceId": "o-014",
+      "targetId": "v-012",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:40.000Z",
+      "updatedAt": "2025-12-21T18:40:40.000Z"
+    },
+    {
+      "id": "l-o014-v008",
+      "type": "outcome-value",
+      "sourceId": "o-014",
+      "targetId": "v-008",
+      "valence": "positive",
+      "strength": "weak",
+      "createdAt": "2025-12-01T09:40:41.000Z",
+      "updatedAt": "2025-12-21T18:40:41.000Z"
+    },
+    {
+      "id": "l-o015-v009",
+      "type": "outcome-value",
+      "sourceId": "o-015",
+      "targetId": "v-009",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:42.000Z",
+      "updatedAt": "2025-12-21T18:40:42.000Z"
+    },
+    {
+      "id": "l-o015-v001",
+      "type": "outcome-value",
+      "sourceId": "o-015",
+      "targetId": "v-001",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:43.000Z",
+      "updatedAt": "2025-12-21T18:40:43.000Z"
+    },
+    {
+      "id": "l-o015-v010",
+      "type": "outcome-value",
+      "sourceId": "o-015",
+      "targetId": "v-010",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:44.000Z",
+      "updatedAt": "2025-12-21T18:40:44.000Z"
+    },
+    {
+      "id": "l-o016-v011",
+      "type": "outcome-value",
+      "sourceId": "o-016",
+      "targetId": "v-011",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:45.000Z",
+      "updatedAt": "2025-12-21T18:40:45.000Z"
+    },
+    {
+      "id": "l-o016-v008",
+      "type": "outcome-value",
+      "sourceId": "o-016",
+      "targetId": "v-008",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:46.000Z",
+      "updatedAt": "2025-12-21T18:40:46.000Z"
+    },
+    {
+      "id": "l-o016-v003",
+      "type": "outcome-value",
+      "sourceId": "o-016",
+      "targetId": "v-003",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:47.000Z",
+      "updatedAt": "2025-12-21T18:40:47.000Z"
+    },
+    {
+      "id": "l-o017-v013",
+      "type": "outcome-value",
+      "sourceId": "o-017",
+      "targetId": "v-013",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:48.000Z",
+      "updatedAt": "2025-12-21T18:40:48.000Z"
+    },
+    {
+      "id": "l-o017-v005",
+      "type": "outcome-value",
+      "sourceId": "o-017",
+      "targetId": "v-005",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:49.000Z",
+      "updatedAt": "2025-12-21T18:40:49.000Z"
+    },
+    {
+      "id": "l-o018-v004",
+      "type": "outcome-value",
+      "sourceId": "o-018",
+      "targetId": "v-004",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:50.000Z",
+      "updatedAt": "2025-12-21T18:40:50.000Z"
+    },
+    {
+      "id": "l-o018-v005",
+      "type": "outcome-value",
+      "sourceId": "o-018",
+      "targetId": "v-005",
+      "valence": "positive",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:51.000Z",
+      "updatedAt": "2025-12-21T18:40:51.000Z"
+    },
+    {
+      "id": "l-o019-v006",
+      "type": "outcome-value",
+      "sourceId": "o-019",
+      "targetId": "v-006",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:52.000Z",
+      "updatedAt": "2025-12-21T18:40:52.000Z"
+    },
+    {
+      "id": "l-o019-v005",
+      "type": "outcome-value",
+      "sourceId": "o-019",
+      "targetId": "v-005",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:53.000Z",
+      "updatedAt": "2025-12-21T18:40:53.000Z"
+    },
+    {
+      "id": "l-o019-v003",
+      "type": "outcome-value",
+      "sourceId": "o-019",
+      "targetId": "v-003",
+      "valence": "positive",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:54.000Z",
+      "updatedAt": "2025-12-21T18:40:54.000Z"
+    },
+    {
+      "id": "l-o020-v001",
+      "type": "outcome-value",
+      "sourceId": "o-020",
+      "targetId": "v-001",
+      "valence": "negative",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:55.000Z",
+      "updatedAt": "2025-12-21T18:40:55.000Z"
+    },
+    {
+      "id": "l-o020-v005",
+      "type": "outcome-value",
+      "sourceId": "o-020",
+      "targetId": "v-005",
+      "valence": "negative",
+      "strength": "strong",
+      "createdAt": "2025-12-01T09:40:56.000Z",
+      "updatedAt": "2025-12-21T18:40:56.000Z"
+    },
+    {
+      "id": "l-o020-v003",
+      "type": "outcome-value",
+      "sourceId": "o-020",
+      "targetId": "v-003",
+      "valence": "negative",
+      "strength": "moderate",
+      "createdAt": "2025-12-01T09:40:57.000Z",
+      "updatedAt": "2025-12-21T18:40:57.000Z"
+    },
+    {
+      "id": "l-o020-v004",
+      "type": "outcome-value",
+      "sourceId": "o-020",
+      "targetId": "v-004",
+      "valence": "negative",
+      "strength": "weak",
+      "createdAt": "2025-12-01T09:40:58.000Z",
+      "updatedAt": "2025-12-21T18:40:58.000Z"
+    }
+  ]
+}
