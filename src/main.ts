@@ -20,6 +20,7 @@ import {
   valueToFormData,
 } from './components/forms';
 import { NetworkGraph } from './components/graph';
+import { LadderSession, WhyLadder } from './components/ladder';
 import { addBehaviour, deleteBehaviour, updateBehaviour } from './data/behaviours';
 import {
   addBehaviourOutcomeLink,
@@ -32,7 +33,7 @@ import { createEmptyNetwork } from './data/network';
 import { addOutcome, deleteOutcome, updateOutcome } from './data/outcomes';
 import { loadNetwork, saveNetwork } from './data/storage';
 import { addValue, deleteValue, updateValue } from './data/values';
-import type { Link, Network, Node } from './types';
+import type { Behaviour, Link, Network, Node, Outcome, Value } from './types';
 
 // ============================================================================
 // Application State
@@ -41,12 +42,13 @@ import type { Link, Network, Node } from './types';
 interface AppState {
   network: Network;
   selectedNodeId: string | null;
-  formMode: 'none' | 'create-behaviour' | 'create-outcome' | 'create-value' | 'create-link' | 'edit-node' | 'edit-link';
+  formMode: 'none' | 'create-behaviour' | 'create-outcome' | 'create-value' | 'create-link' | 'edit-node' | 'edit-link' | 'why-ladder';
   editingNode: Node | null;
   editingLink: Link | null;
   linkType: LinkType | null;
   preselectedSourceId: string | null;
   preselectedTargetId: string | null;
+  ladderBehaviourId: string | null;
 }
 
 const state: AppState = {
@@ -58,10 +60,12 @@ const state: AppState = {
   linkType: null,
   preselectedSourceId: null,
   preselectedTargetId: null,
+  ladderBehaviourId: null,
 };
 
 let graph: NetworkGraph | null = null;
 let detailPanel: NodeDetailPanel | null = null;
+let whyLadderInstance: WhyLadder | null = null;
 
 // ============================================================================
 // State Management
@@ -72,6 +76,10 @@ function updateNetwork(newNetwork: Network): void {
   saveNetwork(newNetwork);
   graph?.setNetwork(newNetwork);
   detailPanel?.setNetwork(newNetwork);
+  // Clear ladder instance when network changes externally (if active)
+  if (whyLadderInstance) {
+    whyLadderInstance = null;
+  }
 }
 
 function selectNode(nodeId: string | null): void {
@@ -140,6 +148,12 @@ function showEditLinkForm(link: Link): void {
   renderSidebar();
 }
 
+function showWhyLadder(behaviourId?: string): void {
+  state.formMode = 'why-ladder';
+  state.ladderBehaviourId = behaviourId ?? null;
+  renderSidebar();
+}
+
 function hideForm(): void {
   state.formMode = 'none';
   state.editingNode = null;
@@ -147,7 +161,117 @@ function hideForm(): void {
   state.linkType = null;
   state.preselectedSourceId = null;
   state.preselectedTargetId = null;
+  state.ladderBehaviourId = null;
+  whyLadderInstance = null;
   renderSidebar();
+}
+
+// ============================================================================
+// Why Ladder Handlers
+// ============================================================================
+
+function handleLadderCreateBehaviour(label: string): Behaviour {
+  const result = addBehaviour(state.network, {
+    label,
+    frequency: 'occasionally',
+    cost: 'low',
+    contextTags: [],
+  });
+  if (result.success && result.data) {
+    updateNetwork(result.data.network);
+    return result.data.behaviour;
+  }
+  throw new Error('Failed to create behaviour');
+}
+
+function handleLadderCreateOutcome(label: string, behaviourId: string): Outcome {
+  // Create the outcome
+  const outcomeResult = addOutcome(state.network, { label });
+  if (!outcomeResult.success || !outcomeResult.data) {
+    throw new Error('Failed to create outcome');
+  }
+
+  // Link it to the behaviour
+  const linkResult = addBehaviourOutcomeLink(outcomeResult.data.network, {
+    sourceId: behaviourId,
+    targetId: outcomeResult.data.outcome.id,
+    valence: 'positive',
+    reliability: 'usually',
+  });
+  if (linkResult.success && linkResult.data) {
+    updateNetwork(linkResult.data.network);
+  }
+
+  return outcomeResult.data.outcome;
+}
+
+function handleLadderLinkOutcome(outcomeId: string, behaviourId: string): void {
+  const result = addBehaviourOutcomeLink(state.network, {
+    sourceId: behaviourId,
+    targetId: outcomeId,
+    valence: 'positive',
+    reliability: 'usually',
+  });
+  if (result.success && result.data) {
+    updateNetwork(result.data.network);
+  }
+}
+
+function handleLadderCreateValue(label: string, outcomeId: string): Value {
+  // Create the value
+  const valueResult = addValue(state.network, {
+    label,
+    importance: 'high',
+    neglect: 'adequately-met',
+  });
+  if (!valueResult.success || !valueResult.data) {
+    throw new Error('Failed to create value');
+  }
+
+  // Link it to the outcome
+  const linkResult = addOutcomeValueLink(valueResult.data.network, {
+    sourceId: outcomeId,
+    targetId: valueResult.data.value.id,
+    valence: 'positive',
+    strength: 'moderate',
+  });
+  if (linkResult.success && linkResult.data) {
+    updateNetwork(linkResult.data.network);
+  }
+
+  return valueResult.data.value;
+}
+
+function handleLadderLinkValue(valueId: string, outcomeId: string): void {
+  const result = addOutcomeValueLink(state.network, {
+    sourceId: outcomeId,
+    targetId: valueId,
+    valence: 'positive',
+    strength: 'moderate',
+  });
+  if (result.success && result.data) {
+    updateNetwork(result.data.network);
+  }
+}
+
+function handleLadderChainOutcome(label: string, _parentOutcomeId: string): Outcome {
+  // For MVP, we create a new outcome that will need to be explained
+  // The parent outcome is marked as explained when chaining
+  // In a full implementation, we might create outcome-to-outcome links
+  const outcomeResult = addOutcome(state.network, { label });
+  if (!outcomeResult.success || !outcomeResult.data) {
+    throw new Error('Failed to create chained outcome');
+  }
+  updateNetwork(outcomeResult.data.network);
+  return outcomeResult.data.outcome;
+}
+
+function handleLadderComplete(_session: LadderSession): void {
+  hideForm();
+}
+
+function handleLadderExit(_session: LadderSession): void {
+  hideForm();
 }
 
 // ============================================================================
@@ -446,6 +570,27 @@ function renderSidebar(): void {
       }
       break;
 
+    case 'why-ladder':
+      // Initialize Why Ladder guided capture mode
+      whyLadderInstance = new WhyLadder(formContainer, {
+        network: state.network,
+        initialBehaviourId: state.ladderBehaviourId ?? undefined,
+        callbacks: {
+          onCreateBehaviour: handleLadderCreateBehaviour,
+          onSelectBehaviour: (_id: string): void => {
+            // Track selected behaviour in state
+          },
+          onCreateOutcome: handleLadderCreateOutcome,
+          onLinkOutcome: handleLadderLinkOutcome,
+          onCreateValue: handleLadderCreateValue,
+          onLinkValue: handleLadderLinkValue,
+          onChainOutcome: handleLadderChainOutcome,
+          onComplete: handleLadderComplete,
+          onExit: handleLadderExit,
+        },
+      });
+      break;
+
     default:
       // Show add buttons when no form is active
       formContainer.innerHTML = `
@@ -462,6 +607,11 @@ function renderSidebar(): void {
             <button class="btn btn-link" id="btn-add-bo-link">+ Behaviour → Outcome</button>
             <button class="btn btn-link" id="btn-add-ov-link">+ Outcome → Value</button>
           </div>
+          <hr class="sidebar-divider" />
+          <p>Guided capture:</p>
+          <div class="add-buttons">
+            <button class="btn btn-ladder" id="btn-why-ladder">🪜 Why Ladder</button>
+          </div>
         </div>
       `;
 
@@ -471,6 +621,7 @@ function renderSidebar(): void {
       document.getElementById('btn-add-value')?.addEventListener('click', showCreateValueForm);
       document.getElementById('btn-add-bo-link')?.addEventListener('click', () => showCreateLinkForm('behaviour-outcome'));
       document.getElementById('btn-add-ov-link')?.addEventListener('click', () => showCreateLinkForm('outcome-value'));
+      document.getElementById('btn-why-ladder')?.addEventListener('click', () => showWhyLadder());
   }
 }
 

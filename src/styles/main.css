@@ -718,3 +718,358 @@ h1 {
   color: #64748b;
   font-size: 1.125rem;
 }
+
+/* ============================================================================
+   Why Ladder Styles
+   ============================================================================ */
+
+.btn-ladder {
+  background: linear-gradient(135deg, var(--color-behaviour) 0%, var(--color-value) 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.btn-ladder:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #059669 100%);
+  border-color: transparent;
+}
+
+.ladder-panel {
+  padding: 0;
+}
+
+.ladder-header {
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--color-behaviour) 0%, var(--color-value) 100%);
+  color: white;
+  margin: -1rem -1rem 1rem -1rem;
+}
+
+.ladder-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.ladder-header p {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.step-dot.active {
+  background: white;
+}
+
+.step-dot.completed {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.ladder-step {
+  padding: 1rem;
+}
+
+.ladder-step h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.ladder-step p {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  margin: 0 0 1rem 0;
+}
+
+.ladder-step label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.375rem;
+}
+
+.ladder-step input[type="text"],
+.ladder-step select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.ladder-step input[type="text"]:focus,
+.ladder-step select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.selectable-list {
+  max-height: 180px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.selectable-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.1s ease;
+}
+
+.selectable-item:last-child {
+  border-bottom: none;
+}
+
+.selectable-item:hover {
+  background: #f9fafb;
+}
+
+.selectable-item.selected {
+  background: #eff6ff;
+}
+
+.selectable-item input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.selectable-item .item-label {
+  flex: 1;
+}
+
+.selectable-item .item-badge {
+  font-size: 0.6875rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.selectable-item .item-badge.behaviour {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-behaviour);
+}
+
+.selectable-item .item-badge.outcome {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-outcome);
+}
+
+.selectable-item .item-badge.value {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-value);
+}
+
+.empty-list {
+  padding: 1rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.8125rem;
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.ladder-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.ladder-actions .btn {
+  width: 100%;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.btn-primary:disabled {
+  background: #93c5fd;
+  border-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: white;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.btn-secondary:hover {
+  background: #f9fafb;
+}
+
+.btn-success {
+  background: var(--color-value);
+  color: white;
+  border-color: var(--color-value);
+}
+
+.btn-success:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
+.pending-outcomes {
+  margin-bottom: 1rem;
+}
+
+.pending-outcomes h5 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem 0;
+}
+
+.pending-outcome-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0;
+  font-size: 0.8125rem;
+}
+
+.pending-outcome-item .status-icon {
+  font-size: 0.75rem;
+}
+
+.pending-outcome-item .status-icon.pending {
+  color: var(--color-outcome);
+}
+
+.pending-outcome-item .status-icon.done {
+  color: var(--color-value);
+}
+
+.current-outcome {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.current-outcome .outcome-label {
+  font-weight: 600;
+  color: var(--color-outcome);
+  font-size: 0.875rem;
+}
+
+.completion-summary {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.completion-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.completion-summary h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.completion-summary p {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.completion-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.stat-label {
+  font-size: 0.6875rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inline-form {
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.inline-form .form-row {
+  margin-bottom: 0.5rem;
+}
+
+.inline-form .form-row:last-child {
+  margin-bottom: 0;
+}
+
+.inline-form .btn-small {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+}
+

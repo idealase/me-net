@@ -35,6 +35,9 @@ export default defineConfig({
         'src/components/forms/LinkForm.ts',
         'src/components/forms/NodeDetailPanel.ts',
         'src/components/forms/index.ts',
+        // Why Ladder UI component - tested via integration/E2E
+        'src/components/ladder/WhyLadder.ts',
+        'src/components/ladder/index.ts',
       ],
       thresholds: {
         statements: 80,
