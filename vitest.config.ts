@@ -35,6 +35,9 @@ export default defineConfig({
         'src/components/forms/LinkForm.ts',
         'src/components/forms/NodeDetailPanel.ts',
         'src/components/forms/index.ts',
+        // Onboarding/empty state overlays - rely on integration verification
+        'src/components/empty/**',
+        'src/components/welcome/**',
         // Why Ladder UI component - tested via integration/E2E
         'src/components/ladder/WhyLadder.ts',
         'src/components/ladder/index.ts',
@@ -49,11 +52,6 @@ export default defineConfig({
         'src/components/filters/index.ts',
         // Metrics index (just re-exports) - tested via unit tests on actual modules
         'src/metrics/index.ts',
-      ],
-      // Exclude specific browser DOM-dependent functions from export module
-      coverageExclude: [
-        '**/downloadNetworkAsJson',
-        '**/downloadSummaryReport',
       ],
       thresholds: {
         statements: 80,
