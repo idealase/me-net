@@ -38,6 +38,9 @@ export default defineConfig({
         // Why Ladder UI component - tested via integration/E2E
         'src/components/ladder/WhyLadder.ts',
         'src/components/ladder/index.ts',
+        // Validation UI component - tested via integration/E2E
+        'src/components/validation/ValidationPanel.ts',
+        'src/components/validation/index.ts',
       ],
       thresholds: {
         statements: 80,
