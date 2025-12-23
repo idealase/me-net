@@ -2,7 +2,14 @@
  * Tests for Theme and Configuration
  */
 
-import { defaultTheme, defaultLayeredLayout, defaultGraphOptions, edgeWidthScale, edgeOpacityScale } from './theme';
+import {
+  defaultTheme,
+  defaultLayeredLayout,
+  defaultGraphOptions,
+  defaultForceLayout,
+  edgeWidthScale,
+  edgeOpacityScale,
+} from './theme';
 
 describe('defaultTheme', () => {
   describe('node configuration', () => {
@@ -118,7 +125,7 @@ describe('defaultGraphOptions', () => {
   });
 
   it('includes default layout', () => {
-    expect(defaultGraphOptions.layout).toBe(defaultLayeredLayout);
+    expect(defaultGraphOptions.layout).toBe(defaultForceLayout);
   });
 });
 

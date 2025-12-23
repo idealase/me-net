@@ -36,6 +36,7 @@ export class NetworkGraph {
   private options: GraphOptions;
   private graphData: GraphData;
   private interactionState: GraphInteractionState;
+  private forceSimulation: d3.Simulation<AnyGraphNode, GraphEdge, undefined> | null = null;
 
   private zoom: d3.ZoomBehavior<SVGSVGElement, unknown>;
   private edgeSelection: d3.Selection<SVGPathElement, GraphEdge, SVGGElement, unknown> | null = null;
@@ -122,6 +123,7 @@ export class NetworkGraph {
    * Update the graph with new network data.
    */
   public setNetwork(network: Network): void {
+    this.stopForceSimulation();
     this.graphData = networkToGraphData(network);
 
     const nodeLookup = new Map(this.graphData.nodes.map((node) => [node.id, node] as const));
@@ -149,6 +151,8 @@ export class NetworkGraph {
         this.options.width,
         this.options.height
       );
+    } else {
+      this.startForceSimulation();
     }
 
     this.render();
@@ -168,6 +172,10 @@ export class NetworkGraph {
     // Re-apply layout
     if (this.options.layout.type === 'layered') {
       applyLayeredLayout(this.graphData, this.options.layout, width, height);
+    } else {
+      const center = d3.forceCenter(width / 2, height / 2);
+      this.forceSimulation?.force('center', center);
+      this.forceSimulation?.alpha(0.4).restart();
     }
 
     this.updatePositions();
@@ -309,6 +317,7 @@ export class NetworkGraph {
    * Destroy the graph and clean up.
    */
   public destroy(): void {
+    this.stopForceSimulation();
     if (this.keydownHandler) {
       document.removeEventListener('keydown', this.keydownHandler);
     }
@@ -326,6 +335,10 @@ export class NetworkGraph {
     this.renderEdges();
     this.renderNodes();
     this.updatePositions();
+
+    if (this.options.layout.type === 'force' && !this.forceSimulation) {
+      this.startForceSimulation();
+    }
   }
 
   private buildNodeAriaLabel(node: AnyGraphNode): string {
@@ -421,6 +434,10 @@ export class NetworkGraph {
         }
         this.onNodeHover?.(null);
       });
+
+    if (this.options.layout.type === 'force') {
+      this.enableNodeDragging();
+    }
   }
 
   /**
@@ -595,5 +612,86 @@ export class NetworkGraph {
       y: 20,
       collapsed: false,
     });
+  }
+
+  /**
+   * Initialize force-directed simulation and re-render on ticks.
+   */
+  private startForceSimulation(): void {
+    if (this.graphData.nodes.length === 0) return;
+
+    const layout = this.options.layout;
+    const theme = this.options.theme;
+    const linkForce = d3
+      .forceLink<AnyGraphNode, GraphEdge>(this.graphData.edges)
+      .id((d) => d.id)
+      .distance((edge) => {
+        const base = layout.linkDistance;
+        // Stronger connections pull nodes closer together.
+        return Math.max(80, base * (1 - edge.strength * 0.4));
+      })
+      .strength((edge) => 0.25 + edge.strength * 0.75);
+
+    const chargeForce = d3.forceManyBody<AnyGraphNode>().strength(layout.chargeStrength);
+
+    const collisionForce = d3.forceCollide<AnyGraphNode>((node) => {
+      const config = getNodeConfig(theme, node.type);
+      const radius = Math.max(config.width, config.height) / 2;
+      return radius + layout.collisionRadius;
+    });
+
+    const centerForce = d3.forceCenter(this.options.width / 2, this.options.height / 2);
+
+    this.forceSimulation = d3
+      .forceSimulation<AnyGraphNode>(this.graphData.nodes)
+      .force('link', linkForce)
+      .force('charge', chargeForce)
+      .force('collision', collisionForce)
+      .force('center', centerForce)
+      .velocityDecay(0.25)
+      .alpha(1)
+      .on('tick', () => this.updatePositions());
+  }
+
+  /**
+   * Stop and clean up force simulation if active.
+   */
+  private stopForceSimulation(): void {
+    if (this.forceSimulation) {
+      this.forceSimulation.stop();
+      this.forceSimulation = null;
+    }
+  }
+
+  /**
+   * Enable drag interactions for force-directed layout.
+   */
+  private enableNodeDragging(): void {
+    if (!this.nodeSelection) return;
+
+    const dragBehavior = d3
+      .drag<SVGGElement, AnyGraphNode>()
+      .on('start', (event, d) => {
+        event.sourceEvent.stopPropagation();
+        if (!event.active && this.forceSimulation) {
+          this.forceSimulation.alphaTarget(0.3).restart();
+        }
+        d.fx = d.x ?? event.x;
+        d.fy = d.y ?? event.y;
+      })
+      .on('drag', (event, d) => {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on('end', (_event, d) => {
+        if (!this.forceSimulation?.active()) {
+          this.forceSimulation?.alphaTarget(0);
+        }
+        // Keep the node pinned where the user dropped it
+        d.fx = d.x;
+        d.fy = d.y;
+      });
+
+    this.nodeSelection.call(dragBehavior as never);
   }
 }

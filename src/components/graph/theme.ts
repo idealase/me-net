@@ -4,7 +4,12 @@
  * Visual encoding defaults per visual-design.md specification.
  */
 
-import type { GraphTheme, GraphOptions, LayeredLayoutConfig } from './types';
+import type {
+  ForceLayoutConfig,
+  GraphOptions,
+  GraphTheme,
+  LayeredLayoutConfig,
+} from './types';
 
 /**
  * Default theme following visual-design.md colour families.
@@ -67,12 +72,22 @@ export const defaultLayeredLayout: LayeredLayoutConfig = {
 };
 
 /**
+ * Default force-directed layout configuration.
+ */
+export const defaultForceLayout: ForceLayoutConfig = {
+  type: 'force',
+  linkDistance: 240,
+  chargeStrength: -420,
+  collisionRadius: 24,
+};
+
+/**
  * Default graph options.
  */
 export const defaultGraphOptions: GraphOptions = {
   width: 1200,
   height: 800,
-  layout: defaultLayeredLayout,
+  layout: defaultForceLayout,
   theme: defaultTheme,
   zoomExtent: [0.25, 4],
   transitionDuration: 300,
