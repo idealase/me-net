@@ -20,6 +20,7 @@ import {
   valueToFormData,
 } from './components/forms';
 import { NetworkGraph } from './components/graph';
+import { InsightsPanel } from './components/insights';
 import { LadderSession, WhyLadder } from './components/ladder';
 import { ValidationPanel } from './components/validation';
 import { addBehaviour, deleteBehaviour, updateBehaviour } from './data/behaviours';
@@ -69,6 +70,7 @@ let graph: NetworkGraph | null = null;
 let detailPanel: NodeDetailPanel | null = null;
 let whyLadderInstance: WhyLadder | null = null;
 let validationPanel: ValidationPanel | null = null;
+let insightsPanel: InsightsPanel | null = null;
 let warningState: WarningState = createEmptyWarningState();
 
 const WARNING_STATE_KEY = 'me-net-warnings';
@@ -107,6 +109,7 @@ function updateNetwork(newNetwork: Network): void {
   graph?.setNetwork(newNetwork);
   detailPanel?.setNetwork(newNetwork);
   validationPanel?.setNetwork(newNetwork);
+  insightsPanel?.setNetwork(newNetwork);
   // Clear ladder instance when network changes externally (if active)
   if (whyLadderInstance) {
     whyLadderInstance = null;
@@ -683,6 +686,9 @@ function init(): void {
             <hr class="sidebar-divider" />
             <h2 class="sidebar-title">Validation</h2>
             <div class="sidebar-validation-container"></div>
+            <hr class="sidebar-divider" />
+            <h2 class="sidebar-title">Insights</h2>
+            <div class="sidebar-insights-container"></div>
           </div>
         </aside>
         <div id="graph-container" class="graph-container"></div>
@@ -764,6 +770,19 @@ function init(): void {
         onNavigateToNode: (nodeId): void => {
           selectNode(nodeId);
           // TODO: Add focusOnNode to NetworkGraph for smooth pan/zoom
+        },
+      },
+    });
+  }
+
+  // Initialize insights panel
+  const insightsContainer = document.querySelector('.sidebar-insights-container');
+  if (insightsContainer) {
+    insightsPanel = new InsightsPanel(insightsContainer as HTMLElement, {
+      network: state.network,
+      callbacks: {
+        onNavigateToNode: (nodeId): void => {
+          selectNode(nodeId);
         },
       },
     });

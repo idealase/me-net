@@ -41,6 +41,11 @@ export default defineConfig({
         // Validation UI component - tested via integration/E2E
         'src/components/validation/ValidationPanel.ts',
         'src/components/validation/index.ts',
+        // Insights UI component - tested via integration/E2E
+        'src/components/insights/InsightsPanel.ts',
+        'src/components/insights/index.ts',
+        // Metrics index (just re-exports) - tested via unit tests on actual modules
+        'src/metrics/index.ts',
       ],
       thresholds: {
         statements: 80,
