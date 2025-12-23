@@ -5,17 +5,17 @@ function createLocalStorageMock(): Storage {
   let store: Record<string, string> = {};
 
   return {
-    getItem: vi.fn((key: string) => store[key] ?? null),
+    getItem: vi.fn((key: string): string | null => store[key] ?? null),
     setItem: vi.fn((key: string, value: string) => {
       store[key] = value;
     }),
     removeItem: vi.fn((key: string) => {
       delete store[key];
     }),
-    clear: vi.fn(() => {
+    clear: vi.fn((): void => {
       store = {};
     }),
-    get length() {
+    get length(): number {
       return Object.keys(store).length;
     },
     key: vi.fn((index: number) => Object.keys(store)[index] ?? null),

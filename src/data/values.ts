@@ -129,7 +129,7 @@ export function updateValue(
     return { success: false, error: `Value with id "${id}" not found` };
   }
 
-  const existing = network.values[existingIndex];
+  const existing = network.values[existingIndex]!;
 
   // Validate label uniqueness if changing label
   if (input.label !== undefined && input.label.trim().toLowerCase() !== existing.label.toLowerCase()) {
@@ -141,10 +141,10 @@ export function updateValue(
 
   const updated: Value = {
     ...existing,
-    label: input.label !== undefined ? input.label.trim() : existing.label,
+    label: input.label?.trim() ?? existing.label,
     importance: input.importance ?? existing.importance,
     neglect: input.neglect ?? existing.neglect,
-    notes: input.notes !== undefined ? input.notes : existing.notes,
+    notes: input.notes ?? existing.notes,
     updatedAt: now(),
   };
 

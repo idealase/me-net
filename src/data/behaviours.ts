@@ -128,7 +128,7 @@ export function updateBehaviour(
     return { success: false, error: `Behaviour with id "${id}" not found` };
   }
 
-  const existing = network.behaviours[existingIndex];
+  const existing = network.behaviours[existingIndex]!;
 
   // Validate label uniqueness if changing label
   if (input.label !== undefined && input.label.trim().toLowerCase() !== existing.label.toLowerCase()) {
@@ -140,11 +140,11 @@ export function updateBehaviour(
 
   const updated: Behaviour = {
     ...existing,
-    label: input.label !== undefined ? input.label.trim() : existing.label,
+    label: input.label?.trim() ?? existing.label,
     frequency: input.frequency ?? existing.frequency,
     cost: input.cost ?? existing.cost,
     contextTags: input.contextTags ?? existing.contextTags,
-    notes: input.notes !== undefined ? input.notes : existing.notes,
+    notes: input.notes ?? existing.notes,
     updatedAt: now(),
   };
 

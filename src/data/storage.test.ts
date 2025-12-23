@@ -2,6 +2,9 @@
  * Tests for Storage Layer
  */
 
+import type { Behaviour, Outcome, Value, BehaviourOutcomeLink, OutcomeValueLink } from '@/types';
+
+import { createEmptyNetwork, createNetwork } from './network';
 import {
   saveNetwork,
   loadNetwork,
@@ -9,8 +12,6 @@ import {
   validateNetworkStructure,
   STORAGE_KEY_FOR_TESTING,
 } from './storage';
-import { createEmptyNetwork, createNetwork } from './network';
-import type { Behaviour, Outcome, Value, BehaviourOutcomeLink, OutcomeValueLink } from '@/types';
 
 describe('saveNetwork', () => {
   beforeEach(() => {
@@ -32,7 +33,7 @@ describe('saveNetwork', () => {
     saveNetwork(network);
 
     const stored = localStorage.getItem(STORAGE_KEY_FOR_TESTING);
-    expect(() => JSON.parse(stored!)).not.toThrow();
+    expect(() => JSON.parse(stored!) as unknown).not.toThrow();
   });
 
   it('preserves all network data', () => {
@@ -83,9 +84,14 @@ describe('saveNetwork', () => {
 
     saveNetwork(network);
 
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY_FOR_TESTING)!);
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY_FOR_TESTING)!) as {
+      behaviours: { label: string }[];
+      outcomes: unknown[];
+      values: unknown[];
+      links: unknown[];
+    };
     expect(stored.behaviours).toHaveLength(1);
-    expect(stored.behaviours[0].label).toBe('Test Behaviour');
+    expect(stored.behaviours[0]!.label).toBe('Test Behaviour');
     expect(stored.outcomes).toHaveLength(1);
     expect(stored.values).toHaveLength(1);
     expect(stored.links).toHaveLength(1);
@@ -96,13 +102,13 @@ describe('saveNetwork', () => {
 
     saveNetwork(network);
 
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY_FOR_TESTING)!);
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY_FOR_TESTING)!) as { version: string };
     expect(stored.version).toBe('1.0.0');
   });
 
   it('handles localStorage quota exceeded error', () => {
     // Mock localStorage.setItem to throw quota exceeded error
-    const originalSetItem = localStorage.setItem;
+    const originalSetItem = localStorage.setItem.bind(localStorage);
     localStorage.setItem = vi.fn(() => {
       throw new Error('QuotaExceededError');
     });
@@ -153,7 +159,7 @@ describe('loadNetwork', () => {
 
     expect(result.success).toBe(true);
     expect(result.data!.behaviours).toHaveLength(1);
-    expect(result.data!.behaviours[0].label).toBe('Loaded Behaviour');
+    expect(result.data!.behaviours[0]!.label).toBe('Loaded Behaviour');
   });
 
   it('returns error for invalid JSON', () => {
@@ -405,7 +411,7 @@ describe('round-trip persistence', () => {
     expect(loadedNetwork.links).toHaveLength(2);
 
     // Verify behaviour details
-    const loadedBehaviour = loadedNetwork.behaviours[0];
+    const loadedBehaviour = loadedNetwork.behaviours[0]!;
     expect(loadedBehaviour.id).toBe('b-123');
     expect(loadedBehaviour.label).toBe('30-min evening walk');
     expect(loadedBehaviour.frequency).toBe('daily');
@@ -414,12 +420,12 @@ describe('round-trip persistence', () => {
     expect(loadedBehaviour.notes).toBe('After dinner, around the neighbourhood.');
 
     // Verify outcome details
-    const loadedOutcome = loadedNetwork.outcomes[0];
+    const loadedOutcome = loadedNetwork.outcomes[0]!;
     expect(loadedOutcome.id).toBe('o-456');
     expect(loadedOutcome.label).toBe('Reduced anxiety');
 
     // Verify value details
-    const loadedValue = loadedNetwork.values[0];
+    const loadedValue = loadedNetwork.values[0]!;
     expect(loadedValue.id).toBe('v-789');
     expect(loadedValue.importance).toBe('critical');
     expect(loadedValue.neglect).toBe('somewhat-neglected');

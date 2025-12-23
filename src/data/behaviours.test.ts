@@ -93,7 +93,7 @@ describe('getBehavioursByTag', () => {
 
     const morning = getBehavioursByTag(network, 'morning');
     expect(morning).toHaveLength(1);
-    expect(morning[0].label).toBe('A');
+    expect(morning[0]!.label).toBe('A');
   });
 });
 

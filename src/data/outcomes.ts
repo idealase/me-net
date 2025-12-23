@@ -109,7 +109,7 @@ export function updateOutcome(
     return { success: false, error: `Outcome with id "${id}" not found` };
   }
 
-  const existing = network.outcomes[existingIndex];
+  const existing = network.outcomes[existingIndex]!;
 
   // Validate label uniqueness if changing label
   if (input.label !== undefined && input.label.trim().toLowerCase() !== existing.label.toLowerCase()) {
@@ -121,8 +121,8 @@ export function updateOutcome(
 
   const updated: Outcome = {
     ...existing,
-    label: input.label !== undefined ? input.label.trim() : existing.label,
-    notes: input.notes !== undefined ? input.notes : existing.notes,
+    label: input.label?.trim() ?? existing.label,
+    notes: input.notes ?? existing.notes,
     updatedAt: now(),
   };
 

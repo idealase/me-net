@@ -2,15 +2,16 @@
  * Tests for Network Factory
  */
 
-import { 
-  createEmptyNetwork, 
-  createNetwork, 
-  isNetworkEmpty, 
-  getNodeCount, 
-  getLinkCount,
-  getNetworkStats 
-} from './network';
 import type { Behaviour, Outcome, Value } from '@/types';
+
+import {
+  createEmptyNetwork,
+  createNetwork,
+  isNetworkEmpty,
+  getNodeCount,
+  getLinkCount,
+  getNetworkStats,
+} from './network';
 
 describe('createEmptyNetwork', () => {
   it('creates a network with empty arrays', () => {
@@ -61,7 +62,7 @@ describe('createNetwork', () => {
     const network = createNetwork({ behaviours: [behaviour] });
 
     expect(network.behaviours).toHaveLength(1);
-    expect(network.behaviours[0].label).toBe('Test Behaviour');
+    expect(network.behaviours[0]!.label).toBe('Test Behaviour');
     expect(network.outcomes).toEqual([]);
     expect(network.values).toEqual([]);
   });

@@ -2,6 +2,7 @@
  * Tests for Value CRUD Operations
  */
 
+import { createEmptyNetwork } from './network';
 import {
   addValue,
   getValueById,
@@ -11,7 +12,6 @@ import {
   updateValue,
   deleteValue,
 } from './values';
-import { createEmptyNetwork } from './network';
 
 describe('addValue', () => {
   it('creates a value', () => {
@@ -83,7 +83,7 @@ describe('getValuesByImportance', () => {
 
     const critical = getValuesByImportance(network, 'critical');
     expect(critical).toHaveLength(1);
-    expect(critical[0].label).toBe('A');
+    expect(critical[0]!.label).toBe('A');
   });
 });
 

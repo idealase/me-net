@@ -2,6 +2,9 @@
  * Tests for Link CRUD Operations
  */
 
+import type { Network } from '@/types';
+
+import { addBehaviour, deleteBehaviour } from './behaviours';
 import {
   addBehaviourOutcomeLink,
   addOutcomeValueLink,
@@ -13,13 +16,19 @@ import {
   updateOutcomeValueLink,
   deleteLink,
 } from './links';
-import { addBehaviour, deleteBehaviour } from './behaviours';
+import { createEmptyNetwork } from './network';
 import { addOutcome, deleteOutcome } from './outcomes';
 import { addValue } from './values';
-import { createEmptyNetwork } from './network';
+
+interface TestNetwork {
+  network: Network;
+  behaviourId: string;
+  outcomeId: string;
+  valueId: string;
+}
 
 // Helper to create a populated network
-function createTestNetwork() {
+function createTestNetwork(): TestNetwork {
   let network = createEmptyNetwork();
   const b = addBehaviour(network, { label: 'Walk', frequency: 'daily', cost: 'low' });
   network = b.data!.network;
@@ -228,7 +237,8 @@ describe('cascade delete', () => {
   });
 
   it('deleting outcome removes incident links', () => {
-    let { network, behaviourId, outcomeId, valueId } = createTestNetwork();
+    const { network: initialNetwork, behaviourId, outcomeId, valueId } = createTestNetwork();
+    let network = initialNetwork;
 
     // Create B→O link
     const boResult = addBehaviourOutcomeLink(network, {

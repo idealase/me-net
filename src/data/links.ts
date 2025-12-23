@@ -235,15 +235,21 @@ export function updateBehaviourOutcomeLink(
     return { success: false, error: `Link with id "${id}" not found` };
   }
 
-  const existing = network.links[existingIndex];
-  if (existing.type !== 'behaviour-outcome') {
+  const existingLink = network.links[existingIndex]!;
+  if (existingLink.type !== 'behaviour-outcome') {
     return { success: false, error: `Link "${id}" is not a behaviour-outcome link` };
   }
 
+  // Explicitly construct the updated link to satisfy type checker
+  const narrowedLink: BehaviourOutcomeLink = existingLink;
   const updated: BehaviourOutcomeLink = {
-    ...existing,
-    valence: input.valence ?? existing.valence,
-    reliability: input.reliability ?? existing.reliability,
+    id: narrowedLink.id,
+    type: 'behaviour-outcome',
+    sourceId: narrowedLink.sourceId,
+    targetId: narrowedLink.targetId,
+    valence: input.valence ?? narrowedLink.valence,
+    reliability: input.reliability ?? narrowedLink.reliability,
+    createdAt: narrowedLink.createdAt,
     updatedAt: now(),
   };
 
@@ -274,15 +280,21 @@ export function updateOutcomeValueLink(
     return { success: false, error: `Link with id "${id}" not found` };
   }
 
-  const existing = network.links[existingIndex];
-  if (existing.type !== 'outcome-value') {
+  const existingLink = network.links[existingIndex]!;
+  if (existingLink.type !== 'outcome-value') {
     return { success: false, error: `Link "${id}" is not an outcome-value link` };
   }
 
+  // Explicitly construct the updated link to satisfy type checker
+  const narrowedLink: OutcomeValueLink = existingLink;
   const updated: OutcomeValueLink = {
-    ...existing,
-    valence: input.valence ?? existing.valence,
-    strength: input.strength ?? existing.strength,
+    id: narrowedLink.id,
+    type: 'outcome-value',
+    sourceId: narrowedLink.sourceId,
+    targetId: narrowedLink.targetId,
+    valence: input.valence ?? narrowedLink.valence,
+    strength: input.strength ?? narrowedLink.strength,
+    createdAt: narrowedLink.createdAt,
     updatedAt: now(),
   };
 

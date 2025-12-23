@@ -2,6 +2,7 @@
  * Tests for Outcome CRUD Operations
  */
 
+import { createEmptyNetwork } from './network';
 import {
   addOutcome,
   getOutcomeById,
@@ -10,7 +11,6 @@ import {
   updateOutcome,
   deleteOutcome,
 } from './outcomes';
-import { createEmptyNetwork } from './network';
 
 describe('addOutcome', () => {
   it('creates an outcome', () => {
