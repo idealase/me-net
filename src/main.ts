@@ -237,7 +237,7 @@ function handleEmptyStateImport(): void {
 function updateNetwork(newNetwork: Network): void {
   state.network = newNetwork;
   const saveResult = saveNetwork(newNetwork);
-  if (!saveResult.success && saveResult.error) {
+  if (!saveResult.success && saveResult.error !== undefined && saveResult.error !== null && saveResult.error !== '') {
     showAppMessage('error', saveResult.error);
   }
   graph?.setNetwork(newNetwork);
@@ -789,11 +789,11 @@ function resizeGraphToContainer(): void {
 }
 
 function setupSidebarResizers(): void {
-  const sidebar = document.getElementById('sidebar') as HTMLElement | null;
-  const detailPanelEl = document.getElementById('detail-panel') as HTMLElement | null;
-  const graphContainer = document.getElementById('graph-container') as HTMLElement | null;
-  const leftResizer = document.getElementById('sidebar-resizer') as HTMLElement | null;
-  const rightResizer = document.getElementById('detail-resizer') as HTMLElement | null;
+  const sidebar = document.getElementById('sidebar');
+  const detailPanelEl = document.getElementById('detail-panel');
+  const graphContainer = document.getElementById('graph-container');
+  const leftResizer = document.getElementById('sidebar-resizer');
+  const rightResizer = document.getElementById('detail-resizer');
 
   if (!sidebar || !detailPanelEl || !graphContainer) return;
 
@@ -1116,7 +1116,7 @@ function init(): void {
 
   // Load network data
   const result = loadNetwork();
-  if (!result.success && result.error) {
+  if (!result.success && result.error !== undefined && result.error !== null && result.error !== '') {
     showAppMessage('error', result.error);
   }
   state.network = result.success && result.data ? result.data : createEmptyNetwork();
