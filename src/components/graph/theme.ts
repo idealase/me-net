@@ -2,6 +2,7 @@
  * Default Graph Theme
  *
  * Visual encoding defaults per visual-design.md specification.
+ * Supports both light and dark themes.
  */
 
 import type {
@@ -12,7 +13,7 @@ import type {
 } from './types';
 
 /**
- * Default theme following visual-design.md colour families.
+ * Default (light) theme following visual-design.md colour families.
  * - Behaviours: Blue family, rectangle
  * - Outcomes: Orange/Yellow family, diamond
  * - Values: Green family, circle
@@ -60,6 +61,61 @@ export const defaultTheme: GraphTheme = {
     fontFamily: 'system-ui, -apple-system, sans-serif',
   },
 };
+
+/**
+ * Dark theme variant for low-light environments.
+ * Maintains WCAG AA contrast ratios.
+ */
+export const darkTheme: GraphTheme = {
+  nodes: {
+    behaviour: {
+      shape: 'rect',
+      fill: '#60a5fa', // Blue-400
+      stroke: '#3b82f6', // Blue-500
+      width: 140,
+      height: 50,
+    },
+    outcome: {
+      shape: 'diamond',
+      fill: '#fbbf24', // Amber-400
+      stroke: '#f59e0b', // Amber-500
+      width: 120,
+      height: 60,
+    },
+    value: {
+      shape: 'circle',
+      fill: '#34d399', // Emerald-400
+      stroke: '#10b981', // Emerald-500
+      width: 100,
+      height: 100,
+    },
+  },
+  edges: {
+    positive: {
+      stroke: '#9ca3af', // Gray-400
+      strokeDasharray: '', // Solid
+      markerEnd: 'url(#arrow-positive)',
+    },
+    negative: {
+      stroke: '#f87171', // Red-400
+      strokeDasharray: '8,4', // Dashed
+      markerEnd: 'url(#arrow-negative)',
+    },
+  },
+  background: '#1e293b', // Slate-800
+  text: {
+    fill: '#0f172a', // Slate-900 (dark text for contrast on bright nodes)
+    fontSize: 12,
+    fontFamily: 'system-ui, -apple-system, sans-serif',
+  },
+};
+
+/**
+ * Get the appropriate theme based on the current theme mode.
+ */
+export function getThemeForMode(mode: 'light' | 'dark'): GraphTheme {
+  return mode === 'dark' ? darkTheme : defaultTheme;
+}
 
 /**
  * Default layered layout configuration.

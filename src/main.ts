@@ -22,6 +22,7 @@ import {
   valueToFormData,
 } from './components/forms';
 import { NetworkGraph } from './components/graph';
+import { getThemeForMode } from './components/graph/theme';
 import { InsightsPanel } from './components/insights';
 import { LadderSession, WhyLadder } from './components/ladder';
 import { ValidationPanel } from './components/validation';
@@ -49,6 +50,7 @@ import {
   getTopLeverageBehaviours,
 } from './metrics';
 import type { Behaviour, Link, Network, Node, Outcome, Value } from './types';
+import { getCurrentTheme, initializeTheme, toggleTheme } from './utils/theme';
 import { WarningState, createEmptyWarningState } from './validation';
 
 // ============================================================================
@@ -1039,6 +1041,27 @@ function renderSidebar(): void {
 }
 
 // ============================================================================
+// Theme Handling
+// ============================================================================
+
+function updateThemeToggleButton(): void {
+  const btn = document.getElementById('btn-theme-toggle');
+  if (!btn) return;
+  const theme = getCurrentTheme();
+  btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+}
+
+function handleThemeToggle(): void {
+  const newTheme = toggleTheme();
+  updateThemeToggleButton();
+  // Update graph theme
+  if (graph) {
+    graph.setTheme(getThemeForMode(newTheme));
+  }
+}
+
+// ============================================================================
 // Initialization
 // ============================================================================
 
@@ -1046,6 +1069,9 @@ function init(): void {
   const app = document.getElementById('app');
   if (!app) return;
   loadWelcomeState();
+
+  // Initialize theme system
+  initializeTheme();
 
   // Create app structure with sidebar
   app.innerHTML = `
@@ -1061,6 +1087,8 @@ function init(): void {
           <button id="btn-export-report" class="btn btn-export" aria-label="Export summary report">Export Report</button>
           <button id="btn-import" class="btn btn-import" aria-label="Import network data">Import</button>
           <input type="file" id="import-file-input" accept=".json" style="display: none;" aria-hidden="true" />
+          <span class="toolbar-separator"></span>
+          <button id="btn-theme-toggle" class="btn btn-theme-toggle" aria-label="Toggle theme">🌙</button>
         </div>
       </header>
       <div id="app-messages" class="app-messages" role="region" aria-live="polite" aria-atomic="false"></div>
@@ -1222,6 +1250,10 @@ function init(): void {
   // Toolbar buttons
   document.getElementById('btn-fit')?.addEventListener('click', (): void => graph?.fitToView());
   document.getElementById('btn-reset')?.addEventListener('click', (): void => graph?.resetZoom());
+
+  // Theme toggle button
+  document.getElementById('btn-theme-toggle')?.addEventListener('click', handleThemeToggle);
+  updateThemeToggleButton();
 
   // Export/Import buttons
   document.getElementById('btn-export-json')?.addEventListener('click', handleExportJson);
