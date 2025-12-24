@@ -21,6 +21,7 @@ import type {
   GraphEdge,
   GraphInteractionState,
   GraphOptions,
+  GraphTheme,
 } from './types';
 
 // ============================================================================
@@ -311,6 +312,25 @@ export class NetworkGraph {
   public clearHighlights(): void {
     this.interactionState.modeHighlightedNodeIds.clear();
     this.updateSelectionState();
+  }
+
+  /**
+   * Update the graph theme (for dark/light mode switching).
+   */
+  public setTheme(theme: GraphTheme): void {
+    this.options.theme = theme;
+
+    // Update background
+    this.svg.style('background', theme.background);
+
+    // Re-create defs with new theme colors
+    this.svg.select('defs').remove();
+    createDefs(this.svg, theme);
+
+    // Re-render nodes and edges with new colors
+    if (this.graphData.nodes.length > 0) {
+      this.render();
+    }
   }
 
   /**
