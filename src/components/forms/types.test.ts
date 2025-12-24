@@ -421,6 +421,77 @@ describe('getAutocompleteSuggestions', () => {
     expect(suggestions[0]!.label).toBe('Health');
     expect(suggestions[0]!.type).toBe('value');
   });
+
+  describe('create-on-link support', () => {
+    it('includes create option when allowCreate is true and no exact match', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'outcome', 'New Outcome', [], true);
+
+      // Should have create option at the end
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeDefined();
+      expect(createOption?.label).toBe('New Outcome');
+      expect(createOption?.id).toBe('__create__New Outcome');
+    });
+
+    it('does not include create option when exact match exists', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'outcome', 'Mental clarity', [], true);
+
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeUndefined();
+    });
+
+    it('exact match is case-insensitive', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'outcome', 'MENTAL CLARITY', [], true);
+
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeUndefined();
+    });
+
+    it('does not include create option when allowCreate is false', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'outcome', 'New Outcome', [], false);
+
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeUndefined();
+    });
+
+    it('does not include create option when allowCreate is not provided', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'outcome', 'New Outcome', []);
+
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeUndefined();
+    });
+
+    it('does not include create option when query is empty', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'outcome', '', [], true);
+
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeUndefined();
+    });
+
+    it('trims whitespace from create option label', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'outcome', '  New Outcome  ', [], true);
+
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeDefined();
+      expect(createOption?.label).toBe('New Outcome');
+    });
+
+    it('works for values type', () => {
+      const network = createTestNetwork();
+      const suggestions = getAutocompleteSuggestions(network, 'value', 'New Value', [], true);
+
+      const createOption = suggestions.find(s => s.isCreateNew === true);
+      expect(createOption).toBeDefined();
+      expect(createOption?.type).toBe('value');
+    });
+  });
 });
 
 // ============================================================================

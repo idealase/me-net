@@ -971,6 +971,57 @@ body {
   color: var(--color-text);
 }
 
+/* Create-on-link styles */
+.autocomplete-item-create {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.autocomplete-item-create:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.autocomplete-item-create:hover .autocomplete-label {
+  color: white;
+}
+
+.autocomplete-create-icon {
+  font-size: 1rem;
+}
+
+.pending-creation {
+  border-color: var(--color-primary) !important;
+  background: var(--color-surface-secondary) !important;
+}
+
+.pending-creation-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--color-primary) 10%, transparent),
+    color-mix(in srgb, var(--color-primary) 5%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.pending-icon {
+  font-size: 1rem;
+}
+
+.pending-text {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
 /* Link Direction Indicator */
 .link-direction-indicator {
   text-align: center;
