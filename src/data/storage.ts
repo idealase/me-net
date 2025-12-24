@@ -7,7 +7,8 @@
 
 import type { Network } from '@/types';
 
-import { createEmptyNetwork } from './network';
+import { createExampleNetwork, isExampleNetwork } from './example-network';
+import { createEmptyNetwork, isNetworkEmpty } from './network';
 
 // ============================================================================
 // Constants
@@ -149,3 +150,64 @@ export function validateNetworkStructure(data: unknown): ValidationResult {
 // ============================================================================
 
 export const STORAGE_KEY_FOR_TESTING = STORAGE_KEY;
+
+// ============================================================================
+// Example Network
+// ============================================================================
+
+export interface LoadExampleOptions {
+  /** If true, will overwrite existing data without warning. Defaults to false. */
+  force?: boolean;
+}
+
+export interface LoadExampleResult {
+  success: boolean;
+  /** Set if user has existing data and force was not true */
+  hasExistingData?: boolean;
+  error?: string;
+}
+
+/**
+ * Load the example "Healthy Living" network for tutorial purposes.
+ *
+ * By default, will not overwrite existing user data. Set force: true to override.
+ * Returns hasExistingData: true if there is existing data that would be overwritten.
+ */
+export function loadExampleNetwork(options: LoadExampleOptions = {}): LoadExampleResult {
+  const { force = false } = options;
+
+  // Check for existing data
+  const existingResult = loadNetwork();
+  if (!existingResult.success) {
+    return { success: false, error: existingResult.error };
+  }
+
+  const existingNetwork = existingResult.data!;
+
+  // If there's existing user data and force is not set, warn the user
+  if (!isNetworkEmpty(existingNetwork) && !force) {
+    return { success: false, hasExistingData: true };
+  }
+
+  // Create and save the example network
+  const exampleNetwork = createExampleNetwork();
+  const saveResult = saveNetwork(exampleNetwork);
+
+  if (!saveResult.success) {
+    return { success: false, error: saveResult.error };
+  }
+
+  return { success: true };
+}
+
+/**
+ * Check if the currently loaded network is the example network.
+ */
+export function isCurrentNetworkExample(): boolean {
+  const result = loadNetwork();
+  if (!result.success || !result.data) {
+    return false;
+  }
+  return isExampleNetwork(result.data);
+}
+

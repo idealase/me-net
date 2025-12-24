@@ -11,6 +11,8 @@ import {
   clearNetwork,
   validateNetworkStructure,
   STORAGE_KEY_FOR_TESTING,
+  loadExampleNetwork,
+  isCurrentNetworkExample,
 } from './storage';
 
 describe('saveNetwork', () => {
@@ -441,5 +443,114 @@ describe('round-trip persistence', () => {
 
     // Verify exportedAt preserved
     expect(loadedNetwork.exportedAt).toBe('2025-12-23T19:00:00.000Z');
+  });
+});
+
+describe('loadExampleNetwork', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it('loads example network when storage is empty', () => {
+    const result = loadExampleNetwork();
+    expect(result.success).toBe(true);
+
+    const loaded = loadNetwork();
+    expect(loaded.success).toBe(true);
+    expect(loaded.data!.behaviours).toHaveLength(4);
+    expect(loaded.data!.outcomes).toHaveLength(4);
+    expect(loaded.data!.values).toHaveLength(3);
+  });
+
+  it('returns hasExistingData when user has data', () => {
+    // Save some existing data
+    const network = createNetwork({
+      behaviours: [
+        {
+          id: 'b-1',
+          type: 'behaviour',
+          label: 'My Behaviour',
+          frequency: 'daily',
+          cost: 'low',
+          contextTags: [],
+          createdAt: '2025-01-01T00:00:00.000Z',
+          updatedAt: '2025-01-01T00:00:00.000Z',
+        },
+      ],
+    });
+    saveNetwork(network);
+
+    const result = loadExampleNetwork();
+    expect(result.success).toBe(false);
+    expect(result.hasExistingData).toBe(true);
+  });
+
+  it('overwrites existing data when force is true', () => {
+    // Save some existing data
+    const network = createNetwork({
+      behaviours: [
+        {
+          id: 'b-1',
+          type: 'behaviour',
+          label: 'My Behaviour',
+          frequency: 'daily',
+          cost: 'low',
+          contextTags: [],
+          createdAt: '2025-01-01T00:00:00.000Z',
+          updatedAt: '2025-01-01T00:00:00.000Z',
+        },
+      ],
+    });
+    saveNetwork(network);
+
+    const result = loadExampleNetwork({ force: true });
+    expect(result.success).toBe(true);
+
+    const loaded = loadNetwork();
+    expect(loaded.data!.behaviours).toHaveLength(4);
+    expect(loaded.data!.behaviours[0]!.label).not.toBe('My Behaviour');
+  });
+
+  it('creates valid example network data', () => {
+    loadExampleNetwork();
+
+    const loaded = loadNetwork();
+    expect(loaded.success).toBe(true);
+    expect(loaded.data!.version).toBe('1.0.0');
+  });
+});
+
+describe('isCurrentNetworkExample', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it('returns true when example network is loaded', () => {
+    loadExampleNetwork();
+    expect(isCurrentNetworkExample()).toBe(true);
+  });
+
+  it('returns false when storage is empty', () => {
+    expect(isCurrentNetworkExample()).toBe(false);
+  });
+
+  it('returns false when user has custom network', () => {
+    const network = createNetwork({
+      behaviours: [
+        {
+          id: 'b-1',
+          type: 'behaviour',
+          label: 'Custom Behaviour',
+          frequency: 'daily',
+          cost: 'low',
+          contextTags: [],
+          createdAt: '2025-01-01T00:00:00.000Z',
+          updatedAt: '2025-01-01T00:00:00.000Z',
+        },
+      ],
+    });
+    saveNetwork(network);
+
+    expect(isCurrentNetworkExample()).toBe(false);
   });
 });

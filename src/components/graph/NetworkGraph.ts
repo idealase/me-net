@@ -95,7 +95,7 @@ export class NetworkGraph {
       if (event.key !== 'Escape') return;
       const target = event.target as HTMLElement | null;
       const tagName = target?.tagName?.toLowerCase();
-      if (tagName && (tagName === 'input' || tagName === 'textarea' || tagName === 'select')) {
+      if (tagName !== undefined && tagName !== null && tagName !== '' && (tagName === 'input' || tagName === 'textarea' || tagName === 'select')) {
         return;
       }
       this.clearSelection();
@@ -673,20 +673,20 @@ export class NetworkGraph {
 
     const dragBehavior = d3
       .drag<SVGGElement, AnyGraphNode>()
-      .on('start', (event, d) => {
-        event.sourceEvent.stopPropagation();
-        if (!event.active && this.forceSimulation) {
+      .on('start', (event: d3.D3DragEvent<SVGGElement, AnyGraphNode, AnyGraphNode>, d) => {
+        (event.sourceEvent as Event).stopPropagation();
+        if (event.active === 0 && this.forceSimulation) {
           this.forceSimulation.alphaTarget(0.3).restart();
         }
         d.fx = d.x ?? event.x;
         d.fy = d.y ?? event.y;
       })
-      .on('drag', (event, d) => {
+      .on('drag', (event: d3.D3DragEvent<SVGGElement, AnyGraphNode, AnyGraphNode>, d) => {
         d.fx = event.x;
         d.fy = event.y;
       })
-      .on('end', (event, d) => {
-        if (!event.active) {
+      .on('end', (event: d3.D3DragEvent<SVGGElement, AnyGraphNode, AnyGraphNode>, d) => {
+        if (event.active === 0) {
           this.forceSimulation?.alphaTarget(0);
         }
         // Keep the node pinned where the user dropped it
