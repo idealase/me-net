@@ -185,6 +185,38 @@ export interface LinkFormCallbacks {
 }
 
 // ============================================================================
+// Create-on-Link Support
+// ============================================================================
+
+/**
+ * Pending node creation during link form.
+ * When user types a name that doesn't exist, we track it here.
+ */
+export interface PendingNodeCreation {
+  label: string;
+  type: 'outcome' | 'value';
+}
+
+/**
+ * Extended link form data that includes pending node creation.
+ */
+export interface LinkFormDataWithPending {
+  linkData: LinkFormData;
+  pendingTarget?: PendingNodeCreation;
+}
+
+/**
+ * Enhanced callbacks for link form with create-on-link support.
+ */
+export interface LinkFormCallbacksWithCreate extends LinkFormCallbacks {
+  /**
+   * Called when user wants to create both a new node and a link.
+   * The handler should create the node first, then create the link.
+   */
+  onSaveWithNewNode?: (data: LinkFormDataWithPending) => void;
+}
+
+// ============================================================================
 // Select Options
 // ============================================================================
 
@@ -249,16 +281,20 @@ export interface AutocompleteItem {
   id: string;
   label: string;
   type: 'behaviour' | 'outcome' | 'value';
+  /** True if this is a "create new" option rather than an existing node */
+  isCreateNew?: boolean;
 }
 
 /**
  * Get autocomplete suggestions from network nodes.
+ * If allowCreate is true, includes a "Create 'X'" option when no exact match is found.
  */
 export function getAutocompleteSuggestions(
   network: Network,
   nodeType: 'behaviour' | 'outcome' | 'value',
   query: string,
-  excludeIds: string[] = []
+  excludeIds: string[] = [],
+  allowCreate: boolean = false
 ): AutocompleteItem[] {
   const normalizedQuery = query.toLowerCase().trim();
 
@@ -275,7 +311,7 @@ export function getAutocompleteSuggestions(
       break;
   }
 
-  return nodes
+  const filtered: AutocompleteItem[] = nodes
     .filter((node) => !excludeIds.includes(node.id))
     .filter((node) => normalizedQuery === '' || node.label.toLowerCase().includes(normalizedQuery))
     .map((node) => ({
@@ -284,6 +320,25 @@ export function getAutocompleteSuggestions(
       type: nodeType,
     }))
     .slice(0, 10); // Limit to 10 suggestions
+
+  // If allowCreate is true and there's a query with no exact match, add create option
+  if (allowCreate && normalizedQuery !== '') {
+    const exactMatch = nodes.some(
+      (node) => node.label.toLowerCase() === normalizedQuery
+    );
+    
+    if (!exactMatch) {
+      // Add "Create 'X'" option at the end
+      filtered.push({
+        id: `__create__${query.trim()}`,
+        label: query.trim(),
+        type: nodeType,
+        isCreateNew: true,
+      });
+    }
+  }
+
+  return filtered;
 }
 
 // ============================================================================
