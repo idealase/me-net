@@ -430,18 +430,20 @@ export class WhyLadder {
     // Create new behaviour
     createBtn.addEventListener('click', () => {
       const labels = parseCommaSeparated(input.value);
-      if (labels.length > 0) {
+      const firstLabel = labels[0];
+      if (firstLabel !== undefined) {
         // For behaviours, only create the first one (Why Ladder explores one at a time)
-        this.createBehaviour(labels[0]!);
+        this.createBehaviour(firstLabel);
       }
     });
 
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const labels = parseCommaSeparated(input.value);
-        if (labels.length > 0) {
+        const firstLabel = labels[0];
+        if (firstLabel !== undefined) {
           // For behaviours, only create the first one (Why Ladder explores one at a time)
-          this.createBehaviour(labels[0]!);
+          this.createBehaviour(firstLabel);
         }
       }
     });
@@ -573,18 +575,20 @@ export class WhyLadder {
     // Chain to another outcome
     chainBtn.addEventListener('click', () => {
       const labels = parseCommaSeparated(chainInput.value);
-      if (labels.length > 0) {
+      const firstLabel = labels[0];
+      if (firstLabel !== undefined) {
         // For chaining, only use the first value (chaining is one-to-one)
-        this.chainOutcome(labels[0]!, pendingOutcome);
+        this.chainOutcome(firstLabel, pendingOutcome);
       }
     });
 
     chainInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const labels = parseCommaSeparated(chainInput.value);
-        if (labels.length > 0) {
+        const firstLabel = labels[0];
+        if (firstLabel !== undefined) {
           // For chaining, only use the first value (chaining is one-to-one)
-          this.chainOutcome(labels[0]!, pendingOutcome);
+          this.chainOutcome(firstLabel, pendingOutcome);
         }
       }
     });
