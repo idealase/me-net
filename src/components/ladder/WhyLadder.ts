@@ -690,6 +690,11 @@ export class WhyLadder {
   }
 
   private createValues(labels: string[], pendingOutcome: PendingOutcome): void {
+    // Guard against empty array
+    if (labels.length === 0) {
+      return;
+    }
+    
     // Create multiple values for the same outcome
     labels.forEach((label, index) => {
       // Only mark as explained after the last value is created
