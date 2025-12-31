@@ -6,6 +6,7 @@
  */
 
 import type { Network } from '@/types';
+import { parseCommaSeparated } from '@/utils/parse';
 
 import {
   countUnexplainedOutcomes,
@@ -428,17 +429,19 @@ export class WhyLadder {
 
     // Create new behaviour
     createBtn.addEventListener('click', () => {
-      const label = input.value.trim();
-      if (label !== '') {
-        this.createBehaviour(label);
+      const labels = parseCommaSeparated(input.value);
+      if (labels.length > 0) {
+        // For behaviours, only create the first one (Why Ladder explores one at a time)
+        this.createBehaviour(labels[0]!);
       }
     });
 
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const label = input.value.trim();
-        if (label !== '') {
-          this.createBehaviour(label);
+        const labels = parseCommaSeparated(input.value);
+        if (labels.length > 0) {
+          // For behaviours, only create the first one (Why Ladder explores one at a time)
+          this.createBehaviour(labels[0]!);
         }
       }
     });
@@ -471,9 +474,9 @@ export class WhyLadder {
 
     // Create new outcome
     addBtn.addEventListener('click', () => {
-      const label = input.value.trim();
-      if (label !== '') {
-        this.createOutcome(label);
+      const labels = parseCommaSeparated(input.value);
+      if (labels.length > 0) {
+        labels.forEach((label) => this.createOutcome(label));
         input.value = '';
         input.focus();
       }
@@ -481,9 +484,9 @@ export class WhyLadder {
 
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const label = input.value.trim();
-        if (label !== '') {
-          this.createOutcome(label);
+        const labels = parseCommaSeparated(input.value);
+        if (labels.length > 0) {
+          labels.forEach((label) => this.createOutcome(label));
           input.value = '';
         }
       }
@@ -540,17 +543,17 @@ export class WhyLadder {
 
     // Create new value
     addValueBtn.addEventListener('click', () => {
-      const label = valueInput.value.trim();
-      if (label !== '') {
-        this.createValue(label, pendingOutcome);
+      const labels = parseCommaSeparated(valueInput.value);
+      if (labels.length > 0) {
+        this.createValues(labels, pendingOutcome);
       }
     });
 
     valueInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const label = valueInput.value.trim();
-        if (label !== '') {
-          this.createValue(label, pendingOutcome);
+        const labels = parseCommaSeparated(valueInput.value);
+        if (labels.length > 0) {
+          this.createValues(labels, pendingOutcome);
         }
       }
     });
@@ -569,17 +572,19 @@ export class WhyLadder {
 
     // Chain to another outcome
     chainBtn.addEventListener('click', () => {
-      const label = chainInput.value.trim();
-      if (label !== '') {
-        this.chainOutcome(label, pendingOutcome);
+      const labels = parseCommaSeparated(chainInput.value);
+      if (labels.length > 0) {
+        // For chaining, only use the first value (chaining is one-to-one)
+        this.chainOutcome(labels[0]!, pendingOutcome);
       }
     });
 
     chainInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const label = chainInput.value.trim();
-        if (label !== '') {
-          this.chainOutcome(label, pendingOutcome);
+        const labels = parseCommaSeparated(chainInput.value);
+        if (labels.length > 0) {
+          // For chaining, only use the first value (chaining is one-to-one)
+          this.chainOutcome(labels[0]!, pendingOutcome);
         }
       }
     });
@@ -672,10 +677,21 @@ export class WhyLadder {
     this.render();
   }
 
-  private createValue(label: string, pendingOutcome: PendingOutcome): void {
+  private createValue(label: string, pendingOutcome: PendingOutcome, shouldMarkExplained: boolean = true): void {
     const value = this.callbacks.onCreateValue(label, pendingOutcome.outcomeId);
     this.session.valueIds.push(value.id);
-    this.markOutcomeExplained(pendingOutcome);
+    if (shouldMarkExplained) {
+      this.markOutcomeExplained(pendingOutcome);
+    }
+  }
+
+  private createValues(labels: string[], pendingOutcome: PendingOutcome): void {
+    // Create multiple values for the same outcome
+    labels.forEach((label, index) => {
+      // Only mark as explained after the last value is created
+      const isLast = index === labels.length - 1;
+      this.createValue(label, pendingOutcome, isLast);
+    });
   }
 
   private linkValue(valueId: string, pendingOutcome: PendingOutcome): void {
