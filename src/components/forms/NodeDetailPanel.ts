@@ -160,9 +160,9 @@ export class NodeDetailPanel {
     return `
       <dl class="attribute-list">
         <dt>Frequency</dt>
-        <dd>${freqLabel}</dd>
+        <dd>${escapeHtml(freqLabel)}</dd>
         <dt>Cost</dt>
-        <dd>${costLabel}</dd>
+        <dd>${escapeHtml(costLabel)}</dd>
         ${behaviour.contextTags.length > 0 ? `<dt>Tags</dt><dd>${behaviour.contextTags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(' ')}</dd>` : ''}
         ${behaviour.notes !== undefined && behaviour.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(behaviour.notes)}</dd>` : ''}
       </dl>
@@ -185,9 +185,9 @@ export class NodeDetailPanel {
     return `
       <dl class="attribute-list">
         <dt>Importance</dt>
-        <dd>${impLabel}</dd>
+        <dd>${escapeHtml(impLabel)}</dd>
         <dt>Current Status</dt>
-        <dd>${negLabel}</dd>
+        <dd>${escapeHtml(negLabel)}</dd>
         ${value.notes !== undefined && value.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(value.notes)}</dd>` : ''}
       </dl>
     `;

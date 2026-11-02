@@ -301,7 +301,9 @@ function updateNetwork(newNetwork: Network): void {
     setWelcomeDismissed();
   }
   // Keep an open Why Ladder in sync so nodes created this session are offered
-  whyLadderInstance?.setNetwork(newNetwork);
+  if (state.formMode === 'why-ladder') {
+    whyLadderInstance?.setNetwork(newNetwork);
+  }
   updateEmptyStateVisibility();
   updateWelcomeVisibility();
 }
@@ -466,6 +468,7 @@ function handleLadderCreateValue(label: string, outcomeId: string): Value {
     type: 'outcome-value',
     sourceId: outcomeId,
     targetLabel: label,
+    importance: 'high',
     valence: 'positive',
     strength: 'moderate',
   });
@@ -700,13 +703,17 @@ function handleDeleteNode(node: Node): void {
   hideForm();
 }
 
-function handleDeleteLink(linkId: string): void {
+/**
+ * Delete a link. Returns true on success so callers can decide whether to close a form.
+ */
+function handleDeleteLink(linkId: string): boolean {
   const result = deleteLink(state.network, linkId);
   if (!result.success || !result.data) {
     showOperationError(result.error, 'Failed to delete link.');
-    return;
+    return false;
   }
   updateNetwork(result.data.network);
+  return true;
 }
 
 /**
@@ -1081,8 +1088,9 @@ function renderSidebar(): void {
             onSave: handleSaveLink,
             onCancel: hideForm,
             onDelete: (): void => {
-              handleDeleteLink(state.editingLink!.id);
-              hideForm();
+              if (handleDeleteLink(state.editingLink!.id)) {
+                hideForm();
+              }
             },
           },
         });
@@ -1305,7 +1313,9 @@ function init(): void {
           const link = findLink(linkId);
           if (link) showEditLinkForm(link);
         },
-        onDeleteLink: (linkId): void => handleDeleteLink(linkId),
+        onDeleteLink: (linkId): void => {
+          handleDeleteLink(linkId);
+        },
         onClose: (): void => selectNode(null),
       },
     });

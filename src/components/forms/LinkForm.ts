@@ -208,7 +208,7 @@ export class LinkForm {
               value="${this.selectedTarget ? escapeHtml(this.selectedTarget.label) : this.pendingTargetCreation ? escapeHtml(this.pendingTargetCreation.label) : ''}"
               placeholder="${this.allowCreateTarget ? `Search or type new ${targetTypeLabel.toLowerCase()}...` : `Search ${targetTypeLabel.toLowerCase()}s...`}"
               autocomplete="off"
-              ${this.mode === 'edit' || this.selectedTarget ? 'readonly' : ''}
+              ${this.mode === 'edit' || this.selectedTarget || this.pendingTargetCreation ? 'readonly' : ''}
             />
             ${this.selectedTarget ? `<button type="button" class="autocomplete-clear" id="clear-target">×</button>` : ''}
             ${this.pendingTargetCreation ? `<button type="button" class="autocomplete-clear" id="clear-pending">×</button>` : ''}

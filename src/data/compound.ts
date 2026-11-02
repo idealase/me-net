@@ -5,7 +5,16 @@
  * network update (for example creating a node and linking it at once).
  */
 
-import type { Link, Network, Outcome, Reliability, Strength, Valence, Value } from '@/types';
+import type {
+  Importance,
+  Link,
+  Network,
+  Outcome,
+  Reliability,
+  Strength,
+  Valence,
+  Value,
+} from '@/types';
 
 import { addBehaviourOutcomeLink, addOutcomeValueLink, type CrudResult } from './links';
 import { addOutcome } from './outcomes';
@@ -31,6 +40,8 @@ export type LinkToNewTargetInput =
       sourceId: string;
       /** Label for the value to create */
       targetLabel: string;
+      /** Importance for the new value (defaults to 'medium') */
+      importance?: Importance;
       valence: Valence;
       strength: Strength;
     };
@@ -78,7 +89,7 @@ export function addLinkToNewTarget(
 
   const nodeResult = addValue(network, {
     label: input.targetLabel,
-    importance: 'medium',
+    importance: input.importance ?? 'medium',
     neglect: 'adequately-met',
   });
   if (!nodeResult.success || nodeResult.data === undefined) {

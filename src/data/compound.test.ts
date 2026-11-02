@@ -61,6 +61,24 @@ describe('addLinkToNewTarget', () => {
     expect(data.link.targetId).toBe(data.target.id);
   });
 
+  it('uses the supplied importance for a new value, defaulting to medium', () => {
+    const { network, outcomeId } = setup();
+    const base = {
+      type: 'outcome-value' as const,
+      sourceId: outcomeId,
+      valence: 'positive' as const,
+      strength: 'moderate' as const,
+    };
+    const withDefault = addLinkToNewTarget(network, { ...base, targetLabel: 'Health' });
+    const withHigh = addLinkToNewTarget(network, {
+      ...base,
+      targetLabel: 'Family',
+      importance: 'high',
+    });
+    expect(withDefault.data!.network.values[0]!.importance).toBe('medium');
+    expect(withHigh.data!.network.values[0]!.importance).toBe('high');
+  });
+
   it('fails without changes when the label already exists', () => {
     const { network, behaviourId } = setup();
     const result = addLinkToNewTarget(network, {
