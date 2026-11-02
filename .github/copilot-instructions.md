@@ -12,8 +12,8 @@ M-E Net is a browser-based personal tool for mapping **Behaviours** (means) → 
 src/
 ├── types/          # Domain types (see index.ts for Network, Node, Link types)
 ├── utils/          # Pure utility functions (id generation, timestamps)
-├── components/     # UI components (planned)
-├── data/           # Persistence layer (planned)
+├── components/     # UI components
+├── data/           # CRUD, persistence, import/export
 └── test/setup.ts   # Vitest globals, localStorage mock
 ```
 
@@ -81,6 +81,5 @@ See [docs/metrics-and-insights.md](docs/metrics-and-insights.md) for numeric map
 
 ## Branch Strategy
 
-- `main` — production (protected)
-- `master` — staging (protected)
+- `master` — the only long-lived branch; pushes deploy to GitHub Pages
 - Feature branches: `feature/description` or `fix/description`

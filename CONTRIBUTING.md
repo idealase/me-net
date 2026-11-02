@@ -4,8 +4,7 @@
 
 ### Branch Strategy
 
-- **`main`** — Protected production branch. Requires PR with passing CI.
-- **`master`** — Protected staging branch. Requires PR with passing CI.
+- **`master`** — The only long-lived branch. Requires PR with passing CI; merges deploy to GitHub Pages.
 - **Feature branches** — Create from `master`, name as `feature/description` or `fix/description`.
 
 ### Getting Started
@@ -35,12 +34,12 @@ Or let the pre-commit hooks handle it automatically.
 
 Every push to a non-protected branch and every PR triggers:
 
-1. **Lint** — ESLint checks
+1. **Lint** — ESLint checks and Prettier format check
 2. **Type Check** — TypeScript compiler
 3. **Test** — Vitest with coverage
 4. **Build** — Vite production build
 
-All checks must pass before merging to `master` or `main`.
+All checks must pass before merging to `master`.
 
 ## Code Style
 

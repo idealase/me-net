@@ -12,9 +12,9 @@ Closes #{issue_number}
 
 ## Testing
 
-- [ ] Tests pass: `{test_command}`
-- [ ] Build succeeds: `{build_command}`
-- [ ] Lint passes: `{lint_command}`
+- [ ] Tests pass: `npm test`
+- [ ] Build succeeds: `npm run build`
+- [ ] Lint passes: `npm run lint && npm run format:check`
 
 ## Agent Evidence
 

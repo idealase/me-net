@@ -87,7 +87,7 @@ Behaviours produce Outcomes; Outcomes serve Values. Links can be **positive** (h
 	```bash
 	npm run dev
 	```
-	Open the printed URL (default http://localhost:5173).
+	Open the printed URL (default http://localhost:3000/me-net/).
 3. In the app: add your first Behaviour (or use **Why Ladder** for guidance), link Outcomes and Values, and explore the graph.
 4. Open **Insights** for leverage/fragility/conflicts; open **Validation** to resolve warnings.
 5. Export JSON or a summary report; import restores a saved network.

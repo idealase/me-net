@@ -6,6 +6,16 @@ on:
       - master
   workflow_dispatch:
 
+# peaceiris/actions-gh-pages pushes to the gh-pages branch, which needs a
+# token with write access to repository contents. Without this the default
+# read-only GITHUB_TOKEN is refused and the deploy fails.
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,6 +32,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
 
       - name: Build
         run: npm run build
