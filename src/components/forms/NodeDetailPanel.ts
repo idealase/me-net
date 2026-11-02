@@ -153,7 +153,8 @@ export class NodeDetailPanel {
   }
 
   private renderBehaviourAttributes(behaviour: Behaviour): string {
-    const freqLabel = frequencyOptions.find((o) => o.value === behaviour.frequency)?.label ?? behaviour.frequency;
+    const freqLabel =
+      frequencyOptions.find((o) => o.value === behaviour.frequency)?.label ?? behaviour.frequency;
     const costLabel = costOptions.find((o) => o.value === behaviour.cost)?.label ?? behaviour.cost;
 
     return `
@@ -177,7 +178,8 @@ export class NodeDetailPanel {
   }
 
   private renderValueAttributes(value: Value): string {
-    const impLabel = importanceOptions.find((o) => o.value === value.importance)?.label ?? value.importance;
+    const impLabel =
+      importanceOptions.find((o) => o.value === value.importance)?.label ?? value.importance;
     const negLabel = neglectOptions.find((o) => o.value === value.neglect)?.label ?? value.neglect;
 
     return `
@@ -191,7 +193,11 @@ export class NodeDetailPanel {
     `;
   }
 
-  private renderConnections(title: string, connections: ConnectedNode[], direction: 'incoming' | 'outgoing'): string {
+  private renderConnections(
+    title: string,
+    connections: ConnectedNode[],
+    direction: 'incoming' | 'outgoing'
+  ): string {
     return `
       <div class="panel-section">
         <h3>${title}</h3>
@@ -200,11 +206,12 @@ export class NodeDetailPanel {
             .map((conn) => {
               const typeClass = conn.type;
               const valenceClass = conn.valence;
-              const strengthLabel = conn.strength !== undefined
-                ? strengthOptions.find((o) => o.value === conn.strength)?.label
-                : conn.reliability !== undefined
-                  ? reliabilityOptions.find((o) => o.value === conn.reliability)?.label
-                  : '';
+              const strengthLabel =
+                conn.strength !== undefined
+                  ? strengthOptions.find((o) => o.value === conn.strength)?.label
+                  : conn.reliability !== undefined
+                    ? reliabilityOptions.find((o) => o.value === conn.reliability)?.label
+                    : '';
 
               return `
               <li class="connection-item">
@@ -238,7 +245,9 @@ export class NodeDetailPanel {
 
     // Outcomes can have incoming from Behaviours and outgoing to Values
     if (node.type === 'outcome') {
-      buttons.push(`<button class="btn btn-sm" id="btn-add-incoming">+ Link from Behaviour</button>`);
+      buttons.push(
+        `<button class="btn btn-sm" id="btn-add-incoming">+ Link from Behaviour</button>`
+      );
       buttons.push(`<button class="btn btn-sm" id="btn-add-outgoing">+ Link to Value</button>`);
     }
 
@@ -280,7 +289,11 @@ export class NodeDetailPanel {
 
     deleteBtn?.addEventListener('click', () => {
       if (this.selectedNode) {
-        if (confirm(`Are you sure you want to delete "${this.selectedNode.label}"? This will also remove all connected links.`)) {
+        if (
+          confirm(
+            `Are you sure you want to delete "${this.selectedNode.label}"? This will also remove all connected links.`
+          )
+        ) {
           this.callbacks.onDelete(this.selectedNode);
         }
       }
@@ -323,11 +336,14 @@ export class NodeDetailPanel {
     this.container.querySelectorAll('[data-action="delete-link"]').forEach((el) => {
       el.addEventListener('click', () => {
         const linkId = (el as HTMLElement).dataset.linkId;
-        if (linkId !== undefined && linkId !== '' && confirm('Are you sure you want to delete this link?')) {
+        if (
+          linkId !== undefined &&
+          linkId !== '' &&
+          confirm('Are you sure you want to delete this link?')
+        ) {
           this.callbacks.onDeleteLink(linkId);
         }
       });
     });
   }
-
 }

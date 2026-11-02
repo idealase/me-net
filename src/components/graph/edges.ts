@@ -7,7 +7,6 @@
 
 import * as d3 from 'd3';
 
-
 import { getNodeBoundaryPoint } from './nodes';
 import { edgeOpacityScale, edgeWidthScale } from './theme';
 import type { AnyGraphNode, GraphEdge, GraphTheme } from './types';
@@ -73,11 +72,7 @@ export function renderEdges(
   edgeSelection.exit().remove();
 
   // Enter
-  const edgeEnter = edgeSelection
-    .enter()
-    .append('path')
-    .attr('class', 'edge')
-    .attr('fill', 'none');
+  const edgeEnter = edgeSelection.enter().append('path').attr('class', 'edge').attr('fill', 'none');
 
   // Update (merge enter + update)
   const edgeMerge = edgeEnter.merge(edgeSelection);
@@ -118,9 +113,7 @@ export function highlightEdge(
   edge: d3.Selection<SVGPathElement, GraphEdge, SVGGElement, unknown>,
   highlighted: boolean
 ): void {
-  edge
-    .classed('highlighted', highlighted)
-    .attr('opacity', highlighted ? 1 : null);
+  edge.classed('highlighted', highlighted).attr('opacity', highlighted ? 1 : null);
 }
 
 /**
@@ -130,7 +123,5 @@ export function dimEdge(
   edge: d3.Selection<SVGPathElement, GraphEdge, SVGGElement, unknown>,
   dimmed: boolean
 ): void {
-  edge
-    .classed('dimmed', dimmed)
-    .attr('opacity', dimmed ? 0.15 : null);
+  edge.classed('dimmed', dimmed).attr('opacity', dimmed ? 0.15 : null);
 }

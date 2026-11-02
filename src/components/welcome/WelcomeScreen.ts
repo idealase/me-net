@@ -22,7 +22,8 @@ export class WelcomeScreen {
   show(): void {
     if (this.element !== null) {
       this.element.classList.remove('hidden');
-      const existingStartButton = this.element.querySelector<HTMLButtonElement>('#btn-welcome-start');
+      const existingStartButton =
+        this.element.querySelector<HTMLButtonElement>('#btn-welcome-start');
       existingStartButton?.focus();
       return;
     }

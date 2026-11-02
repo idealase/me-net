@@ -15,7 +15,11 @@ function setup(): { network: Network; behaviourId: string; outcomeId: string } {
   if (!b.success || b.data === undefined) throw new Error(b.error);
   const o = addOutcome(b.data.network, { label: 'More energy' });
   if (!o.success || o.data === undefined) throw new Error(o.error);
-  return { network: o.data.network, behaviourId: b.data.behaviour.id, outcomeId: o.data.outcome.id };
+  return {
+    network: o.data.network,
+    behaviourId: b.data.behaviour.id,
+    outcomeId: o.data.outcome.id,
+  };
 }
 
 describe('addLinkToNewTarget', () => {

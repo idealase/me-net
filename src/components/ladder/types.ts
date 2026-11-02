@@ -139,9 +139,7 @@ function getBehaviourOutcomeLinks(network: Network): BehaviourOutcomeLink[] {
  * Get all outcome-value links from the network.
  */
 function getOutcomeValueLinks(network: Network): OutcomeValueLink[] {
-  return network.links.filter(
-    (link): link is OutcomeValueLink => link.type === 'outcome-value'
-  );
+  return network.links.filter((link): link is OutcomeValueLink => link.type === 'outcome-value');
 }
 
 // ============================================================================

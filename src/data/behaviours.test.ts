@@ -63,7 +63,11 @@ describe('getBehaviour', () => {
 
   it('finds by label (case-insensitive)', () => {
     const network = createEmptyNetwork();
-    const { data } = addBehaviour(network, { label: 'Morning Walk', frequency: 'daily', cost: 'low' });
+    const { data } = addBehaviour(network, {
+      label: 'Morning Walk',
+      frequency: 'daily',
+      cost: 'low',
+    });
 
     const found = getBehaviourByLabel(data!.network, 'morning walk');
     expect(found?.label).toBe('Morning Walk');
@@ -79,7 +83,8 @@ describe('getAllBehaviours', () => {
   it('returns all behaviours', () => {
     let network = createEmptyNetwork();
     network = addBehaviour(network, { label: 'A', frequency: 'daily', cost: 'low' }).data!.network;
-    network = addBehaviour(network, { label: 'B', frequency: 'weekly', cost: 'medium' }).data!.network;
+    network = addBehaviour(network, { label: 'B', frequency: 'weekly', cost: 'medium' }).data!
+      .network;
 
     expect(getAllBehaviours(network)).toHaveLength(2);
   });
@@ -88,8 +93,18 @@ describe('getAllBehaviours', () => {
 describe('getBehavioursByTag', () => {
   it('filters by context tag', () => {
     let network = createEmptyNetwork();
-    network = addBehaviour(network, { label: 'A', frequency: 'daily', cost: 'low', contextTags: ['morning'] }).data!.network;
-    network = addBehaviour(network, { label: 'B', frequency: 'daily', cost: 'low', contextTags: ['evening'] }).data!.network;
+    network = addBehaviour(network, {
+      label: 'A',
+      frequency: 'daily',
+      cost: 'low',
+      contextTags: ['morning'],
+    }).data!.network;
+    network = addBehaviour(network, {
+      label: 'B',
+      frequency: 'daily',
+      cost: 'low',
+      contextTags: ['evening'],
+    }).data!.network;
 
     const morning = getBehavioursByTag(network, 'morning');
     expect(morning).toHaveLength(1);
@@ -111,10 +126,13 @@ describe('updateBehaviour', () => {
 
   it('rejects update to duplicate label', () => {
     let network = createEmptyNetwork();
-    network = addBehaviour(network, { label: 'Walk', frequency: 'daily', cost: 'low' }).data!.network;
+    network = addBehaviour(network, { label: 'Walk', frequency: 'daily', cost: 'low' }).data!
+      .network;
     const second = addBehaviour(network, { label: 'Run', frequency: 'daily', cost: 'medium' });
 
-    const result = updateBehaviour(second.data!.network, second.data!.behaviour.id, { label: 'Walk' });
+    const result = updateBehaviour(second.data!.network, second.data!.behaviour.id, {
+      label: 'Walk',
+    });
 
     expect(result.success).toBe(false);
     expect(result.error).toContain('already exists');

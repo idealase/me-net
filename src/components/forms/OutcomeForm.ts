@@ -127,7 +127,11 @@ export class OutcomeForm {
     // Delete button
     if (deleteBtn && this.callbacks.onDelete) {
       deleteBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete this outcome? This will also remove all connected links.')) {
+        if (
+          confirm(
+            'Are you sure you want to delete this outcome? This will also remove all connected links.'
+          )
+        ) {
           this.callbacks.onDelete!();
         }
       });
@@ -175,7 +179,6 @@ export class OutcomeForm {
       labelInput.classList.remove('invalid');
     }
   }
-
 
   getData(): OutcomeFormData {
     return { ...this.data };

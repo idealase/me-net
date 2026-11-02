@@ -5,13 +5,7 @@
  * along with weighted influence values.
  */
 
-import type {
-  Network,
-  Behaviour,
-  Value,
-  BehaviourOutcomeLink,
-  OutcomeValueLink,
-} from '@/types';
+import type { Network, Behaviour, Value, BehaviourOutcomeLink, OutcomeValueLink } from '@/types';
 
 import {
   reliabilityToNumber,
@@ -130,7 +124,8 @@ export function computeAllPaths(network: Network): PathToValue[] {
       const boValence = valenceToMultiplier(boLink.valence);
       const ovValence = valenceToMultiplier(ovLink.valence);
       const combinedValence = boValence * ovValence;
-      const effectiveValence: 'positive' | 'negative' = combinedValence > 0 ? 'positive' : 'negative';
+      const effectiveValence: 'positive' | 'negative' =
+        combinedValence > 0 ? 'positive' : 'negative';
 
       // Compute path weight (reliability × strength)
       const reliability = reliabilityToNumber(boLink.reliability);

@@ -131,7 +131,9 @@ export class WhyLadder {
               </div>
             </div>
 
-            ${behaviours.length > 0 ? `
+            ${
+              behaviours.length > 0
+                ? `
               <div class="divider-text">
                 <span>or select existing</span>
               </div>
@@ -139,15 +141,21 @@ export class WhyLadder {
               <div class="form-group">
                 <label>Select existing behaviour</label>
                 <ul class="selectable-list" id="behaviour-list">
-                  ${behaviours.map((b) => `
+                  ${behaviours
+                    .map(
+                      (b) => `
                     <li class="selectable-item ${b.hasLinks ? 'has-links' : 'no-links'}" data-id="${escapeHtml(b.id)}">
                       <span class="item-label">${escapeHtml(b.label)}</span>
                       ${b.hasLinks ? '<span class="item-badge">has links</span>' : '<span class="item-badge unexplained">unexplained</span>'}
                     </li>
-                  `).join('')}
+                  `
+                    )
+                    .join('')}
                 </ul>
               </div>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
         </div>
 
@@ -184,19 +192,27 @@ export class WhyLadder {
             What outcome(s) does <strong>"${escapeHtml(this.session.behaviourLabel)}"</strong> produce?
           </p>
 
-          ${addedCount > 0 ? `
+          ${
+            addedCount > 0
+              ? `
             <div class="added-items">
               <h4>Added outcomes (${addedCount}):</h4>
               <ul class="outcome-chips">
-                ${this.session.outcomes.map((o) => `
+                ${this.session.outcomes
+                  .map(
+                    (o) => `
                   <li class="outcome-chip">
                     <span>${escapeHtml(o.outcomeLabel)}</span>
                     <button type="button" class="chip-remove" data-outcome-id="${escapeHtml(o.outcomeId)}" title="Remove">×</button>
                   </li>
-                `).join('')}
+                `
+                  )
+                  .join('')}
               </ul>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
 
           <div class="ladder-form">
             <div class="form-group">
@@ -215,7 +231,9 @@ export class WhyLadder {
               </div>
             </div>
 
-            ${availableOutcomes.length > 0 ? `
+            ${
+              availableOutcomes.length > 0
+                ? `
               <div class="divider-text">
                 <span>or link existing</span>
               </div>
@@ -223,14 +241,20 @@ export class WhyLadder {
               <div class="form-group">
                 <label>Link to existing outcome</label>
                 <ul class="selectable-list" id="outcome-list">
-                  ${availableOutcomes.map((o) => `
+                  ${availableOutcomes
+                    .map(
+                      (o) => `
                     <li class="selectable-item" data-id="${escapeHtml(o.id)}">
                       <span class="item-label">${escapeHtml(o.label)}</span>
                     </li>
-                  `).join('')}
+                  `
+                    )
+                    .join('')}
                 </ul>
               </div>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
         </div>
 
@@ -241,11 +265,15 @@ export class WhyLadder {
           <button type="button" class="btn btn-secondary" id="btn-exit">
             Exit Early
           </button>
-          ${addedCount > 0 ? `
+          ${
+            addedCount > 0
+              ? `
             <button type="button" class="btn btn-primary" id="btn-next">
               Continue →
             </button>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
       </div>
     `;
@@ -305,21 +333,29 @@ export class WhyLadder {
               </div>
             </div>
 
-            ${availableValues.length > 0 ? `
+            ${
+              availableValues.length > 0
+                ? `
               <div class="divider-text">
                 <span>or link to existing value</span>
               </div>
 
               <div class="form-group">
                 <ul class="selectable-list" id="value-list">
-                  ${availableValues.map((v) => `
+                  ${availableValues
+                    .map(
+                      (v) => `
                     <li class="selectable-item" data-id="${escapeHtml(v.id)}">
                       <span class="item-label">${escapeHtml(v.label)}</span>
                     </li>
-                  `).join('')}
+                  `
+                    )
+                    .join('')}
                 </ul>
               </div>
-            ` : ''}
+            `
+                : ''
+            }
 
             <div class="divider-text">
               <span>or chain to another outcome</span>
@@ -393,14 +429,18 @@ export class WhyLadder {
             </span>
           </div>
 
-          ${unexplainedCount > 0 ? `
+          ${
+            unexplainedCount > 0
+              ? `
             <div class="summary-item warning">
               <span class="summary-icon">⚠</span>
               <span class="summary-text">
                 ${unexplainedCount} outcome${unexplainedCount !== 1 ? 's' : ''} left unexplained
               </span>
             </div>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
 
         <div class="ladder-actions">
@@ -692,14 +732,14 @@ export class WhyLadder {
     // This creates an outcome-to-outcome chain (conceptually, though we model as behaviour->outcome->value)
     // For MVP, we'll treat this as creating a new outcome and marking current as explained
     const newOutcome = this.callbacks.onChainOutcome(label, pendingOutcome.outcomeId);
-    
+
     // Add the new outcome to pending list (it also needs to be explained)
     this.session.outcomes.push({
       outcomeId: newOutcome.id,
       outcomeLabel: newOutcome.label,
       explained: false,
     });
-    
+
     // Mark the original outcome as explained (it chains to the new one)
     this.markOutcomeExplained(pendingOutcome);
   }
@@ -748,5 +788,4 @@ export class WhyLadder {
   // ============================================================================
   // Utilities
   // ============================================================================
-
 }

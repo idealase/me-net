@@ -210,4 +210,3 @@ export function isCurrentNetworkExample(): boolean {
   }
   return isExampleNetwork(result.data);
 }
-

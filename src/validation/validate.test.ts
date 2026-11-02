@@ -531,9 +531,7 @@ describe('detectValueLevelConflicts', () => {
     const network = createTestNetwork();
     // Remove the conflicting behaviour
     network.behaviours = network.behaviours.filter((b) => b.id !== 'b-2');
-    network.links = network.links.filter(
-      (l) => l.sourceId !== 'b-2'
-    );
+    network.links = network.links.filter((l) => l.sourceId !== 'b-2');
 
     const warnings = detectValueLevelConflicts(network);
     expect(warnings).toHaveLength(0);

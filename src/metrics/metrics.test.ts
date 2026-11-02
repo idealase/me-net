@@ -2,7 +2,14 @@
  * Tests for Metrics Computation
  */
 
-import type { Network, Behaviour, Outcome, Value, BehaviourOutcomeLink, OutcomeValueLink } from '@/types';
+import type {
+  Network,
+  Behaviour,
+  Outcome,
+  Value,
+  BehaviourOutcomeLink,
+  OutcomeValueLink,
+} from '@/types';
 
 import {
   computeLeverageScore,

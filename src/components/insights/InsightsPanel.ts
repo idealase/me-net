@@ -228,9 +228,10 @@ export class InsightsPanel {
           </div>
         </div>
         <div class="insight-explanation">
-          ${isOrphan
-            ? '<span class="explanation-text warning">No behaviours support this value.</span>'
-            : `<span class="explanation-text">Supported by: <strong>${behaviourLabels !== '' ? behaviourLabels : 'none'}</strong></span>`
+          ${
+            isOrphan
+              ? '<span class="explanation-text warning">No behaviours support this value.</span>'
+              : `<span class="explanation-text">Supported by: <strong>${behaviourLabels !== '' ? behaviourLabels : 'none'}</strong></span>`
           }
         </div>
         <div class="insight-meta">
@@ -314,7 +315,6 @@ export class InsightsPanel {
   private formatNeglect(neglect: string): string {
     return neglect.replace(/-/g, ' ');
   }
-
 
   // ==========================================================================
   // Event Handling

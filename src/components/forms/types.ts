@@ -323,10 +323,8 @@ export function getAutocompleteSuggestions(
 
   // If allowCreate is true and there's a query with no exact match, add create option
   if (allowCreate && normalizedQuery !== '') {
-    const exactMatch = nodes.some(
-      (node) => node.label.toLowerCase() === normalizedQuery
-    );
-    
+    const exactMatch = nodes.some((node) => node.label.toLowerCase() === normalizedQuery);
+
     if (!exactMatch) {
       // Add "Create 'X'" option at the end
       filtered.push({
@@ -348,7 +346,11 @@ export function getAutocompleteSuggestions(
 /**
  * Validate a label field.
  */
-export function validateLabel(label: string, existingLabels: string[], currentLabel?: string): FormError | null {
+export function validateLabel(
+  label: string,
+  existingLabels: string[],
+  currentLabel?: string
+): FormError | null {
   const trimmed = label.trim();
 
   if (!trimmed) {
@@ -362,7 +364,9 @@ export function validateLabel(label: string, existingLabels: string[], currentLa
   // Check for duplicates (case-insensitive), excluding current label during edit
   const normalized = trimmed.toLowerCase();
   const isDuplicate = existingLabels.some(
-    (existing) => existing.toLowerCase() === normalized && existing.toLowerCase() !== currentLabel?.toLowerCase()
+    (existing) =>
+      existing.toLowerCase() === normalized &&
+      existing.toLowerCase() !== currentLabel?.toLowerCase()
   );
 
   if (isDuplicate) {
@@ -382,7 +386,10 @@ export function linkExists(network: Network, sourceId: string, targetId: string)
 /**
  * Get labels for a specific node type from the network.
  */
-export function getLabelsForType(network: Network, nodeType: 'behaviour' | 'outcome' | 'value'): string[] {
+export function getLabelsForType(
+  network: Network,
+  nodeType: 'behaviour' | 'outcome' | 'value'
+): string[] {
   switch (nodeType) {
     case 'behaviour':
       return network.behaviours.map((b) => b.label);

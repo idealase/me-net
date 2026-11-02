@@ -122,7 +122,7 @@ export class ValidationPanel {
 
   private renderSummary(result: ValidationResult): string {
     const counts = result.counts;
-    
+
     if (counts.total === 0) {
       return `
         <div class="validation-summary validation-empty">
@@ -158,7 +158,7 @@ export class ValidationPanel {
       if (warnings.length === 0) continue;
 
       const isExpanded = this.expandedTypes.has(group.type);
-      
+
       html += `
         <div class="warning-group ${group.severity}">
           <div class="group-header" data-type="${group.type}">
@@ -179,7 +179,8 @@ export class ValidationPanel {
     return warnings.filter((w) => {
       const isDismissed = this.warningState.dismissed[w.id] === true;
       const snoozedUntil = this.warningState.snoozed[w.id];
-      const isSnoozed = snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
+      const isSnoozed =
+        snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
 
       if (!this.showDismissed && isDismissed) return false;
       if (!this.showDismissed && isSnoozed) return false;
@@ -203,7 +204,8 @@ export class ValidationPanel {
   private renderWarningItem(warning: Warning): string {
     const isDismissed = this.warningState.dismissed[warning.id] === true;
     const snoozedUntil = this.warningState.snoozed[warning.id];
-    const isSnoozed = snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
+    const isSnoozed =
+      snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
 
     const statusClass = isDismissed ? 'dismissed' : isSnoozed ? 'snoozed' : 'active';
 
@@ -219,19 +221,27 @@ export class ValidationPanel {
           <button class="btn-icon btn-navigate" data-node-id="${escapeHtml(warning.nodeId)}" title="Go to node">
             👁
           </button>
-          ${!isDismissed && !isSnoozed ? `
+          ${
+            !isDismissed && !isSnoozed
+              ? `
             <button class="btn-icon btn-snooze" data-warning-id="${escapeHtml(warning.id)}" title="Snooze for 24h">
               💤
             </button>
             <button class="btn-icon btn-dismiss" data-warning-id="${escapeHtml(warning.id)}" title="Dismiss">
               ✕
             </button>
-          ` : ''}
-          ${isDismissed ? `
+          `
+              : ''
+          }
+          ${
+            isDismissed
+              ? `
             <button class="btn-icon btn-undismiss" data-warning-id="${escapeHtml(warning.id)}" title="Restore">
               ↩
             </button>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
       </div>
     `;

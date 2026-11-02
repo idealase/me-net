@@ -23,7 +23,9 @@ export class EmptyState {
   show(): void {
     if (this.element !== null) {
       this.element.classList.remove('hidden');
-      const existingAddButton = this.element.querySelector<HTMLButtonElement>('#btn-empty-add-behaviour');
+      const existingAddButton = this.element.querySelector<HTMLButtonElement>(
+        '#btn-empty-add-behaviour'
+      );
       existingAddButton?.focus();
       return;
     }
@@ -79,7 +81,9 @@ export class EmptyState {
     this.container.appendChild(this.element);
 
     // Wire event handlers
-    const addBehaviourBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-add-behaviour');
+    const addBehaviourBtn = this.element.querySelector<HTMLButtonElement>(
+      '#btn-empty-add-behaviour'
+    );
     const whyLadderBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-why-ladder');
     const importBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-import');
 

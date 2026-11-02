@@ -5,12 +5,7 @@
  * Supports both light and dark themes.
  */
 
-import type {
-  ForceLayoutConfig,
-  GraphOptions,
-  GraphTheme,
-  LayeredLayoutConfig,
-} from './types';
+import type { ForceLayoutConfig, GraphOptions, GraphTheme, LayeredLayoutConfig } from './types';
 
 /**
  * Default (light) theme following visual-design.md colour families.

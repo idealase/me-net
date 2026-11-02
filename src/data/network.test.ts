@@ -135,16 +135,18 @@ describe('isNetworkEmpty', () => {
   it('returns true when only links exist (orphaned links)', () => {
     // This is an edge case - links without nodes
     const network = createNetwork({
-      links: [{
-        id: 'l-1',
-        type: 'behaviour-outcome',
-        sourceId: 'b-1',
-        targetId: 'o-1',
-        valence: 'positive',
-        reliability: 'usually',
-        createdAt: '2025-01-01T00:00:00.000Z',
-        updatedAt: '2025-01-01T00:00:00.000Z',
-      }],
+      links: [
+        {
+          id: 'l-1',
+          type: 'behaviour-outcome',
+          sourceId: 'b-1',
+          targetId: 'o-1',
+          valence: 'positive',
+          reliability: 'usually',
+          createdAt: '2025-01-01T00:00:00.000Z',
+          updatedAt: '2025-01-01T00:00:00.000Z',
+        },
+      ],
     });
 
     // Network is "empty" of nodes even if orphan links exist
@@ -251,19 +253,68 @@ describe('getNetworkStats', () => {
   it('returns correct stats for populated network', () => {
     const network = createNetwork({
       behaviours: [
-        { id: 'b-1', type: 'behaviour', label: 'B1', frequency: 'daily', cost: 'low', contextTags: [], createdAt: '', updatedAt: '' },
-        { id: 'b-2', type: 'behaviour', label: 'B2', frequency: 'weekly', cost: 'medium', contextTags: [], createdAt: '', updatedAt: '' },
+        {
+          id: 'b-1',
+          type: 'behaviour',
+          label: 'B1',
+          frequency: 'daily',
+          cost: 'low',
+          contextTags: [],
+          createdAt: '',
+          updatedAt: '',
+        },
+        {
+          id: 'b-2',
+          type: 'behaviour',
+          label: 'B2',
+          frequency: 'weekly',
+          cost: 'medium',
+          contextTags: [],
+          createdAt: '',
+          updatedAt: '',
+        },
       ],
-      outcomes: [
-        { id: 'o-1', type: 'outcome', label: 'O1', createdAt: '', updatedAt: '' },
-      ],
+      outcomes: [{ id: 'o-1', type: 'outcome', label: 'O1', createdAt: '', updatedAt: '' }],
       values: [
-        { id: 'v-1', type: 'value', label: 'V1', importance: 'high', neglect: 'adequately-met', createdAt: '', updatedAt: '' },
-        { id: 'v-2', type: 'value', label: 'V2', importance: 'medium', neglect: 'somewhat-neglected', createdAt: '', updatedAt: '' },
-        { id: 'v-3', type: 'value', label: 'V3', importance: 'low', neglect: 'well-satisfied', createdAt: '', updatedAt: '' },
+        {
+          id: 'v-1',
+          type: 'value',
+          label: 'V1',
+          importance: 'high',
+          neglect: 'adequately-met',
+          createdAt: '',
+          updatedAt: '',
+        },
+        {
+          id: 'v-2',
+          type: 'value',
+          label: 'V2',
+          importance: 'medium',
+          neglect: 'somewhat-neglected',
+          createdAt: '',
+          updatedAt: '',
+        },
+        {
+          id: 'v-3',
+          type: 'value',
+          label: 'V3',
+          importance: 'low',
+          neglect: 'well-satisfied',
+          createdAt: '',
+          updatedAt: '',
+        },
       ],
       links: [
-        { id: 'l-1', type: 'behaviour-outcome', sourceId: 'b-1', targetId: 'o-1', valence: 'positive', reliability: 'usually', createdAt: '', updatedAt: '' },
+        {
+          id: 'l-1',
+          type: 'behaviour-outcome',
+          sourceId: 'b-1',
+          targetId: 'o-1',
+          valence: 'positive',
+          reliability: 'usually',
+          createdAt: '',
+          updatedAt: '',
+        },
       ],
     });
 

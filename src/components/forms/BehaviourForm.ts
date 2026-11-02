@@ -127,7 +127,9 @@ export class BehaviourForm {
   private bindEvents(): void {
     const form = this.container.querySelector('form')!;
     const labelInput = this.container.querySelector('#behaviour-label') as HTMLInputElement;
-    const frequencySelect = this.container.querySelector('#behaviour-frequency') as HTMLSelectElement;
+    const frequencySelect = this.container.querySelector(
+      '#behaviour-frequency'
+    ) as HTMLSelectElement;
     const costSelect = this.container.querySelector('#behaviour-cost') as HTMLSelectElement;
     const tagsInput = this.container.querySelector('#behaviour-tags') as HTMLInputElement;
     const notesTextarea = this.container.querySelector('#behaviour-notes') as HTMLTextAreaElement;
@@ -175,7 +177,11 @@ export class BehaviourForm {
     // Delete button
     if (deleteBtn && this.callbacks.onDelete) {
       deleteBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete this behaviour? This will also remove all connected links.')) {
+        if (
+          confirm(
+            'Are you sure you want to delete this behaviour? This will also remove all connected links.'
+          )
+        ) {
           this.callbacks.onDelete!();
         }
       });
@@ -225,7 +231,6 @@ export class BehaviourForm {
       labelInput.classList.remove('invalid');
     }
   }
-
 
   /**
    * Get the current form data.

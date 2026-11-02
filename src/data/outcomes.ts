@@ -112,7 +112,10 @@ export function updateOutcome(
   const existing = network.outcomes[existingIndex]!;
 
   // Validate label uniqueness if changing label
-  if (input.label !== undefined && input.label.trim().toLowerCase() !== existing.label.toLowerCase()) {
+  if (
+    input.label !== undefined &&
+    input.label.trim().toLowerCase() !== existing.label.toLowerCase()
+  ) {
     const labelValidation = validateLabel(input.label, network);
     if (!labelValidation.valid) {
       return { success: false, error: labelValidation.error };
@@ -148,10 +151,7 @@ export function updateOutcome(
  * Delete an outcome and all its incident links.
  * Returns the updated network.
  */
-export function deleteOutcome(
-  network: Network,
-  id: string
-): CrudResult<{ network: Network }> {
+export function deleteOutcome(network: Network, id: string): CrudResult<{ network: Network }> {
   const existingIndex = network.outcomes.findIndex((o) => o.id === id);
   if (existingIndex === -1) {
     return { success: false, error: `Outcome with id "${id}" not found` };
@@ -161,9 +161,7 @@ export function deleteOutcome(
   const updatedOutcomes = network.outcomes.filter((o) => o.id !== id);
 
   // Cascade delete: remove all links where this outcome is source OR target
-  const updatedLinks = network.links.filter(
-    (link) => link.sourceId !== id && link.targetId !== id
-  );
+  const updatedLinks = network.links.filter((link) => link.sourceId !== id && link.targetId !== id);
 
   const updatedNetwork: Network = {
     ...network,
@@ -201,9 +199,7 @@ function validateLabel(label: string, network: Network): ValidationResult {
   }
 
   // Check uniqueness (case-insensitive)
-  const exists = network.outcomes.some(
-    (o) => o.label.toLowerCase() === trimmed.toLowerCase()
-  );
+  const exists = network.outcomes.some((o) => o.label.toLowerCase() === trimmed.toLowerCase());
   if (exists) {
     return { valid: false, error: `An outcome with label "${trimmed}" already exists` };
   }

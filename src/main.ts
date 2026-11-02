@@ -31,11 +31,7 @@ import { WelcomeScreen } from './components/welcome';
 import { addBehaviour, deleteBehaviour, updateBehaviour } from './data/behaviours';
 import { addLinkToNewTarget } from './data/compound';
 import { createExampleNetwork } from './data/example-network';
-import {
-  downloadNetworkAsJson,
-  downloadSummaryReport,
-  importNetworkFromFile,
-} from './data/export';
+import { downloadNetworkAsJson, downloadSummaryReport, importNetworkFromFile } from './data/export';
 import {
   addBehaviourOutcomeLink,
   addOutcomeValueLink,
@@ -47,11 +43,7 @@ import { createEmptyNetwork, isNetworkEmpty } from './data/network';
 import { addOutcome, deleteOutcome, updateOutcome } from './data/outcomes';
 import { loadNetwork, saveNetwork } from './data/storage';
 import { addValue, deleteValue, updateValue } from './data/values';
-import {
-  getConflictBehaviours,
-  getFragileValues,
-  getTopLeverageBehaviours,
-} from './metrics';
+import { getConflictBehaviours, getFragileValues, getTopLeverageBehaviours } from './metrics';
 import type { Behaviour, Link, Network, Node, Outcome, Value } from './types';
 import { getCurrentTheme, initializeTheme, toggleTheme } from './utils/theme';
 import { WarningState, createEmptyWarningState, pruneWarningState } from './validation';
@@ -63,7 +55,15 @@ import { WarningState, createEmptyWarningState, pruneWarningState } from './vali
 interface AppState {
   network: Network;
   selectedNodeId: string | null;
-  formMode: 'none' | 'create-behaviour' | 'create-outcome' | 'create-value' | 'create-link' | 'edit-node' | 'edit-link' | 'why-ladder';
+  formMode:
+    | 'none'
+    | 'create-behaviour'
+    | 'create-outcome'
+    | 'create-value'
+    | 'create-link'
+    | 'edit-node'
+    | 'edit-link'
+    | 'why-ladder';
   editingNode: Node | null;
   editingLink: Link | null;
   linkType: LinkType | null;
@@ -227,7 +227,9 @@ function handleWelcomeImport(): void {
 function handleLoadExample(): void {
   if (
     !isNetworkEmpty(state.network) &&
-    !confirm('Load the example network?\n\nThis will replace your current network. Export it first if you want to keep it.')
+    !confirm(
+      'Load the example network?\n\nThis will replace your current network. Export it first if you want to keep it.'
+    )
   ) {
     return;
   }
@@ -245,7 +247,9 @@ function handleLoadExample(): void {
 function handleNewNetwork(): void {
   if (isNetworkEmpty(state.network)) return;
   if (
-    !confirm('Start a new, empty network?\n\nThis will remove your current network. Export it first if you want to keep it.')
+    !confirm(
+      'Start a new, empty network?\n\nThis will remove your current network. Export it first if you want to keep it.'
+    )
   ) {
     return;
   }
@@ -280,7 +284,12 @@ function updateNetwork(newNetwork: Network): void {
   state.network = newNetwork;
   pruneStaleWarnings(newNetwork);
   const saveResult = saveNetwork(newNetwork);
-  if (!saveResult.success && saveResult.error !== undefined && saveResult.error !== null && saveResult.error !== '') {
+  if (
+    !saveResult.success &&
+    saveResult.error !== undefined &&
+    saveResult.error !== null &&
+    saveResult.error !== ''
+  ) {
     showAppMessage('error', saveResult.error);
   }
   graph?.setNetwork(newNetwork);
@@ -357,7 +366,11 @@ function showCreateValueForm(): void {
   renderSidebar();
 }
 
-function showCreateLinkForm(linkType: LinkType, preselectedSourceId?: string, preselectedTargetId?: string): void {
+function showCreateLinkForm(
+  linkType: LinkType,
+  preselectedSourceId?: string,
+  preselectedTargetId?: string
+): void {
   state.formMode = 'create-link';
   state.linkType = linkType;
   state.preselectedSourceId = preselectedSourceId ?? null;
@@ -659,7 +672,10 @@ function handleSaveLinkWithNewNode({ linkData, pendingTarget }: LinkFormDataWith
   updateNetwork(result.data.network);
   hideForm();
   selectNode(result.data.target.id);
-  showAppMessage('success', `Created ${pendingTarget.type} "${result.data.target.label}" and linked it.`);
+  showAppMessage(
+    'success',
+    `Created ${pendingTarget.type} "${result.data.target.label}" and linked it.`
+  );
 }
 
 function handleDeleteNode(node: Node): void {
@@ -1119,11 +1135,17 @@ function renderSidebar(): void {
       `;
 
       // Bind add buttons
-      document.getElementById('btn-add-behaviour')?.addEventListener('click', showCreateBehaviourForm);
+      document
+        .getElementById('btn-add-behaviour')
+        ?.addEventListener('click', showCreateBehaviourForm);
       document.getElementById('btn-add-outcome')?.addEventListener('click', showCreateOutcomeForm);
       document.getElementById('btn-add-value')?.addEventListener('click', showCreateValueForm);
-      document.getElementById('btn-add-bo-link')?.addEventListener('click', () => showCreateLinkForm('behaviour-outcome'));
-      document.getElementById('btn-add-ov-link')?.addEventListener('click', () => showCreateLinkForm('outcome-value'));
+      document
+        .getElementById('btn-add-bo-link')
+        ?.addEventListener('click', () => showCreateLinkForm('behaviour-outcome'));
+      document
+        .getElementById('btn-add-ov-link')
+        ?.addEventListener('click', () => showCreateLinkForm('outcome-value'));
       document.getElementById('btn-why-ladder')?.addEventListener('click', () => showWhyLadder());
   }
 }
@@ -1235,7 +1257,12 @@ function init(): void {
 
   // Load network data
   const result = loadNetwork();
-  if (!result.success && result.error !== undefined && result.error !== null && result.error !== '') {
+  if (
+    !result.success &&
+    result.error !== undefined &&
+    result.error !== null &&
+    result.error !== ''
+  ) {
     showAppMessage('error', result.error);
   }
   state.network = result.success && result.data ? result.data : createEmptyNetwork();

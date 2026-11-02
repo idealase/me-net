@@ -319,10 +319,7 @@ export function updateOutcomeValueLink(
 /**
  * Delete a link by ID.
  */
-export function deleteLink(
-  network: Network,
-  id: string
-): CrudResult<{ network: Network }> {
+export function deleteLink(network: Network, id: string): CrudResult<{ network: Network }> {
   const existingIndex = network.links.findIndex((l) => l.id === id);
   if (existingIndex === -1) {
     return { success: false, error: `Link with id "${id}" not found` };

@@ -7,7 +7,14 @@
  * See issue #21 for requirements.
  */
 
-import type { Behaviour, Outcome, Value, BehaviourOutcomeLink, OutcomeValueLink, Network } from '@/types';
+import type {
+  Behaviour,
+  Outcome,
+  Value,
+  BehaviourOutcomeLink,
+  OutcomeValueLink,
+  Network,
+} from '@/types';
 import { generateId, now } from '@/utils/id';
 
 // ============================================================================
