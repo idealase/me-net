@@ -6,6 +6,7 @@
  */
 
 import type { Behaviour, Network, Node, Outcome, Value } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   ConnectedNode,
@@ -116,7 +117,7 @@ export class NodeDetailPanel {
         <div class="panel-header">
           <button class="panel-close" id="btn-close" aria-label="Close panel">×</button>
           <span class="node-type-badge ${typeClass}">${typeLabel}</span>
-          <h2 class="panel-title">${this.escapeHtml(node.label)}</h2>
+          <h2 class="panel-title">${escapeHtml(node.label)}</h2>
         </div>
 
         <div class="panel-section">
@@ -161,8 +162,8 @@ export class NodeDetailPanel {
         <dd>${freqLabel}</dd>
         <dt>Cost</dt>
         <dd>${costLabel}</dd>
-        ${behaviour.contextTags.length > 0 ? `<dt>Tags</dt><dd>${behaviour.contextTags.map((t) => `<span class="tag">${this.escapeHtml(t)}</span>`).join(' ')}</dd>` : ''}
-        ${behaviour.notes !== undefined && behaviour.notes !== '' ? `<dt>Notes</dt><dd class="notes">${this.escapeHtml(behaviour.notes)}</dd>` : ''}
+        ${behaviour.contextTags.length > 0 ? `<dt>Tags</dt><dd>${behaviour.contextTags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(' ')}</dd>` : ''}
+        ${behaviour.notes !== undefined && behaviour.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(behaviour.notes)}</dd>` : ''}
       </dl>
     `;
   }
@@ -170,7 +171,7 @@ export class NodeDetailPanel {
   private renderOutcomeAttributes(outcome: Outcome): string {
     return `
       <dl class="attribute-list">
-        ${outcome.notes !== undefined && outcome.notes !== '' ? `<dt>Notes</dt><dd class="notes">${this.escapeHtml(outcome.notes)}</dd>` : '<p class="no-attributes">No additional attributes</p>'}
+        ${outcome.notes !== undefined && outcome.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(outcome.notes)}</dd>` : '<p class="no-attributes">No additional attributes</p>'}
       </dl>
     `;
   }
@@ -185,7 +186,7 @@ export class NodeDetailPanel {
         <dd>${impLabel}</dd>
         <dt>Current Status</dt>
         <dd>${negLabel}</dd>
-        ${value.notes !== undefined && value.notes !== '' ? `<dt>Notes</dt><dd class="notes">${this.escapeHtml(value.notes)}</dd>` : ''}
+        ${value.notes !== undefined && value.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(value.notes)}</dd>` : ''}
       </dl>
     `;
   }
@@ -210,13 +211,13 @@ export class NodeDetailPanel {
                 <div class="connection-main">
                   <span class="connection-direction">${direction === 'incoming' ? '←' : '→'}</span>
                   <span class="node-type-dot ${typeClass}"></span>
-                  <a href="#" class="connection-label" data-node-id="${conn.id}">${this.escapeHtml(conn.label)}</a>
+                  <a href="#" class="connection-label" data-node-id="${escapeHtml(conn.id)}">${escapeHtml(conn.label)}</a>
                 </div>
                 <div class="connection-meta">
                   <span class="valence-badge ${valenceClass}">${conn.valence === 'positive' ? '+' : '−'}</span>
                   ${strengthLabel !== '' ? `<span class="strength-label">${strengthLabel}</span>` : ''}
-                  <button class="btn-icon" data-link-id="${conn.linkId}" data-action="edit-link" title="Edit link">✎</button>
-                  <button class="btn-icon btn-icon-danger" data-link-id="${conn.linkId}" data-action="delete-link" title="Delete link">×</button>
+                  <button class="btn-icon" data-link-id="${escapeHtml(conn.linkId)}" data-action="edit-link" title="Edit link">✎</button>
+                  <button class="btn-icon btn-icon-danger" data-link-id="${escapeHtml(conn.linkId)}" data-action="delete-link" title="Delete link">×</button>
                 </div>
               </li>
             `;
@@ -329,9 +330,4 @@ export class NodeDetailPanel {
     });
   }
 
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 }

@@ -5,6 +5,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   BehaviourFormCallbacks,
@@ -66,7 +67,7 @@ export class BehaviourForm {
             type="text"
             id="behaviour-label"
             class="form-input"
-            value="${this.escapeHtml(this.data.label)}"
+            value="${escapeHtml(this.data.label)}"
             placeholder="e.g., Morning meditation"
             maxlength="100"
             required
@@ -96,7 +97,7 @@ export class BehaviourForm {
             type="text"
             id="behaviour-tags"
             class="form-input"
-            value="${this.escapeHtml(this.data.contextTags.join(', '))}"
+            value="${escapeHtml(this.data.contextTags.join(', '))}"
             placeholder="e.g., morning, alone, work"
           />
           <div class="form-hint">Separate tags with commas</div>
@@ -109,7 +110,7 @@ export class BehaviourForm {
             class="form-textarea"
             rows="3"
             placeholder="Optional notes about this behaviour..."
-          >${this.escapeHtml(this.data.notes)}</textarea>
+          >${escapeHtml(this.data.notes)}</textarea>
         </div>
 
         <div class="form-actions">
@@ -225,11 +226,6 @@ export class BehaviourForm {
     }
   }
 
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 
   /**
    * Get the current form data.

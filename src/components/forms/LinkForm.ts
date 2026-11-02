@@ -7,6 +7,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   AutocompleteItem,
@@ -141,7 +142,7 @@ export class LinkForm {
     const pendingIndicator = this.pendingTargetCreation
       ? `<div class="pending-creation-indicator">
           <span class="pending-icon">✨</span>
-          <span class="pending-text">Will create new ${targetTypeLabel.toLowerCase()}: "${this.escapeHtml(this.pendingTargetCreation.label)}"</span>
+          <span class="pending-text">Will create new ${targetTypeLabel.toLowerCase()}: "${escapeHtml(this.pendingTargetCreation.label)}"</span>
         </div>`
       : '';
 
@@ -179,7 +180,7 @@ export class LinkForm {
               type="text"
               id="link-source"
               class="form-input autocomplete-input"
-              value="${this.selectedSource ? this.escapeHtml(this.selectedSource.label) : ''}"
+              value="${this.selectedSource ? escapeHtml(this.selectedSource.label) : ''}"
               placeholder="Search ${sourceTypeLabel.toLowerCase()}s..."
               autocomplete="off"
               ${this.mode === 'edit' || this.selectedSource ? 'readonly' : ''}
@@ -201,7 +202,7 @@ export class LinkForm {
               type="text"
               id="link-target"
               class="form-input autocomplete-input ${this.pendingTargetCreation ? 'pending-creation' : ''}"
-              value="${this.selectedTarget ? this.escapeHtml(this.selectedTarget.label) : (this.pendingTargetCreation ? this.escapeHtml(this.pendingTargetCreation.label) : '')}"
+              value="${this.selectedTarget ? escapeHtml(this.selectedTarget.label) : (this.pendingTargetCreation ? escapeHtml(this.pendingTargetCreation.label) : '')}"
               placeholder="${this.allowCreateTarget ? `Search or type new ${targetTypeLabel.toLowerCase()}...` : `Search ${targetTypeLabel.toLowerCase()}s...`}"
               autocomplete="off"
               ${this.mode === 'edit' || this.selectedTarget ? 'readonly' : ''}
@@ -375,8 +376,8 @@ export class LinkForm {
     dropdown.innerHTML = this.sourceSuggestions
       .map(
         (item) => `
-        <div class="autocomplete-item" data-id="${item.id}">
-          <span class="autocomplete-label">${this.escapeHtml(item.label)}</span>
+        <div class="autocomplete-item" data-id="${escapeHtml(item.id)}">
+          <span class="autocomplete-label">${escapeHtml(item.label)}</span>
         </div>
       `
       )
@@ -426,10 +427,10 @@ export class LinkForm {
     dropdown.innerHTML = this.targetSuggestions
       .map(
         (item) => `
-        <div class="autocomplete-item ${item.isCreateNew === true ? 'autocomplete-item-create' : ''}" data-id="${item.id}" data-create="${String(item.isCreateNew === true)}">
+        <div class="autocomplete-item ${item.isCreateNew === true ? 'autocomplete-item-create' : ''}" data-id="${escapeHtml(item.id)}" data-create="${String(item.isCreateNew === true)}">
           ${item.isCreateNew === true
-            ? `<span class="autocomplete-create-icon">✨</span><span class="autocomplete-label">Create "${this.escapeHtml(item.label)}"</span>`
-            : `<span class="autocomplete-label">${this.escapeHtml(item.label)}</span>`
+            ? `<span class="autocomplete-create-icon">✨</span><span class="autocomplete-label">Create "${escapeHtml(item.label)}"</span>`
+            : `<span class="autocomplete-label">${escapeHtml(item.label)}</span>`
           }
         </div>
       `
@@ -559,11 +560,6 @@ export class LinkForm {
     }
   }
 
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 
   getData(): LinkFormData {
     return { ...this.data };

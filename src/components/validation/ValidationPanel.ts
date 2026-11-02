@@ -5,6 +5,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 import {
   Warning,
   WarningState,
@@ -207,27 +208,27 @@ export class ValidationPanel {
     const statusClass = isDismissed ? 'dismissed' : isSnoozed ? 'snoozed' : 'active';
 
     return `
-      <div class="warning-item ${statusClass}" data-warning-id="${warning.id}">
+      <div class="warning-item ${statusClass}" data-warning-id="${escapeHtml(warning.id)}">
         <div class="warning-content">
-          <div class="warning-message">${warning.message}</div>
-          ${warning.suggestion !== undefined && warning.suggestion !== '' ? `<div class="warning-suggestion">${warning.suggestion}</div>` : ''}
+          <div class="warning-message">${escapeHtml(warning.message)}</div>
+          ${warning.suggestion !== undefined && warning.suggestion !== '' ? `<div class="warning-suggestion">${escapeHtml(warning.suggestion)}</div>` : ''}
           ${isSnoozed && snoozedUntil !== undefined ? `<div class="warning-status">Snoozed until ${new Date(snoozedUntil).toLocaleString()}</div>` : ''}
           ${isDismissed ? '<div class="warning-status">Dismissed</div>' : ''}
         </div>
         <div class="warning-actions">
-          <button class="btn-icon btn-navigate" data-node-id="${warning.nodeId}" title="Go to node">
+          <button class="btn-icon btn-navigate" data-node-id="${escapeHtml(warning.nodeId)}" title="Go to node">
             👁
           </button>
           ${!isDismissed && !isSnoozed ? `
-            <button class="btn-icon btn-snooze" data-warning-id="${warning.id}" title="Snooze for 24h">
+            <button class="btn-icon btn-snooze" data-warning-id="${escapeHtml(warning.id)}" title="Snooze for 24h">
               💤
             </button>
-            <button class="btn-icon btn-dismiss" data-warning-id="${warning.id}" title="Dismiss">
+            <button class="btn-icon btn-dismiss" data-warning-id="${escapeHtml(warning.id)}" title="Dismiss">
               ✕
             </button>
           ` : ''}
           ${isDismissed ? `
-            <button class="btn-icon btn-undismiss" data-warning-id="${warning.id}" title="Restore">
+            <button class="btn-icon btn-undismiss" data-warning-id="${escapeHtml(warning.id)}" title="Restore">
               ↩
             </button>
           ` : ''}

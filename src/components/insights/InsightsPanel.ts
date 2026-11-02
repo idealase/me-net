@@ -13,6 +13,7 @@ import {
   ConflictInsight,
 } from '@/metrics';
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 // ============================================================================
 // Types
@@ -154,9 +155,9 @@ export class InsightsPanel {
     const outcomeLabels = viaOutcomes.join(', ');
 
     return `
-      <div class="insight-item leverage-item" data-node-id="${behaviour.id}">
+      <div class="insight-item leverage-item" data-node-id="${escapeHtml(behaviour.id)}">
         <div class="insight-main">
-          <div class="insight-label">${this.escapeHtml(behaviour.label)}</div>
+          <div class="insight-label">${escapeHtml(behaviour.label)}</div>
           <div class="insight-score">
             <span class="score-value">${metrics.leverageScore.toFixed(2)}</span>
             <span class="score-label">leverage</span>
@@ -218,9 +219,9 @@ export class InsightsPanel {
     const behaviourLabels = supportingBehaviours.map((b) => b.label).join(', ');
 
     return `
-      <div class="insight-item fragility-item ${isOrphan ? 'orphan' : ''}" data-node-id="${value.id}">
+      <div class="insight-item fragility-item ${isOrphan ? 'orphan' : ''}" data-node-id="${escapeHtml(value.id)}">
         <div class="insight-main">
-          <div class="insight-label">${this.escapeHtml(value.label)}</div>
+          <div class="insight-label">${escapeHtml(value.label)}</div>
           <div class="insight-score">
             <span class="score-value ${isOrphan ? 'critical' : ''}">${fragilityDisplay}</span>
             <span class="score-label">fragility</span>
@@ -283,9 +284,9 @@ export class InsightsPanel {
     const negativeLabels = negativeValues.map((v) => v.label).join(', ');
 
     return `
-      <div class="insight-item conflict-item" data-node-id="${behaviour.id}">
+      <div class="insight-item conflict-item" data-node-id="${escapeHtml(behaviour.id)}">
         <div class="insight-main">
-          <div class="insight-label">${this.escapeHtml(behaviour.label)}</div>
+          <div class="insight-label">${escapeHtml(behaviour.label)}</div>
           <div class="insight-score">
             <span class="score-value">${metrics.conflictIndex.toFixed(2)}</span>
             <span class="score-label">conflict</span>
@@ -314,11 +315,6 @@ export class InsightsPanel {
     return neglect.replace(/-/g, ' ');
   }
 
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 
   // ==========================================================================
   // Event Handling

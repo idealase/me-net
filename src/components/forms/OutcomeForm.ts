@@ -5,6 +5,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   FormError,
@@ -64,7 +65,7 @@ export class OutcomeForm {
             type="text"
             id="outcome-label"
             class="form-input"
-            value="${this.escapeHtml(this.data.label)}"
+            value="${escapeHtml(this.data.label)}"
             placeholder="e.g., Mental clarity"
             maxlength="100"
             required
@@ -79,7 +80,7 @@ export class OutcomeForm {
             class="form-textarea"
             rows="3"
             placeholder="Optional notes about this outcome..."
-          >${this.escapeHtml(this.data.notes)}</textarea>
+          >${escapeHtml(this.data.notes)}</textarea>
         </div>
 
         <div class="form-actions">
@@ -175,11 +176,6 @@ export class OutcomeForm {
     }
   }
 
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
 
   getData(): OutcomeFormData {
     return { ...this.data };
