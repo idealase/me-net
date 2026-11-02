@@ -102,11 +102,25 @@ export function renderLegend(
   currentY += LEGEND_ROW_HEIGHT - 4;
 
   // Positive edge
-  renderLegendEdgeItem(legend, LEGEND_PADDING, currentY, 'Positive', theme.edges.positive.stroke, '');
+  renderLegendEdgeItem(
+    legend,
+    LEGEND_PADDING,
+    currentY,
+    'Positive',
+    theme.edges.positive.stroke,
+    ''
+  );
   currentY += LEGEND_ROW_HEIGHT;
 
   // Negative edge
-  renderLegendEdgeItem(legend, LEGEND_PADDING, currentY, 'Negative', theme.edges.negative.stroke, '8,4');
+  renderLegendEdgeItem(
+    legend,
+    LEGEND_PADDING,
+    currentY,
+    'Negative',
+    theme.edges.negative.stroke,
+    '8,4'
+  );
   currentY += LEGEND_ROW_HEIGHT + SECTION_GAP;
 
   // Edge Strength section
@@ -135,9 +149,7 @@ export function renderLegend(
 
   // Size background to content
   const legendWidth = 140;
-  bgRect
-    .attr('width', legendWidth)
-    .attr('height', currentY + LEGEND_PADDING);
+  bgRect.attr('width', legendWidth).attr('height', currentY + LEGEND_PADDING);
 
   return legend;
 }
@@ -203,7 +215,10 @@ function renderLegendNodeItem(
     case 'diamond':
       legend
         .append('polygon')
-        .attr('points', `${iconX},${y} ${x + ICON_SIZE},${iconY} ${iconX},${y + ICON_SIZE} ${x},${iconY}`)
+        .attr(
+          'points',
+          `${iconX},${y} ${x + ICON_SIZE},${iconY} ${iconX},${y + ICON_SIZE} ${x},${iconY}`
+        )
         .attr('fill', config.fill);
       break;
     case 'circle':

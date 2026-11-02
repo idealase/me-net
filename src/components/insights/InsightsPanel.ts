@@ -13,6 +13,7 @@ import {
   ConflictInsight,
 } from '@/metrics';
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 // ============================================================================
 // Types
@@ -150,13 +151,13 @@ export class InsightsPanel {
 
   private renderLeverageItem(insight: LeverageInsight): string {
     const { behaviour, metrics, supportedValues, viaOutcomes } = insight;
-    const valueLabels = supportedValues.map((v) => v.label).join(', ');
+    const valueLabels = supportedValues.map((v) => escapeHtml(v.label)).join(', ');
     const outcomeLabels = viaOutcomes.join(', ');
 
     return `
-      <div class="insight-item leverage-item" data-node-id="${behaviour.id}">
+      <div class="insight-item leverage-item" data-node-id="${escapeHtml(behaviour.id)}">
         <div class="insight-main">
-          <div class="insight-label">${this.escapeHtml(behaviour.label)}</div>
+          <div class="insight-label">${escapeHtml(behaviour.label)}</div>
           <div class="insight-score">
             <span class="score-value">${metrics.leverageScore.toFixed(2)}</span>
             <span class="score-label">leverage</span>
@@ -170,7 +171,7 @@ export class InsightsPanel {
         </div>
         <div class="insight-meta">
           <span class="meta-item">Coverage: ${metrics.coverage}</span>
-          <span class="meta-item">Cost: ${behaviour.cost}</span>
+          <span class="meta-item">Cost: ${escapeHtml(behaviour.cost)}</span>
         </div>
       </div>
     `;
@@ -215,25 +216,26 @@ export class InsightsPanel {
   private renderFragilityItem(insight: FragilityInsight): string {
     const { value, metrics, supportingBehaviours, isOrphan } = insight;
     const fragilityDisplay = isOrphan ? '∞' : metrics.fragilityScore.toFixed(2);
-    const behaviourLabels = supportingBehaviours.map((b) => b.label).join(', ');
+    const behaviourLabels = supportingBehaviours.map((b) => escapeHtml(b.label)).join(', ');
 
     return `
-      <div class="insight-item fragility-item ${isOrphan ? 'orphan' : ''}" data-node-id="${value.id}">
+      <div class="insight-item fragility-item ${isOrphan ? 'orphan' : ''}" data-node-id="${escapeHtml(value.id)}">
         <div class="insight-main">
-          <div class="insight-label">${this.escapeHtml(value.label)}</div>
+          <div class="insight-label">${escapeHtml(value.label)}</div>
           <div class="insight-score">
             <span class="score-value ${isOrphan ? 'critical' : ''}">${fragilityDisplay}</span>
             <span class="score-label">fragility</span>
           </div>
         </div>
         <div class="insight-explanation">
-          ${isOrphan
-            ? '<span class="explanation-text warning">No behaviours support this value.</span>'
-            : `<span class="explanation-text">Supported by: <strong>${behaviourLabels !== '' ? behaviourLabels : 'none'}</strong></span>`
+          ${
+            isOrphan
+              ? '<span class="explanation-text warning">No behaviours support this value.</span>'
+              : `<span class="explanation-text">Supported by: <strong>${behaviourLabels !== '' ? behaviourLabels : 'none'}</strong></span>`
           }
         </div>
         <div class="insight-meta">
-          <span class="meta-item">Importance: ${value.importance}</span>
+          <span class="meta-item">Importance: ${escapeHtml(value.importance)}</span>
           <span class="meta-item">Neglect: ${this.formatNeglect(value.neglect)}</span>
         </div>
         ${isOrphan ? '<div class="suggestion">Consider adding behaviours that support this value.</div>' : ''}
@@ -279,13 +281,13 @@ export class InsightsPanel {
 
   private renderConflictItem(insight: ConflictInsight): string {
     const { behaviour, metrics, positiveValues, negativeValues } = insight;
-    const positiveLabels = positiveValues.map((v) => v.label).join(', ');
-    const negativeLabels = negativeValues.map((v) => v.label).join(', ');
+    const positiveLabels = positiveValues.map((v) => escapeHtml(v.label)).join(', ');
+    const negativeLabels = negativeValues.map((v) => escapeHtml(v.label)).join(', ');
 
     return `
-      <div class="insight-item conflict-item" data-node-id="${behaviour.id}">
+      <div class="insight-item conflict-item" data-node-id="${escapeHtml(behaviour.id)}">
         <div class="insight-main">
-          <div class="insight-label">${this.escapeHtml(behaviour.label)}</div>
+          <div class="insight-label">${escapeHtml(behaviour.label)}</div>
           <div class="insight-score">
             <span class="score-value">${metrics.conflictIndex.toFixed(2)}</span>
             <span class="score-label">conflict</span>
@@ -311,13 +313,7 @@ export class InsightsPanel {
   // ==========================================================================
 
   private formatNeglect(neglect: string): string {
-    return neglect.replace(/-/g, ' ');
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    return escapeHtml(neglect.replace(/-/g, ' '));
   }
 
   // ==========================================================================

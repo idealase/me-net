@@ -11,9 +11,4 @@ export {
   nodeMatchesSearch,
   shouldDimNode,
 } from './types';
-export type {
-  FilterState,
-  HighlightMode,
-  NodeTypeFilter,
-  ValenceFilter,
-} from './types';
+export type { FilterState, HighlightMode, NodeTypeFilter, ValenceFilter } from './types';

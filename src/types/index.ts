@@ -15,7 +15,11 @@ export type Cost = 'trivial' | 'low' | 'medium' | 'high' | 'very-high';
 
 export type Importance = 'critical' | 'high' | 'medium' | 'low';
 
-export type Neglect = 'severely-neglected' | 'somewhat-neglected' | 'adequately-met' | 'well-satisfied';
+export type Neglect =
+  | 'severely-neglected'
+  | 'somewhat-neglected'
+  | 'adequately-met'
+  | 'well-satisfied';
 
 export type Reliability = 'always' | 'usually' | 'sometimes' | 'rarely';
 

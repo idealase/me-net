@@ -10,7 +10,6 @@ import * as d3 from 'd3';
 import { truncateLabel } from './data';
 import type { AnyGraphNode, GraphTheme, NodeVisualConfig } from './types';
 
-
 /**
  * Create SVG definitions for markers and gradients.
  */
@@ -149,7 +148,12 @@ export function renderNodeShape(
   theme: GraphTheme
 ): void {
   group.each(function (d) {
-    const g = d3.select(this) as unknown as d3.Selection<SVGGElement, AnyGraphNode, SVGGElement, unknown>;
+    const g = d3.select(this) as unknown as d3.Selection<
+      SVGGElement,
+      AnyGraphNode,
+      SVGGElement,
+      unknown
+    >;
     const config = getNodeConfig(theme, d.type);
 
     switch (config.shape) {

@@ -131,7 +131,10 @@ export function updateBehaviour(
   const existing = network.behaviours[existingIndex]!;
 
   // Validate label uniqueness if changing label
-  if (input.label !== undefined && input.label.trim().toLowerCase() !== existing.label.toLowerCase()) {
+  if (
+    input.label !== undefined &&
+    input.label.trim().toLowerCase() !== existing.label.toLowerCase()
+  ) {
     const labelValidation = validateLabel(input.label, network);
     if (!labelValidation.valid) {
       return { success: false, error: labelValidation.error };
@@ -170,10 +173,7 @@ export function updateBehaviour(
  * Delete a behaviour and all its incident links.
  * Returns the updated network.
  */
-export function deleteBehaviour(
-  network: Network,
-  id: string
-): CrudResult<{ network: Network }> {
+export function deleteBehaviour(network: Network, id: string): CrudResult<{ network: Network }> {
   const existingIndex = network.behaviours.findIndex((b) => b.id === id);
   if (existingIndex === -1) {
     return { success: false, error: `Behaviour with id "${id}" not found` };
@@ -221,9 +221,7 @@ function validateLabel(label: string, network: Network): ValidationResult {
   }
 
   // Check uniqueness (case-insensitive)
-  const exists = network.behaviours.some(
-    (b) => b.label.toLowerCase() === trimmed.toLowerCase()
-  );
+  const exists = network.behaviours.some((b) => b.label.toLowerCase() === trimmed.toLowerCase());
   if (exists) {
     return { valid: false, error: `A behaviour with label "${trimmed}" already exists` };
   }

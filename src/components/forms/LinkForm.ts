@@ -7,6 +7,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   AutocompleteItem,
@@ -61,7 +62,7 @@ export class LinkForm {
   private targetSuggestions: AutocompleteItem[] = [];
   private selectedSource: AutocompleteItem | null = null;
   private selectedTarget: AutocompleteItem | null = null;
-  
+
   // Create-on-link state
   private pendingTargetCreation: PendingNodeCreation | null = null;
 
@@ -72,7 +73,7 @@ export class LinkForm {
     this.network = options.network;
     this.callbacks = options.callbacks;
     // Enable create-on-link by default in create mode
-    this.allowCreateTarget = options.allowCreateTarget ?? (options.mode === 'create');
+    this.allowCreateTarget = options.allowCreateTarget ?? options.mode === 'create';
 
     // Initialize data based on link type
     if (options.initialData) {
@@ -130,9 +131,12 @@ export class LinkForm {
           ? 'Link Behaviour → Outcome'
           : 'Link Outcome → Value'
         : 'Edit Link';
-    const submitLabel = this.mode === 'create' 
-      ? (this.pendingTargetCreation ? 'Create & Link' : 'Create Link')
-      : 'Save';
+    const submitLabel =
+      this.mode === 'create'
+        ? this.pendingTargetCreation
+          ? 'Create & Link'
+          : 'Create Link'
+        : 'Save';
 
     const sourceTypeLabel = this.sourceNodeType === 'behaviour' ? 'Behaviour' : 'Outcome';
     const targetTypeLabel = this.targetNodeType === 'outcome' ? 'Outcome' : 'Value';
@@ -141,7 +145,7 @@ export class LinkForm {
     const pendingIndicator = this.pendingTargetCreation
       ? `<div class="pending-creation-indicator">
           <span class="pending-icon">✨</span>
-          <span class="pending-text">Will create new ${targetTypeLabel.toLowerCase()}: "${this.escapeHtml(this.pendingTargetCreation.label)}"</span>
+          <span class="pending-text">Will create new ${targetTypeLabel.toLowerCase()}: "${escapeHtml(this.pendingTargetCreation.label)}"</span>
         </div>`
       : '';
 
@@ -179,7 +183,7 @@ export class LinkForm {
               type="text"
               id="link-source"
               class="form-input autocomplete-input"
-              value="${this.selectedSource ? this.escapeHtml(this.selectedSource.label) : ''}"
+              value="${this.selectedSource ? escapeHtml(this.selectedSource.label) : ''}"
               placeholder="Search ${sourceTypeLabel.toLowerCase()}s..."
               autocomplete="off"
               ${this.mode === 'edit' || this.selectedSource ? 'readonly' : ''}
@@ -201,10 +205,10 @@ export class LinkForm {
               type="text"
               id="link-target"
               class="form-input autocomplete-input ${this.pendingTargetCreation ? 'pending-creation' : ''}"
-              value="${this.selectedTarget ? this.escapeHtml(this.selectedTarget.label) : (this.pendingTargetCreation ? this.escapeHtml(this.pendingTargetCreation.label) : '')}"
+              value="${this.selectedTarget ? escapeHtml(this.selectedTarget.label) : this.pendingTargetCreation ? escapeHtml(this.pendingTargetCreation.label) : ''}"
               placeholder="${this.allowCreateTarget ? `Search or type new ${targetTypeLabel.toLowerCase()}...` : `Search ${targetTypeLabel.toLowerCase()}s...`}"
               autocomplete="off"
-              ${this.mode === 'edit' || this.selectedTarget ? 'readonly' : ''}
+              ${this.mode === 'edit' || this.selectedTarget || this.pendingTargetCreation ? 'readonly' : ''}
             />
             ${this.selectedTarget ? `<button type="button" class="autocomplete-clear" id="clear-target">×</button>` : ''}
             ${this.pendingTargetCreation ? `<button type="button" class="autocomplete-clear" id="clear-pending">×</button>` : ''}
@@ -319,14 +323,23 @@ export class LinkForm {
 
     // Reliability/Strength change
     if (this.linkType === 'behaviour-outcome') {
-      const reliabilitySelect = this.container.querySelector('#link-reliability') as HTMLSelectElement;
+      const reliabilitySelect = this.container.querySelector(
+        '#link-reliability'
+      ) as HTMLSelectElement;
       reliabilitySelect.addEventListener('change', () => {
-        (this.data as BehaviourOutcomeLinkFormData).reliability = reliabilitySelect.value as 'always' | 'usually' | 'sometimes' | 'rarely';
+        (this.data as BehaviourOutcomeLinkFormData).reliability = reliabilitySelect.value as
+          | 'always'
+          | 'usually'
+          | 'sometimes'
+          | 'rarely';
       });
     } else {
       const strengthSelect = this.container.querySelector('#link-strength') as HTMLSelectElement;
       strengthSelect.addEventListener('change', () => {
-        (this.data as OutcomeValueLinkFormData).strength = strengthSelect.value as 'strong' | 'moderate' | 'weak';
+        (this.data as OutcomeValueLinkFormData).strength = strengthSelect.value as
+          | 'strong'
+          | 'moderate'
+          | 'weak';
       });
     }
 
@@ -365,7 +378,11 @@ export class LinkForm {
   private updateSourceSuggestions(): void {
     const dropdown = this.container.querySelector('#source-dropdown') as HTMLElement;
 
-    this.sourceSuggestions = getAutocompleteSuggestions(this.network, this.sourceNodeType, this.sourceQuery);
+    this.sourceSuggestions = getAutocompleteSuggestions(
+      this.network,
+      this.sourceNodeType,
+      this.sourceQuery
+    );
 
     if (this.sourceSuggestions.length === 0) {
       dropdown.style.display = 'none';
@@ -375,8 +392,8 @@ export class LinkForm {
     dropdown.innerHTML = this.sourceSuggestions
       .map(
         (item) => `
-        <div class="autocomplete-item" data-id="${item.id}">
-          <span class="autocomplete-label">${this.escapeHtml(item.label)}</span>
+        <div class="autocomplete-item" data-id="${escapeHtml(item.id)}">
+          <span class="autocomplete-label">${escapeHtml(item.label)}</span>
         </div>
       `
       )
@@ -426,10 +443,11 @@ export class LinkForm {
     dropdown.innerHTML = this.targetSuggestions
       .map(
         (item) => `
-        <div class="autocomplete-item ${item.isCreateNew === true ? 'autocomplete-item-create' : ''}" data-id="${item.id}" data-create="${String(item.isCreateNew === true)}">
-          ${item.isCreateNew === true
-            ? `<span class="autocomplete-create-icon">✨</span><span class="autocomplete-label">Create "${this.escapeHtml(item.label)}"</span>`
-            : `<span class="autocomplete-label">${this.escapeHtml(item.label)}</span>`
+        <div class="autocomplete-item ${item.isCreateNew === true ? 'autocomplete-item-create' : ''}" data-id="${escapeHtml(item.id)}" data-create="${String(item.isCreateNew === true)}">
+          ${
+            item.isCreateNew === true
+              ? `<span class="autocomplete-create-icon">✨</span><span class="autocomplete-label">Create "${escapeHtml(item.label)}"</span>`
+              : `<span class="autocomplete-label">${escapeHtml(item.label)}</span>`
           }
         </div>
       `
@@ -499,7 +517,7 @@ export class LinkForm {
     // Validate pending target creation
     if (this.pendingTargetCreation) {
       const label = this.pendingTargetCreation.label.trim();
-      
+
       // Check if label is empty
       if (!label) {
         this.errors.push({ field: 'target', message: 'Label cannot be empty' });
@@ -510,12 +528,12 @@ export class LinkForm {
           (existing) => existing.toLowerCase() === label.toLowerCase()
         );
         if (isDuplicate) {
-          this.errors.push({ 
-            field: 'target', 
-            message: `A ${this.targetNodeType} with label "${label}" already exists` 
+          this.errors.push({
+            field: 'target',
+            message: `A ${this.targetNodeType} with label "${label}" already exists`,
           });
         }
-        
+
         // Check label length
         if (label.length > 100) {
           this.errors.push({ field: 'target', message: 'Label must be 100 characters or less' });
@@ -524,7 +542,12 @@ export class LinkForm {
     }
 
     // Check for duplicate link (in create mode, only if target is an existing node)
-    if (this.mode === 'create' && this.data.sourceId && this.data.targetId && !this.pendingTargetCreation) {
+    if (
+      this.mode === 'create' &&
+      this.data.sourceId &&
+      this.data.targetId &&
+      !this.pendingTargetCreation
+    ) {
       if (linkExists(this.network, this.data.sourceId, this.data.targetId)) {
         this.errors.push({ field: 'target', message: 'A link between these nodes already exists' });
       }
@@ -557,12 +580,6 @@ export class LinkForm {
       targetError.textContent = '';
       targetInput.classList.remove('invalid');
     }
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
   }
 
   getData(): LinkFormData {

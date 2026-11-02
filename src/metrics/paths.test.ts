@@ -2,7 +2,14 @@
  * Tests for Path Computation
  */
 
-import type { Network, Behaviour, Outcome, Value, BehaviourOutcomeLink, OutcomeValueLink } from '@/types';
+import type {
+  Network,
+  Behaviour,
+  Outcome,
+  Value,
+  BehaviourOutcomeLink,
+  OutcomeValueLink,
+} from '@/types';
 
 import {
   computeAllPaths,
@@ -236,18 +243,14 @@ describe('computeAllPaths', () => {
   it('computes correct effective valence for positive paths', () => {
     const network = createTestNetwork();
     const paths = computeAllPaths(network);
-    const walkToPeace = paths.find(
-      (p) => p.behaviourId === 'b-walk' && p.valueId === 'v-peace'
-    );
+    const walkToPeace = paths.find((p) => p.behaviourId === 'b-walk' && p.valueId === 'v-peace');
     expect(walkToPeace?.effectiveValence).toBe('positive');
   });
 
   it('computes correct effective valence for negative paths', () => {
     const network = createTestNetwork();
     const paths = computeAllPaths(network);
-    const workToHealth = paths.find(
-      (p) => p.behaviourId === 'b-work' && p.valueId === 'v-health'
-    );
+    const workToHealth = paths.find((p) => p.behaviourId === 'b-work' && p.valueId === 'v-health');
     expect(workToHealth?.effectiveValence).toBe('negative');
   });
 
@@ -255,9 +258,7 @@ describe('computeAllPaths', () => {
     const network = createTestNetwork();
     const paths = computeAllPaths(network);
     // Walk -> anxiety -> peace: usually (0.75) × strong (1.0) = 0.75
-    const walkToPeace = paths.find(
-      (p) => p.behaviourId === 'b-walk' && p.valueId === 'v-peace'
-    );
+    const walkToPeace = paths.find((p) => p.behaviourId === 'b-walk' && p.valueId === 'v-peace');
     expect(walkToPeace?.pathWeight).toBe(0.75);
   });
 
@@ -265,9 +266,7 @@ describe('computeAllPaths', () => {
     const network = createTestNetwork();
     const paths = computeAllPaths(network);
     // Walk -> anxiety -> peace: +1 × 0.75 × 1.0 × 3 (high) = 2.25
-    const walkToPeace = paths.find(
-      (p) => p.behaviourId === 'b-walk' && p.valueId === 'v-peace'
-    );
+    const walkToPeace = paths.find((p) => p.behaviourId === 'b-walk' && p.valueId === 'v-peace');
     expect(walkToPeace?.influence).toBe(2.25);
   });
 

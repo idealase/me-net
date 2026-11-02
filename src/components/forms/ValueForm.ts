@@ -5,6 +5,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   FormError,
@@ -66,7 +67,7 @@ export class ValueForm {
             type="text"
             id="value-label"
             class="form-input"
-            value="${this.escapeHtml(this.data.label)}"
+            value="${escapeHtml(this.data.label)}"
             placeholder="e.g., Health"
             maxlength="100"
             required
@@ -97,7 +98,7 @@ export class ValueForm {
             class="form-textarea"
             rows="3"
             placeholder="Optional notes about this value..."
-          >${this.escapeHtml(this.data.notes)}</textarea>
+          >${escapeHtml(this.data.notes)}</textarea>
         </div>
 
         <div class="form-actions">
@@ -154,7 +155,11 @@ export class ValueForm {
     // Delete button
     if (deleteBtn && this.callbacks.onDelete) {
       deleteBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete this value? This will also remove all connected links.')) {
+        if (
+          confirm(
+            'Are you sure you want to delete this value? This will also remove all connected links.'
+          )
+        ) {
           this.callbacks.onDelete!();
         }
       });
@@ -201,12 +206,6 @@ export class ValueForm {
       labelError.textContent = '';
       labelInput.classList.remove('invalid');
     }
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
   }
 
   getData(): ValueFormData {

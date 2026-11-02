@@ -2,7 +2,15 @@
  * Tests for Why Ladder Types and Utilities
  */
 
-import type { Behaviour, BehaviourOutcomeLink, Link, Network, Outcome, OutcomeValueLink, Value } from '@/types';
+import type {
+  Behaviour,
+  BehaviourOutcomeLink,
+  Link,
+  Network,
+  Outcome,
+  OutcomeValueLink,
+  Value,
+} from '@/types';
 
 import {
   behaviourHasOutgoingLinks,
@@ -364,7 +372,7 @@ describe('getNextUnexplainedOutcome', () => {
     if (outcome) {
       outcome.explained = true;
     }
-    
+
     const next = getNextUnexplainedOutcome(session);
 
     expect(next).toEqual({

@@ -152,7 +152,10 @@ export function parseNetworkJson(jsonString: string): ImportResult {
 /**
  * Validate that entity arrays contain properly structured items.
  */
-function validateEntityStructures(data: Record<string, unknown>): { valid: boolean; error?: string } {
+function validateEntityStructures(data: Record<string, unknown>): {
+  valid: boolean;
+  error?: string;
+} {
   // Validate behaviours
   const behaviours = data.behaviours as unknown[];
   for (let i = 0; i < behaviours.length; i++) {
@@ -246,10 +249,16 @@ function validateEntityStructures(data: Record<string, unknown>): { valid: boole
     const linkSourceId = link.sourceId as string;
     const linkTargetId = link.targetId as string;
     if (!nodeIds.has(linkSourceId)) {
-      return { valid: false, error: `Link "${linkId}" references non-existent source "${linkSourceId}"` };
+      return {
+        valid: false,
+        error: `Link "${linkId}" references non-existent source "${linkSourceId}"`,
+      };
     }
     if (!nodeIds.has(linkTargetId)) {
-      return { valid: false, error: `Link "${linkId}" references non-existent target "${linkTargetId}"` };
+      return {
+        valid: false,
+        error: `Link "${linkId}" references non-existent target "${linkTargetId}"`,
+      };
     }
   }
 
@@ -344,7 +353,9 @@ export function generateSummaryReportData(
   }
 
   if (suggestions.length === 0) {
-    suggestions.push('Your network looks complete! Continue refining link attributes for more accurate insights.');
+    suggestions.push(
+      'Your network looks complete! Continue refining link attributes for more accurate insights.'
+    );
   }
 
   return {

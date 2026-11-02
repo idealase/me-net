@@ -7,6 +7,7 @@ export interface EmptyStateCallbacks {
   onAddBehaviour: () => void;
   onStartWhyLadder: () => void;
   onImportData: () => void;
+  onLoadExample: () => void;
 }
 
 export class EmptyState {
@@ -22,7 +23,9 @@ export class EmptyState {
   show(): void {
     if (this.element !== null) {
       this.element.classList.remove('hidden');
-      const existingAddButton = this.element.querySelector<HTMLButtonElement>('#btn-empty-add-behaviour');
+      const existingAddButton = this.element.querySelector<HTMLButtonElement>(
+        '#btn-empty-add-behaviour'
+      );
       existingAddButton?.focus();
       return;
     }
@@ -59,6 +62,9 @@ export class EmptyState {
           <button id="btn-empty-import" class="btn btn-secondary" aria-label="Import existing data">
             Import Data
           </button>
+          <button id="btn-empty-example" class="btn btn-secondary" aria-label="Load an example network to explore">
+            Load Example
+          </button>
         </div>
 
         <div class="empty-state-tips">
@@ -75,7 +81,9 @@ export class EmptyState {
     this.container.appendChild(this.element);
 
     // Wire event handlers
-    const addBehaviourBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-add-behaviour');
+    const addBehaviourBtn = this.element.querySelector<HTMLButtonElement>(
+      '#btn-empty-add-behaviour'
+    );
     const whyLadderBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-why-ladder');
     const importBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-import');
 
@@ -96,6 +104,11 @@ export class EmptyState {
         this.callbacks.onImportData();
       });
     }
+
+    const exampleBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-example');
+    exampleBtn?.addEventListener('click', () => {
+      this.callbacks.onLoadExample();
+    });
 
     // Focus the primary action
     addBehaviourBtn?.focus();

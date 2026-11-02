@@ -226,10 +226,16 @@ export function getFragileValues(
     .filter(([_, m]) => m.fragilityScore > threshold || m.fragilityScore === INFINITE_FRAGILITY)
     .sort((a, b) => {
       // Infinite fragility (orphans) always first
-      if (a[1].fragilityScore === INFINITE_FRAGILITY && b[1].fragilityScore !== INFINITE_FRAGILITY) {
+      if (
+        a[1].fragilityScore === INFINITE_FRAGILITY &&
+        b[1].fragilityScore !== INFINITE_FRAGILITY
+      ) {
         return -1;
       }
-      if (b[1].fragilityScore === INFINITE_FRAGILITY && a[1].fragilityScore !== INFINITE_FRAGILITY) {
+      if (
+        b[1].fragilityScore === INFINITE_FRAGILITY &&
+        a[1].fragilityScore !== INFINITE_FRAGILITY
+      ) {
         return 1;
       }
       return b[1].fragilityScore - a[1].fragilityScore;

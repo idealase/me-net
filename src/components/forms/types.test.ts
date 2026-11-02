@@ -428,7 +428,7 @@ describe('getAutocompleteSuggestions', () => {
       const suggestions = getAutocompleteSuggestions(network, 'outcome', 'New Outcome', [], true);
 
       // Should have create option at the end
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeDefined();
       expect(createOption?.label).toBe('New Outcome');
       expect(createOption?.id).toBe('__create__New Outcome');
@@ -436,17 +436,29 @@ describe('getAutocompleteSuggestions', () => {
 
     it('does not include create option when exact match exists', () => {
       const network = createTestNetwork();
-      const suggestions = getAutocompleteSuggestions(network, 'outcome', 'Mental clarity', [], true);
+      const suggestions = getAutocompleteSuggestions(
+        network,
+        'outcome',
+        'Mental clarity',
+        [],
+        true
+      );
 
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeUndefined();
     });
 
     it('exact match is case-insensitive', () => {
       const network = createTestNetwork();
-      const suggestions = getAutocompleteSuggestions(network, 'outcome', 'MENTAL CLARITY', [], true);
+      const suggestions = getAutocompleteSuggestions(
+        network,
+        'outcome',
+        'MENTAL CLARITY',
+        [],
+        true
+      );
 
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeUndefined();
     });
 
@@ -454,7 +466,7 @@ describe('getAutocompleteSuggestions', () => {
       const network = createTestNetwork();
       const suggestions = getAutocompleteSuggestions(network, 'outcome', 'New Outcome', [], false);
 
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeUndefined();
     });
 
@@ -462,7 +474,7 @@ describe('getAutocompleteSuggestions', () => {
       const network = createTestNetwork();
       const suggestions = getAutocompleteSuggestions(network, 'outcome', 'New Outcome', []);
 
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeUndefined();
     });
 
@@ -470,15 +482,21 @@ describe('getAutocompleteSuggestions', () => {
       const network = createTestNetwork();
       const suggestions = getAutocompleteSuggestions(network, 'outcome', '', [], true);
 
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeUndefined();
     });
 
     it('trims whitespace from create option label', () => {
       const network = createTestNetwork();
-      const suggestions = getAutocompleteSuggestions(network, 'outcome', '  New Outcome  ', [], true);
+      const suggestions = getAutocompleteSuggestions(
+        network,
+        'outcome',
+        '  New Outcome  ',
+        [],
+        true
+      );
 
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeDefined();
       expect(createOption?.label).toBe('New Outcome');
     });
@@ -487,7 +505,7 @@ describe('getAutocompleteSuggestions', () => {
       const network = createTestNetwork();
       const suggestions = getAutocompleteSuggestions(network, 'value', 'New Value', [], true);
 
-      const createOption = suggestions.find(s => s.isCreateNew === true);
+      const createOption = suggestions.find((s) => s.isCreateNew === true);
       expect(createOption).toBeDefined();
       expect(createOption?.type).toBe('value');
     });

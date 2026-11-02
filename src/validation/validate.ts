@@ -43,9 +43,7 @@ function getBehaviourOutcomeLinks(network: Network): BehaviourOutcomeLink[] {
  * Get all outcome-value links from the network.
  */
 function getOutcomeValueLinks(network: Network): OutcomeValueLink[] {
-  return network.links.filter(
-    (link): link is OutcomeValueLink => link.type === 'outcome-value'
-  );
+  return network.links.filter((link): link is OutcomeValueLink => link.type === 'outcome-value');
 }
 
 /**
@@ -107,7 +105,8 @@ export function detectOrphanValues(network: Network): Warning[] {
         message: `"${value.label}" has no connection from any behaviour`,
         severity: getSeverity('orphan-value'),
         relatedNodeIds: incomingOutcomeIds,
-        suggestion: 'Connect this value to an outcome, or use Why Ladder to trace a behaviour to this value.',
+        suggestion:
+          'Connect this value to an outcome, or use Why Ladder to trace a behaviour to this value.',
       });
     }
   }
@@ -246,8 +245,7 @@ export function computePathsToValues(network: Network): PathToValue[] {
 
     for (const ovLink of downstreamLinks) {
       // Determine effective valence (negative * negative = positive, etc.)
-      const effectiveValence =
-        boLink.valence === ovLink.valence ? 'positive' : 'negative';
+      const effectiveValence = boLink.valence === ovLink.valence ? 'positive' : 'negative';
 
       // Compute weight based on reliability and strength
       const reliabilityWeight = getReliabilityWeight(boLink.reliability);
@@ -407,7 +405,11 @@ export function validateNetwork(network: Network, state?: WarningState): Validat
     const snoozedUntil = warningState.snoozed[warning.id];
     if (warningState.dismissed[warning.id] === true) {
       result.counts.dismissed++;
-    } else if (snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date()) {
+    } else if (
+      snoozedUntil !== undefined &&
+      snoozedUntil !== '' &&
+      new Date(snoozedUntil) > new Date()
+    ) {
       result.counts.snoozed++;
     } else {
       result.counts.active++;

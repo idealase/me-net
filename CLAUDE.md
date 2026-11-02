@@ -7,7 +7,7 @@
 - **Lint**: `npm run lint` (ESLint, strict 0-warnings policy)
 - **Format**: `npm run format` (Prettier)
 - **Typecheck**: `npm run typecheck` (`tsc --noEmit`)
-- **Dev server**: `npm run dev` → http://localhost:5173
+- **Dev server**: `npm run dev` → http://localhost:3000/me-net/ (port and base set in `vite.config.ts`)
 - **Deploy**: `npm run deploy` (gh-pages -d dist)
 
 ## Architecture
@@ -16,18 +16,18 @@ Means-Ends Network — maps Behaviours → Outcomes → Values as a directed gra
 ```
 /src/
   /types/               → Domain types: Behaviour, Outcome, Value, Link, Network
-  /components/          → UI components (planned/in-progress)
+  /components/          → UI components (forms, graph, ladder, panels)
   /data/                → Persistence layer (localStorage)
   /metrics/             → Leverage, fragility, conflict analysis computations
   /validation/          → Network validation rules
-  /utils/               → Pure utilities (ID generation, timestamps)
+  /utils/               → Pure utilities (ID generation, timestamps, escapeHtml, theme)
   /styles/              → CSS styles
   /test/setup.ts        → Vitest globals + localStorage mock
   /main.ts              → Entry point (TypeScript, not TSX)
 ```
 
 ## Key Conventions
-- **Branch**: `master` (not `main`) — note copilot-instructions mention both
+- **Branch**: `master` is the only long-lived branch (there is no `main`)
 - **Three-layer model**: Behaviour → Outcome → Value (never skip layers)
 - **ID prefixes**: `b-` Behaviours, `o-` Outcomes, `v-` Values, `l-` Links, `w-` Warnings
 - **Labels unique**: Within each entity type, case-insensitive
@@ -35,7 +35,8 @@ Means-Ends Network — maps Behaviours → Outcomes → Values as a directed gra
 - **Link valence**: Every link has positive or negative valence
 - **D3.js**: Force-directed graph visualization
 - **localStorage**: All persistence — offline-capable, no backend
-- **Pre-commit hooks**: Husky + lint-staged run lint/format automatically
+- **Pre-commit hooks**: Husky + lint-staged run ESLint --fix and Prettier on staged files (installed by `npm install` via the `prepare` script)
+- **HTML escaping**: Any user text or ID interpolated into an HTML template string must go through `escapeHtml` from `src/utils/html.ts`
 - **Co-located tests**: `foo.ts` → `foo.test.ts` in same directory
 - **Entry point**: `main.ts` (not `main.tsx`) — pure TypeScript
 
@@ -46,7 +47,9 @@ Non-obvious numeric mappings (see `docs/metrics-and-insights.md`):
 - Cost divisor: trivial=1, low=2, medium=4, high=8, very-high=16
 
 ## Deployment
-- **No CI/CD workflows** — manual deploy via `npm run deploy` (gh-pages)
+- **CI**: `.github/workflows/ci.yml` runs lint, format check, typecheck, tests and build on PRs
+- **Deploy**: `.github/workflows/deploy.yml` runs lint + tests, builds and publishes `dist/` to the `gh-pages` branch on every push to `master`
+- **Manual fallback**: `npm run deploy` (gh-pages CLI) publishes the same way from a local machine
 - **Node**: ≥20.0.0 required (engines field in package.json)
 
 ## Common Pitfalls

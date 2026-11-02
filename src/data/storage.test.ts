@@ -104,7 +104,9 @@ describe('saveNetwork', () => {
 
     saveNetwork(network);
 
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY_FOR_TESTING)!) as { version: string };
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY_FOR_TESTING)!) as {
+      version: string;
+    };
     expect(stored.version).toBe('1.0.0');
   });
 
@@ -433,11 +435,11 @@ describe('round-trip persistence', () => {
     expect(loadedValue.neglect).toBe('somewhat-neglected');
 
     // Verify links
-    const loadedBoLink = loadedNetwork.links.find(l => l.id === 'l-001') as BehaviourOutcomeLink;
+    const loadedBoLink = loadedNetwork.links.find((l) => l.id === 'l-001') as BehaviourOutcomeLink;
     expect(loadedBoLink.type).toBe('behaviour-outcome');
     expect(loadedBoLink.reliability).toBe('usually');
 
-    const loadedOvLink = loadedNetwork.links.find(l => l.id === 'l-002') as OutcomeValueLink;
+    const loadedOvLink = loadedNetwork.links.find((l) => l.id === 'l-002') as OutcomeValueLink;
     expect(loadedOvLink.type).toBe('outcome-value');
     expect(loadedOvLink.strength).toBe('strong');
 

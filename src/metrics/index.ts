@@ -28,7 +28,12 @@ export {
 } from './paths';
 
 // Metrics computation
-export type { LeverageInsight, FragilityInsight, ConflictInsight, NetworkAnalysis } from './metrics';
+export type {
+  LeverageInsight,
+  FragilityInsight,
+  ConflictInsight,
+  NetworkAnalysis,
+} from './metrics';
 
 export {
   INFINITE_FRAGILITY,

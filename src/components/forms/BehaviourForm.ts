@@ -5,6 +5,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   BehaviourFormCallbacks,
@@ -66,7 +67,7 @@ export class BehaviourForm {
             type="text"
             id="behaviour-label"
             class="form-input"
-            value="${this.escapeHtml(this.data.label)}"
+            value="${escapeHtml(this.data.label)}"
             placeholder="e.g., Morning meditation"
             maxlength="100"
             required
@@ -96,7 +97,7 @@ export class BehaviourForm {
             type="text"
             id="behaviour-tags"
             class="form-input"
-            value="${this.escapeHtml(this.data.contextTags.join(', '))}"
+            value="${escapeHtml(this.data.contextTags.join(', '))}"
             placeholder="e.g., morning, alone, work"
           />
           <div class="form-hint">Separate tags with commas</div>
@@ -109,7 +110,7 @@ export class BehaviourForm {
             class="form-textarea"
             rows="3"
             placeholder="Optional notes about this behaviour..."
-          >${this.escapeHtml(this.data.notes)}</textarea>
+          >${escapeHtml(this.data.notes)}</textarea>
         </div>
 
         <div class="form-actions">
@@ -126,7 +127,9 @@ export class BehaviourForm {
   private bindEvents(): void {
     const form = this.container.querySelector('form')!;
     const labelInput = this.container.querySelector('#behaviour-label') as HTMLInputElement;
-    const frequencySelect = this.container.querySelector('#behaviour-frequency') as HTMLSelectElement;
+    const frequencySelect = this.container.querySelector(
+      '#behaviour-frequency'
+    ) as HTMLSelectElement;
     const costSelect = this.container.querySelector('#behaviour-cost') as HTMLSelectElement;
     const tagsInput = this.container.querySelector('#behaviour-tags') as HTMLInputElement;
     const notesTextarea = this.container.querySelector('#behaviour-notes') as HTMLTextAreaElement;
@@ -174,7 +177,11 @@ export class BehaviourForm {
     // Delete button
     if (deleteBtn && this.callbacks.onDelete) {
       deleteBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete this behaviour? This will also remove all connected links.')) {
+        if (
+          confirm(
+            'Are you sure you want to delete this behaviour? This will also remove all connected links.'
+          )
+        ) {
           this.callbacks.onDelete!();
         }
       });
@@ -223,12 +230,6 @@ export class BehaviourForm {
       labelError.textContent = '';
       labelInput.classList.remove('invalid');
     }
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
   }
 
   /**

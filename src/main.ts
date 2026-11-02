@@ -11,6 +11,7 @@ import {
   BehaviourFormData,
   LinkForm,
   LinkFormData,
+  LinkFormDataWithPending,
   LinkType,
   NodeDetailPanel,
   OutcomeForm,
@@ -28,11 +29,9 @@ import { LadderSession, WhyLadder } from './components/ladder';
 import { ValidationPanel } from './components/validation';
 import { WelcomeScreen } from './components/welcome';
 import { addBehaviour, deleteBehaviour, updateBehaviour } from './data/behaviours';
-import {
-  downloadNetworkAsJson,
-  downloadSummaryReport,
-  importNetworkFromFile,
-} from './data/export';
+import { addLinkToNewTarget } from './data/compound';
+import { createExampleNetwork } from './data/example-network';
+import { downloadNetworkAsJson, downloadSummaryReport, importNetworkFromFile } from './data/export';
 import {
   addBehaviourOutcomeLink,
   addOutcomeValueLink,
@@ -44,14 +43,10 @@ import { createEmptyNetwork, isNetworkEmpty } from './data/network';
 import { addOutcome, deleteOutcome, updateOutcome } from './data/outcomes';
 import { loadNetwork, saveNetwork } from './data/storage';
 import { addValue, deleteValue, updateValue } from './data/values';
-import {
-  getConflictBehaviours,
-  getFragileValues,
-  getTopLeverageBehaviours,
-} from './metrics';
+import { getConflictBehaviours, getFragileValues, getTopLeverageBehaviours } from './metrics';
 import type { Behaviour, Link, Network, Node, Outcome, Value } from './types';
 import { getCurrentTheme, initializeTheme, toggleTheme } from './utils/theme';
-import { WarningState, createEmptyWarningState } from './validation';
+import { WarningState, createEmptyWarningState, pruneWarningState } from './validation';
 
 // ============================================================================
 // Application State
@@ -60,7 +55,15 @@ import { WarningState, createEmptyWarningState } from './validation';
 interface AppState {
   network: Network;
   selectedNodeId: string | null;
-  formMode: 'none' | 'create-behaviour' | 'create-outcome' | 'create-value' | 'create-link' | 'edit-node' | 'edit-link' | 'why-ladder';
+  formMode:
+    | 'none'
+    | 'create-behaviour'
+    | 'create-outcome'
+    | 'create-value'
+    | 'create-link'
+    | 'edit-node'
+    | 'edit-link'
+    | 'why-ladder';
   editingNode: Node | null;
   editingLink: Link | null;
   linkType: LinkType | null;
@@ -157,6 +160,13 @@ function showAppMessage(type: MessageType, message: string): void {
   }, MESSAGE_TIMEOUT_MS);
 }
 
+/**
+ * Report a failed data-layer operation to the user.
+ */
+function showOperationError(error: string | undefined, fallback: string): void {
+  showAppMessage('error', error !== undefined && error !== '' ? error : fallback);
+}
+
 function loadWelcomeState(): void {
   try {
     hasDismissedWelcome = localStorage.getItem(WELCOME_DISMISSED_KEY) === 'true';
@@ -214,6 +224,40 @@ function handleWelcomeImport(): void {
   triggerImportDialog();
 }
 
+function handleLoadExample(): void {
+  if (
+    !isNetworkEmpty(state.network) &&
+    !confirm(
+      'Load the example network?\n\nThis will replace your current network. Export it first if you want to keep it.'
+    )
+  ) {
+    return;
+  }
+  setWelcomeDismissed();
+  emptyState?.hide();
+  updateNetwork(createExampleNetwork());
+  hideForm();
+  selectNode(null);
+  showAppMessage(
+    'info',
+    'Loaded the "Healthy Living" example. Explore it, then use New or Import to start your own network.'
+  );
+}
+
+function handleNewNetwork(): void {
+  if (isNetworkEmpty(state.network)) return;
+  if (
+    !confirm(
+      'Start a new, empty network?\n\nThis will remove your current network. Export it first if you want to keep it.'
+    )
+  ) {
+    return;
+  }
+  updateNetwork(createEmptyNetwork());
+  hideForm();
+  selectNode(null);
+}
+
 function handleEmptyStateAddBehaviour(): void {
   setWelcomeDismissed();
   emptyState?.hide();
@@ -238,8 +282,14 @@ function handleEmptyStateImport(): void {
 
 function updateNetwork(newNetwork: Network): void {
   state.network = newNetwork;
+  pruneStaleWarnings(newNetwork);
   const saveResult = saveNetwork(newNetwork);
-  if (!saveResult.success && saveResult.error !== undefined && saveResult.error !== null && saveResult.error !== '') {
+  if (
+    !saveResult.success &&
+    saveResult.error !== undefined &&
+    saveResult.error !== null &&
+    saveResult.error !== ''
+  ) {
     showAppMessage('error', saveResult.error);
   }
   graph?.setNetwork(newNetwork);
@@ -250,12 +300,27 @@ function updateNetwork(newNetwork: Network): void {
   if (!hasDismissedWelcome && !isNetworkEmpty(newNetwork)) {
     setWelcomeDismissed();
   }
-  // Clear ladder instance when network changes externally (if active)
-  if (whyLadderInstance) {
-    whyLadderInstance = null;
+  // Keep an open Why Ladder in sync so nodes created this session are offered
+  if (state.formMode === 'why-ladder') {
+    whyLadderInstance?.setNetwork(newNetwork);
   }
   updateEmptyStateVisibility();
   updateWelcomeVisibility();
+}
+
+/**
+ * Forget snoozed/dismissed warnings for nodes that no longer exist.
+ * Mutates the shared warningState object so the Validation panel keeps its reference.
+ */
+function pruneStaleWarnings(network: Network): void {
+  const pruned = pruneWarningState(warningState, network);
+  const before =
+    Object.keys(warningState.snoozed).length + Object.keys(warningState.dismissed).length;
+  const after = Object.keys(pruned.snoozed).length + Object.keys(pruned.dismissed).length;
+  if (before === after) return;
+  warningState.snoozed = pruned.snoozed;
+  warningState.dismissed = pruned.dismissed;
+  saveWarningState();
 }
 
 function selectNode(nodeId: string | null): void {
@@ -303,7 +368,11 @@ function showCreateValueForm(): void {
   renderSidebar();
 }
 
-function showCreateLinkForm(linkType: LinkType, preselectedSourceId?: string, preselectedTargetId?: string): void {
+function showCreateLinkForm(
+  linkType: LinkType,
+  preselectedSourceId?: string,
+  preselectedTargetId?: string
+): void {
   state.formMode = 'create-link';
   state.linkType = linkType;
   state.preselectedSourceId = preselectedSourceId ?? null;
@@ -358,28 +427,25 @@ function handleLadderCreateBehaviour(label: string): Behaviour {
     updateNetwork(result.data.network);
     return result.data.behaviour;
   }
-  throw new Error('Failed to create behaviour');
+  showOperationError(result.error, 'Failed to create behaviour.');
+  throw new Error(result.error ?? 'Failed to create behaviour');
 }
 
 function handleLadderCreateOutcome(label: string, behaviourId: string): Outcome {
-  // Create the outcome
-  const outcomeResult = addOutcome(state.network, { label });
-  if (!outcomeResult.success || !outcomeResult.data) {
-    throw new Error('Failed to create outcome');
-  }
-
-  // Link it to the behaviour
-  const linkResult = addBehaviourOutcomeLink(outcomeResult.data.network, {
+  // Create the outcome and link it to the behaviour in one update
+  const result = addLinkToNewTarget(state.network, {
+    type: 'behaviour-outcome',
     sourceId: behaviourId,
-    targetId: outcomeResult.data.outcome.id,
+    targetLabel: label,
     valence: 'positive',
     reliability: 'usually',
   });
-  if (linkResult.success && linkResult.data) {
-    updateNetwork(linkResult.data.network);
+  if (!result.success || !result.data) {
+    showOperationError(result.error, 'Failed to create outcome.');
+    throw new Error(result.error ?? 'Failed to create outcome');
   }
-
-  return outcomeResult.data.outcome;
+  updateNetwork(result.data.network);
+  return result.data.target as Outcome;
 }
 
 function handleLadderLinkOutcome(outcomeId: string, behaviourId: string): void {
@@ -391,32 +457,27 @@ function handleLadderLinkOutcome(outcomeId: string, behaviourId: string): void {
   });
   if (result.success && result.data) {
     updateNetwork(result.data.network);
+  } else {
+    showOperationError(result.error, 'Failed to link outcome.');
   }
 }
 
 function handleLadderCreateValue(label: string, outcomeId: string): Value {
-  // Create the value
-  const valueResult = addValue(state.network, {
-    label,
-    importance: 'high',
-    neglect: 'adequately-met',
-  });
-  if (!valueResult.success || !valueResult.data) {
-    throw new Error('Failed to create value');
-  }
-
-  // Link it to the outcome
-  const linkResult = addOutcomeValueLink(valueResult.data.network, {
+  // Create the value and link the outcome to it in one update
+  const result = addLinkToNewTarget(state.network, {
+    type: 'outcome-value',
     sourceId: outcomeId,
-    targetId: valueResult.data.value.id,
+    targetLabel: label,
+    importance: 'high',
     valence: 'positive',
     strength: 'moderate',
   });
-  if (linkResult.success && linkResult.data) {
-    updateNetwork(linkResult.data.network);
+  if (!result.success || !result.data) {
+    showOperationError(result.error, 'Failed to create value.');
+    throw new Error(result.error ?? 'Failed to create value');
   }
-
-  return valueResult.data.value;
+  updateNetwork(result.data.network);
+  return result.data.target as Value;
 }
 
 function handleLadderLinkValue(valueId: string, outcomeId: string): void {
@@ -428,6 +489,8 @@ function handleLadderLinkValue(valueId: string, outcomeId: string): void {
   });
   if (result.success && result.data) {
     updateNetwork(result.data.network);
+  } else {
+    showOperationError(result.error, 'Failed to link value.');
   }
 }
 
@@ -437,7 +500,8 @@ function handleLadderChainOutcome(label: string, _parentOutcomeId: string): Outc
   // In a full implementation, we might create outcome-to-outcome links
   const outcomeResult = addOutcome(state.network, { label });
   if (!outcomeResult.success || !outcomeResult.data) {
-    throw new Error('Failed to create chained outcome');
+    showOperationError(outcomeResult.error, 'Failed to create outcome.');
+    throw new Error(outcomeResult.error ?? 'Failed to create chained outcome');
   }
   updateNetwork(outcomeResult.data.network);
   return outcomeResult.data.outcome;
@@ -456,127 +520,165 @@ function handleLadderExit(_session: LadderSession): void {
 // ============================================================================
 
 function handleSaveBehaviour(data: BehaviourFormData): void {
+  const input = {
+    label: data.label,
+    frequency: data.frequency,
+    cost: data.cost,
+    contextTags: data.contextTags,
+    notes: data.notes || undefined,
+  };
   if (state.formMode === 'edit-node' && state.editingNode?.type === 'behaviour') {
-    const result = updateBehaviour(state.network, state.editingNode.id, {
-      label: data.label,
-      frequency: data.frequency,
-      cost: data.cost,
-      contextTags: data.contextTags,
-      notes: data.notes || undefined,
-    });
-    if (result.success && result.data) {
-      updateNetwork(result.data.network);
-      selectNode(state.editingNode.id);
+    const nodeId = state.editingNode.id;
+    const result = updateBehaviour(state.network, nodeId, input);
+    if (!result.success || !result.data) {
+      showOperationError(result.error, 'Failed to update behaviour.');
+      return;
     }
+    updateNetwork(result.data.network);
+    hideForm();
+    selectNode(nodeId);
   } else {
-    const result = addBehaviour(state.network, {
-      label: data.label,
-      frequency: data.frequency,
-      cost: data.cost,
-      contextTags: data.contextTags,
-      notes: data.notes || undefined,
-    });
-    if (result.success && result.data) {
-      updateNetwork(result.data.network);
-      selectNode(result.data.behaviour.id);
+    const result = addBehaviour(state.network, input);
+    if (!result.success || !result.data) {
+      showOperationError(result.error, 'Failed to create behaviour.');
+      return;
     }
+    updateNetwork(result.data.network);
+    hideForm();
+    selectNode(result.data.behaviour.id);
   }
-  hideForm();
 }
 
 function handleSaveOutcome(data: OutcomeFormData): void {
+  const input = {
+    label: data.label,
+    notes: data.notes || undefined,
+  };
   if (state.formMode === 'edit-node' && state.editingNode?.type === 'outcome') {
-    const result = updateOutcome(state.network, state.editingNode.id, {
-      label: data.label,
-      notes: data.notes || undefined,
-    });
-    if (result.success && result.data) {
-      updateNetwork(result.data.network);
-      selectNode(state.editingNode.id);
+    const nodeId = state.editingNode.id;
+    const result = updateOutcome(state.network, nodeId, input);
+    if (!result.success || !result.data) {
+      showOperationError(result.error, 'Failed to update outcome.');
+      return;
     }
+    updateNetwork(result.data.network);
+    hideForm();
+    selectNode(nodeId);
   } else {
-    const result = addOutcome(state.network, {
-      label: data.label,
-      notes: data.notes || undefined,
-    });
-    if (result.success && result.data) {
-      updateNetwork(result.data.network);
-      selectNode(result.data.outcome.id);
+    const result = addOutcome(state.network, input);
+    if (!result.success || !result.data) {
+      showOperationError(result.error, 'Failed to create outcome.');
+      return;
     }
+    updateNetwork(result.data.network);
+    hideForm();
+    selectNode(result.data.outcome.id);
   }
-  hideForm();
 }
 
 function handleSaveValue(data: ValueFormData): void {
+  const input = {
+    label: data.label,
+    importance: data.importance,
+    neglect: data.neglect,
+    notes: data.notes || undefined,
+  };
   if (state.formMode === 'edit-node' && state.editingNode?.type === 'value') {
-    const result = updateValue(state.network, state.editingNode.id, {
-      label: data.label,
-      importance: data.importance,
-      neglect: data.neglect,
-      notes: data.notes || undefined,
-    });
-    if (result.success && result.data) {
-      updateNetwork(result.data.network);
-      selectNode(state.editingNode.id);
+    const nodeId = state.editingNode.id;
+    const result = updateValue(state.network, nodeId, input);
+    if (!result.success || !result.data) {
+      showOperationError(result.error, 'Failed to update value.');
+      return;
     }
+    updateNetwork(result.data.network);
+    hideForm();
+    selectNode(nodeId);
   } else {
-    const result = addValue(state.network, {
-      label: data.label,
-      importance: data.importance,
-      neglect: data.neglect,
-      notes: data.notes || undefined,
-    });
-    if (result.success && result.data) {
-      updateNetwork(result.data.network);
-      selectNode(result.data.value.id);
+    const result = addValue(state.network, input);
+    if (!result.success || !result.data) {
+      showOperationError(result.error, 'Failed to create value.');
+      return;
     }
+    updateNetwork(result.data.network);
+    hideForm();
+    selectNode(result.data.value.id);
   }
-  hideForm();
 }
 
 function handleSaveLink(data: LinkFormData): void {
+  let result: { success: boolean; data?: { network: Network }; error?: string };
   if (state.formMode === 'edit-link' && state.editingLink) {
-    if (data.type === 'behaviour-outcome') {
-      const result = updateBehaviourOutcomeLink(state.network, state.editingLink.id, {
-        valence: data.valence,
-        reliability: data.reliability,
-      });
-      if (result.success && result.data) {
-        updateNetwork(result.data.network);
-      }
-    } else {
-      const result = updateOutcomeValueLink(state.network, state.editingLink.id, {
-        valence: data.valence,
-        strength: data.strength,
-      });
-      if (result.success && result.data) {
-        updateNetwork(result.data.network);
-      }
-    }
+    result =
+      data.type === 'behaviour-outcome'
+        ? updateBehaviourOutcomeLink(state.network, state.editingLink.id, {
+            valence: data.valence,
+            reliability: data.reliability,
+          })
+        : updateOutcomeValueLink(state.network, state.editingLink.id, {
+            valence: data.valence,
+            strength: data.strength,
+          });
   } else {
-    if (data.type === 'behaviour-outcome') {
-      const result = addBehaviourOutcomeLink(state.network, {
-        sourceId: data.sourceId,
-        targetId: data.targetId,
-        valence: data.valence,
-        reliability: data.reliability,
-      });
-      if (result.success && result.data) {
-        updateNetwork(result.data.network);
-      }
-    } else {
-      const result = addOutcomeValueLink(state.network, {
-        sourceId: data.sourceId,
-        targetId: data.targetId,
-        valence: data.valence,
-        strength: data.strength,
-      });
-      if (result.success && result.data) {
-        updateNetwork(result.data.network);
-      }
-    }
+    result =
+      data.type === 'behaviour-outcome'
+        ? addBehaviourOutcomeLink(state.network, {
+            sourceId: data.sourceId,
+            targetId: data.targetId,
+            valence: data.valence,
+            reliability: data.reliability,
+          })
+        : addOutcomeValueLink(state.network, {
+            sourceId: data.sourceId,
+            targetId: data.targetId,
+            valence: data.valence,
+            strength: data.strength,
+          });
   }
+  if (!result.success || !result.data) {
+    showOperationError(result.error, 'Failed to save link.');
+    return;
+  }
+  updateNetwork(result.data.network);
   hideForm();
+}
+
+/**
+ * Create-on-link: create the new target node and the link in a single update.
+ */
+function handleSaveLinkWithNewNode({ linkData, pendingTarget }: LinkFormDataWithPending): void {
+  if (pendingTarget === undefined) {
+    handleSaveLink(linkData);
+    return;
+  }
+  const result = addLinkToNewTarget(
+    state.network,
+    linkData.type === 'behaviour-outcome'
+      ? {
+          type: 'behaviour-outcome',
+          sourceId: linkData.sourceId,
+          targetLabel: pendingTarget.label,
+          valence: linkData.valence,
+          reliability: linkData.reliability,
+        }
+      : {
+          type: 'outcome-value',
+          sourceId: linkData.sourceId,
+          targetLabel: pendingTarget.label,
+          valence: linkData.valence,
+          strength: linkData.strength,
+        }
+  );
+  if (!result.success || !result.data) {
+    showOperationError(result.error, `Failed to create ${pendingTarget.type} and link.`);
+    return;
+  }
+  updateNetwork(result.data.network);
+  hideForm();
+  selectNode(result.data.target.id);
+  showAppMessage(
+    'success',
+    `Created ${pendingTarget.type} "${result.data.target.label}" and linked it.`
+  );
 }
 
 function handleDeleteNode(node: Node): void {
@@ -592,18 +694,26 @@ function handleDeleteNode(node: Node): void {
       result = deleteValue(state.network, node.id);
       break;
   }
-  if (result?.success && result.data) {
-    updateNetwork(result.data.network);
-    selectNode(null);
+  if (!result.success || !result.data) {
+    showOperationError(result.error, `Failed to delete ${node.type}.`);
+    return;
   }
+  updateNetwork(result.data.network);
+  selectNode(null);
   hideForm();
 }
 
-function handleDeleteLink(linkId: string): void {
+/**
+ * Delete a link. Returns true on success so callers can decide whether to close a form.
+ */
+function handleDeleteLink(linkId: string): boolean {
   const result = deleteLink(state.network, linkId);
-  if (result.success && result.data) {
-    updateNetwork(result.data.network);
+  if (!result.success || !result.data) {
+    showOperationError(result.error, 'Failed to delete link.');
+    return false;
   }
+  updateNetwork(result.data.network);
+  return true;
 }
 
 /**
@@ -902,6 +1012,7 @@ function renderSidebar(): void {
           preselectedTargetId: state.preselectedTargetId ?? undefined,
           callbacks: {
             onSave: handleSaveLink,
+            onSaveWithNewNode: handleSaveLinkWithNewNode,
             onCancel: hideForm,
           },
         });
@@ -977,8 +1088,9 @@ function renderSidebar(): void {
             onSave: handleSaveLink,
             onCancel: hideForm,
             onDelete: (): void => {
-              handleDeleteLink(state.editingLink!.id);
-              hideForm();
+              if (handleDeleteLink(state.editingLink!.id)) {
+                hideForm();
+              }
             },
           },
         });
@@ -1031,11 +1143,17 @@ function renderSidebar(): void {
       `;
 
       // Bind add buttons
-      document.getElementById('btn-add-behaviour')?.addEventListener('click', showCreateBehaviourForm);
+      document
+        .getElementById('btn-add-behaviour')
+        ?.addEventListener('click', showCreateBehaviourForm);
       document.getElementById('btn-add-outcome')?.addEventListener('click', showCreateOutcomeForm);
       document.getElementById('btn-add-value')?.addEventListener('click', showCreateValueForm);
-      document.getElementById('btn-add-bo-link')?.addEventListener('click', () => showCreateLinkForm('behaviour-outcome'));
-      document.getElementById('btn-add-ov-link')?.addEventListener('click', () => showCreateLinkForm('outcome-value'));
+      document
+        .getElementById('btn-add-bo-link')
+        ?.addEventListener('click', () => showCreateLinkForm('behaviour-outcome'));
+      document
+        .getElementById('btn-add-ov-link')
+        ?.addEventListener('click', () => showCreateLinkForm('outcome-value'));
       document.getElementById('btn-why-ladder')?.addEventListener('click', () => showWhyLadder());
   }
 }
@@ -1086,6 +1204,7 @@ function init(): void {
           <button id="btn-export-json" class="btn btn-export" aria-label="Export network as JSON">Export JSON</button>
           <button id="btn-export-report" class="btn btn-export" aria-label="Export summary report">Export Report</button>
           <button id="btn-import" class="btn btn-import" aria-label="Import network data">Import</button>
+          <button id="btn-new-network" class="btn btn-import" aria-label="Start a new empty network">New</button>
           <input type="file" id="import-file-input" accept=".json" style="display: none;" aria-hidden="true" />
           <span class="toolbar-separator"></span>
           <button id="btn-theme-toggle" class="btn btn-theme-toggle" aria-label="Toggle theme">🌙</button>
@@ -1127,6 +1246,7 @@ function init(): void {
     welcomeScreen = new WelcomeScreen(overlayRoot, {
       onGetStarted: handleWelcomeStart,
       onImportData: handleWelcomeImport,
+      onLoadExample: handleLoadExample,
     });
   }
 
@@ -1134,6 +1254,7 @@ function init(): void {
     onAddBehaviour: handleEmptyStateAddBehaviour,
     onStartWhyLadder: handleEmptyStateWhyLadder,
     onImportData: handleEmptyStateImport,
+    onLoadExample: handleLoadExample,
   });
 
   const rect = graphContainer.getBoundingClientRect();
@@ -1144,7 +1265,12 @@ function init(): void {
 
   // Load network data
   const result = loadNetwork();
-  if (!result.success && result.error !== undefined && result.error !== null && result.error !== '') {
+  if (
+    !result.success &&
+    result.error !== undefined &&
+    result.error !== null &&
+    result.error !== ''
+  ) {
     showAppMessage('error', result.error);
   }
   state.network = result.success && result.data ? result.data : createEmptyNetwork();
@@ -1187,7 +1313,9 @@ function init(): void {
           const link = findLink(linkId);
           if (link) showEditLinkForm(link);
         },
-        onDeleteLink: (linkId): void => handleDeleteLink(linkId),
+        onDeleteLink: (linkId): void => {
+          handleDeleteLink(linkId);
+        },
         onClose: (): void => selectNode(null),
       },
     });
@@ -1212,7 +1340,7 @@ function init(): void {
         },
         onNavigateToNode: (nodeId): void => {
           selectNode(nodeId);
-          // TODO: Add focusOnNode to NetworkGraph for smooth pan/zoom
+          graph?.focusOnNode(nodeId);
         },
       },
     });
@@ -1262,6 +1390,7 @@ function init(): void {
     triggerImportDialog();
   });
   document.getElementById('import-file-input')?.addEventListener('change', handleImportFile);
+  document.getElementById('btn-new-network')?.addEventListener('click', handleNewNetwork);
 
   // Graph interaction handlers
   graph.setOnNodeClick((graphNode): void => {

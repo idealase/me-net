@@ -6,6 +6,7 @@
 export interface WelcomeScreenCallbacks {
   onGetStarted: () => void;
   onImportData: () => void;
+  onLoadExample: () => void;
 }
 
 export class WelcomeScreen {
@@ -21,7 +22,8 @@ export class WelcomeScreen {
   show(): void {
     if (this.element !== null) {
       this.element.classList.remove('hidden');
-      const existingStartButton = this.element.querySelector<HTMLButtonElement>('#btn-welcome-start');
+      const existingStartButton =
+        this.element.querySelector<HTMLButtonElement>('#btn-welcome-start');
       existingStartButton?.focus();
       return;
     }
@@ -52,6 +54,9 @@ export class WelcomeScreen {
           <button id="btn-welcome-import" class="btn btn-secondary" aria-label="Import existing network data">
             Import Existing Data
           </button>
+          <button id="btn-welcome-example" class="btn btn-secondary" aria-label="Load an example network to explore">
+            Explore an Example
+          </button>
         </div>
 
         <p class="welcome-hint">Tip: Use the Why Ladder mode to quickly build your network</p>
@@ -77,6 +82,12 @@ export class WelcomeScreen {
         this.callbacks.onImportData();
       });
     }
+
+    const exampleBtn = this.element.querySelector<HTMLButtonElement>('#btn-welcome-example');
+    exampleBtn?.addEventListener('click', () => {
+      this.hide();
+      this.callbacks.onLoadExample();
+    });
 
     // Focus the primary action
     startBtn?.focus();

@@ -2,7 +2,14 @@
  * Tests for Export & Import Module
  */
 
-import type { Network, Behaviour, Outcome, Value, BehaviourOutcomeLink, OutcomeValueLink } from '@/types';
+import type {
+  Network,
+  Behaviour,
+  Outcome,
+  Value,
+  BehaviourOutcomeLink,
+  OutcomeValueLink,
+} from '@/types';
 import { generateId, now } from '@/utils/id';
 
 import {
@@ -254,7 +261,15 @@ describe('parseNetworkJson', () => {
       behaviours: [{ id: 'b-1', type: 'behaviour', label: 'Test' }],
       outcomes: [{ id: 'o-1', type: 'outcome', label: 'Outcome' }],
       values: [],
-      links: [{ id: 'l-1', type: 'behaviour-outcome', sourceId: 'b-1', targetId: 'o-1', valence: 'neutral' }],
+      links: [
+        {
+          id: 'l-1',
+          type: 'behaviour-outcome',
+          sourceId: 'b-1',
+          targetId: 'o-1',
+          valence: 'neutral',
+        },
+      ],
     });
 
     const result = parseNetworkJson(json);
@@ -269,7 +284,15 @@ describe('parseNetworkJson', () => {
       behaviours: [{ id: 'b-1', type: 'behaviour', label: 'Test' }],
       outcomes: [],
       values: [],
-      links: [{ id: 'l-1', type: 'behaviour-outcome', sourceId: 'b-1', targetId: 'o-missing', valence: 'positive' }],
+      links: [
+        {
+          id: 'l-1',
+          type: 'behaviour-outcome',
+          sourceId: 'b-1',
+          targetId: 'o-missing',
+          valence: 'positive',
+        },
+      ],
     });
 
     const result = parseNetworkJson(json);

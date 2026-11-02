@@ -132,7 +132,10 @@ export function updateValue(
   const existing = network.values[existingIndex]!;
 
   // Validate label uniqueness if changing label
-  if (input.label !== undefined && input.label.trim().toLowerCase() !== existing.label.toLowerCase()) {
+  if (
+    input.label !== undefined &&
+    input.label.trim().toLowerCase() !== existing.label.toLowerCase()
+  ) {
     const labelValidation = validateLabel(input.label, network);
     if (!labelValidation.valid) {
       return { success: false, error: labelValidation.error };
@@ -170,10 +173,7 @@ export function updateValue(
  * Delete a value and all its incident links.
  * Returns the updated network.
  */
-export function deleteValue(
-  network: Network,
-  id: string
-): CrudResult<{ network: Network }> {
+export function deleteValue(network: Network, id: string): CrudResult<{ network: Network }> {
   const existingIndex = network.values.findIndex((v) => v.id === id);
   if (existingIndex === -1) {
     return { success: false, error: `Value with id "${id}" not found` };
@@ -221,9 +221,7 @@ function validateLabel(label: string, network: Network): ValidationResult {
   }
 
   // Check uniqueness (case-insensitive)
-  const exists = network.values.some(
-    (v) => v.label.toLowerCase() === trimmed.toLowerCase()
-  );
+  const exists = network.values.some((v) => v.label.toLowerCase() === trimmed.toLowerCase());
   if (exists) {
     return { valid: false, error: `A value with label "${trimmed}" already exists` };
   }

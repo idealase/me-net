@@ -52,9 +52,7 @@ export function createNetwork(partial: Partial<Network> = {}): Network {
  */
 export function isNetworkEmpty(network: Network): boolean {
   return (
-    network.behaviours.length === 0 &&
-    network.outcomes.length === 0 &&
-    network.values.length === 0
+    network.behaviours.length === 0 && network.outcomes.length === 0 && network.values.length === 0
   );
 }
 

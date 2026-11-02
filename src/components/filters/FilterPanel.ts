@@ -6,12 +6,9 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
-import {
-  createDefaultFilterState,
-  type FilterState,
-  type HighlightMode,
-} from './types';
+import { createDefaultFilterState, type FilterState, type HighlightMode } from './types';
 
 // ============================================================================
 // Types
@@ -111,7 +108,7 @@ export class FilterPanel {
               id="filter-search"
               class="filter-search-input"
               placeholder="Search nodes..."
-              value="${this.escapeHtml(searchQuery)}"
+              value="${escapeHtml(searchQuery)}"
               aria-label="Search nodes by label"
             />
             <button
@@ -294,7 +291,9 @@ export class FilterPanel {
     });
 
     // Highlight mode radios
-    const radios = this.container.querySelectorAll<HTMLInputElement>('input[name="highlight-mode"]');
+    const radios = this.container.querySelectorAll<HTMLInputElement>(
+      'input[name="highlight-mode"]'
+    );
     radios.forEach((radio) => {
       radio.addEventListener('change', (e) => {
         this.filterState.highlightMode = (e.target as HTMLInputElement).value as HighlightMode;
@@ -320,11 +319,5 @@ export class FilterPanel {
 
   private emitChange(): void {
     this.callbacks.onFilterChange({ ...this.filterState });
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
   }
 }

@@ -40,8 +40,10 @@ export class NetworkGraph {
   private forceSimulation: d3.Simulation<AnyGraphNode, GraphEdge> | null = null;
 
   private zoom: d3.ZoomBehavior<SVGSVGElement, unknown>;
-  private edgeSelection: d3.Selection<SVGPathElement, GraphEdge, SVGGElement, unknown> | null = null;
-  private nodeSelection: d3.Selection<SVGGElement, AnyGraphNode, SVGGElement, unknown> | null = null;
+  private edgeSelection: d3.Selection<SVGPathElement, GraphEdge, SVGGElement, unknown> | null =
+    null;
+  private nodeSelection: d3.Selection<SVGGElement, AnyGraphNode, SVGGElement, unknown> | null =
+    null;
   private keydownHandler: ((event: KeyboardEvent) => void) | null = null;
 
   // Event callbacks
@@ -96,7 +98,12 @@ export class NetworkGraph {
       if (event.key !== 'Escape') return;
       const target = event.target as HTMLElement | null;
       const tagName = target?.tagName?.toLowerCase();
-      if (tagName !== undefined && tagName !== null && tagName !== '' && (tagName === 'input' || tagName === 'textarea' || tagName === 'select')) {
+      if (
+        tagName !== undefined &&
+        tagName !== null &&
+        tagName !== '' &&
+        (tagName === 'input' || tagName === 'textarea' || tagName === 'select')
+      ) {
         return;
       }
       this.clearSelection();
@@ -208,6 +215,26 @@ export class NetworkGraph {
       .translate(this.options.width / 2, this.options.height / 2)
       .scale(scale)
       .translate(-centerX, -centerY);
+
+    this.svg
+      .transition()
+      .duration(this.options.transitionDuration)
+      .call((selection) => this.zoom.transform(selection, transform));
+  }
+
+  /**
+   * Pan the view so the given node is centred, keeping the current zoom level.
+   */
+  public focusOnNode(nodeId: string): void {
+    const node = this.graphData.nodes.find((n) => n.id === nodeId);
+    if (node?.x === undefined || node.y === undefined) return;
+
+    const svgNode = this.svg.node();
+    const scale = svgNode !== null ? d3.zoomTransform(svgNode).k : 1;
+    const transform = d3.zoomIdentity
+      .translate(this.options.width / 2, this.options.height / 2)
+      .scale(scale)
+      .translate(-node.x, -node.y);
 
     this.svg
       .transition()
@@ -488,14 +515,19 @@ export class NetworkGraph {
     const modeActive = modeHighlightedIds.size > 0;
     const hoverActive = !modeActive && !searchActive && hoverHighlightedIds.size > 0;
 
-    const activeHighlightedIds = modeActive ? modeHighlightedIds : hoverActive ? hoverHighlightedIds : new Set<string>();
+    const activeHighlightedIds = modeActive
+      ? modeHighlightedIds
+      : hoverActive
+        ? hoverHighlightedIds
+        : new Set<string>();
 
     // Update node styling
     this.nodeSelection?.each(function (d) {
       const group = d3.select(this);
       const isSelected = d.id === selectedId;
       const typeEnabled = nodeTypeVisibility[d.type];
-      const matchesSearch = !searchActive || d.label.toLowerCase().includes(searchQuery.toLowerCase().trim());
+      const matchesSearch =
+        !searchActive || d.label.toLowerCase().includes(searchQuery.toLowerCase().trim());
 
       const isHighlighted = activeHighlightedIds.has(d.id) || (searchActive && matchesSearch);
 
@@ -558,8 +590,10 @@ export class NetworkGraph {
       const dimByModeEdge = modeActive && !isConnectedToActiveHighlight && !isConnectedToSelected;
 
       const q = searchQuery.toLowerCase().trim();
-      const sourceMatchesSearch = !searchActive || (sourceNode?.label.toLowerCase().includes(q) ?? false);
-      const targetMatchesSearch = !searchActive || (targetNode?.label.toLowerCase().includes(q) ?? false);
+      const sourceMatchesSearch =
+        !searchActive || (sourceNode?.label.toLowerCase().includes(q) ?? false);
+      const targetMatchesSearch =
+        !searchActive || (targetNode?.label.toLowerCase().includes(q) ?? false);
       const dimBySearchEdge = searchActive && !sourceMatchesSearch && !targetMatchesSearch;
 
       const dimByHoverEdge = hoverActive && !isConnectedToActiveHighlight && !isConnectedToSelected;

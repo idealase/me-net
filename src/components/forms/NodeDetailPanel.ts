@@ -6,6 +6,7 @@
  */
 
 import type { Behaviour, Network, Node, Outcome, Value } from '@/types';
+import { escapeHtml } from '@/utils/html';
 
 import {
   ConnectedNode,
@@ -116,7 +117,7 @@ export class NodeDetailPanel {
         <div class="panel-header">
           <button class="panel-close" id="btn-close" aria-label="Close panel">×</button>
           <span class="node-type-badge ${typeClass}">${typeLabel}</span>
-          <h2 class="panel-title">${this.escapeHtml(node.label)}</h2>
+          <h2 class="panel-title">${escapeHtml(node.label)}</h2>
         </div>
 
         <div class="panel-section">
@@ -152,17 +153,18 @@ export class NodeDetailPanel {
   }
 
   private renderBehaviourAttributes(behaviour: Behaviour): string {
-    const freqLabel = frequencyOptions.find((o) => o.value === behaviour.frequency)?.label ?? behaviour.frequency;
+    const freqLabel =
+      frequencyOptions.find((o) => o.value === behaviour.frequency)?.label ?? behaviour.frequency;
     const costLabel = costOptions.find((o) => o.value === behaviour.cost)?.label ?? behaviour.cost;
 
     return `
       <dl class="attribute-list">
         <dt>Frequency</dt>
-        <dd>${freqLabel}</dd>
+        <dd>${escapeHtml(freqLabel)}</dd>
         <dt>Cost</dt>
-        <dd>${costLabel}</dd>
-        ${behaviour.contextTags.length > 0 ? `<dt>Tags</dt><dd>${behaviour.contextTags.map((t) => `<span class="tag">${this.escapeHtml(t)}</span>`).join(' ')}</dd>` : ''}
-        ${behaviour.notes !== undefined && behaviour.notes !== '' ? `<dt>Notes</dt><dd class="notes">${this.escapeHtml(behaviour.notes)}</dd>` : ''}
+        <dd>${escapeHtml(costLabel)}</dd>
+        ${behaviour.contextTags.length > 0 ? `<dt>Tags</dt><dd>${behaviour.contextTags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(' ')}</dd>` : ''}
+        ${behaviour.notes !== undefined && behaviour.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(behaviour.notes)}</dd>` : ''}
       </dl>
     `;
   }
@@ -170,27 +172,32 @@ export class NodeDetailPanel {
   private renderOutcomeAttributes(outcome: Outcome): string {
     return `
       <dl class="attribute-list">
-        ${outcome.notes !== undefined && outcome.notes !== '' ? `<dt>Notes</dt><dd class="notes">${this.escapeHtml(outcome.notes)}</dd>` : '<p class="no-attributes">No additional attributes</p>'}
+        ${outcome.notes !== undefined && outcome.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(outcome.notes)}</dd>` : '<p class="no-attributes">No additional attributes</p>'}
       </dl>
     `;
   }
 
   private renderValueAttributes(value: Value): string {
-    const impLabel = importanceOptions.find((o) => o.value === value.importance)?.label ?? value.importance;
+    const impLabel =
+      importanceOptions.find((o) => o.value === value.importance)?.label ?? value.importance;
     const negLabel = neglectOptions.find((o) => o.value === value.neglect)?.label ?? value.neglect;
 
     return `
       <dl class="attribute-list">
         <dt>Importance</dt>
-        <dd>${impLabel}</dd>
+        <dd>${escapeHtml(impLabel)}</dd>
         <dt>Current Status</dt>
-        <dd>${negLabel}</dd>
-        ${value.notes !== undefined && value.notes !== '' ? `<dt>Notes</dt><dd class="notes">${this.escapeHtml(value.notes)}</dd>` : ''}
+        <dd>${escapeHtml(negLabel)}</dd>
+        ${value.notes !== undefined && value.notes !== '' ? `<dt>Notes</dt><dd class="notes">${escapeHtml(value.notes)}</dd>` : ''}
       </dl>
     `;
   }
 
-  private renderConnections(title: string, connections: ConnectedNode[], direction: 'incoming' | 'outgoing'): string {
+  private renderConnections(
+    title: string,
+    connections: ConnectedNode[],
+    direction: 'incoming' | 'outgoing'
+  ): string {
     return `
       <div class="panel-section">
         <h3>${title}</h3>
@@ -199,24 +206,25 @@ export class NodeDetailPanel {
             .map((conn) => {
               const typeClass = conn.type;
               const valenceClass = conn.valence;
-              const strengthLabel = conn.strength !== undefined
-                ? strengthOptions.find((o) => o.value === conn.strength)?.label
-                : conn.reliability !== undefined
-                  ? reliabilityOptions.find((o) => o.value === conn.reliability)?.label
-                  : '';
+              const strengthLabel =
+                conn.strength !== undefined
+                  ? strengthOptions.find((o) => o.value === conn.strength)?.label
+                  : conn.reliability !== undefined
+                    ? reliabilityOptions.find((o) => o.value === conn.reliability)?.label
+                    : '';
 
               return `
               <li class="connection-item">
                 <div class="connection-main">
                   <span class="connection-direction">${direction === 'incoming' ? '←' : '→'}</span>
                   <span class="node-type-dot ${typeClass}"></span>
-                  <a href="#" class="connection-label" data-node-id="${conn.id}">${this.escapeHtml(conn.label)}</a>
+                  <a href="#" class="connection-label" data-node-id="${escapeHtml(conn.id)}">${escapeHtml(conn.label)}</a>
                 </div>
                 <div class="connection-meta">
                   <span class="valence-badge ${valenceClass}">${conn.valence === 'positive' ? '+' : '−'}</span>
                   ${strengthLabel !== '' ? `<span class="strength-label">${strengthLabel}</span>` : ''}
-                  <button class="btn-icon" data-link-id="${conn.linkId}" data-action="edit-link" title="Edit link">✎</button>
-                  <button class="btn-icon btn-icon-danger" data-link-id="${conn.linkId}" data-action="delete-link" title="Delete link">×</button>
+                  <button class="btn-icon" data-link-id="${escapeHtml(conn.linkId)}" data-action="edit-link" title="Edit link">✎</button>
+                  <button class="btn-icon btn-icon-danger" data-link-id="${escapeHtml(conn.linkId)}" data-action="delete-link" title="Delete link">×</button>
                 </div>
               </li>
             `;
@@ -237,7 +245,9 @@ export class NodeDetailPanel {
 
     // Outcomes can have incoming from Behaviours and outgoing to Values
     if (node.type === 'outcome') {
-      buttons.push(`<button class="btn btn-sm" id="btn-add-incoming">+ Link from Behaviour</button>`);
+      buttons.push(
+        `<button class="btn btn-sm" id="btn-add-incoming">+ Link from Behaviour</button>`
+      );
       buttons.push(`<button class="btn btn-sm" id="btn-add-outgoing">+ Link to Value</button>`);
     }
 
@@ -279,7 +289,11 @@ export class NodeDetailPanel {
 
     deleteBtn?.addEventListener('click', () => {
       if (this.selectedNode) {
-        if (confirm(`Are you sure you want to delete "${this.selectedNode.label}"? This will also remove all connected links.`)) {
+        if (
+          confirm(
+            `Are you sure you want to delete "${this.selectedNode.label}"? This will also remove all connected links.`
+          )
+        ) {
           this.callbacks.onDelete(this.selectedNode);
         }
       }
@@ -322,16 +336,14 @@ export class NodeDetailPanel {
     this.container.querySelectorAll('[data-action="delete-link"]').forEach((el) => {
       el.addEventListener('click', () => {
         const linkId = (el as HTMLElement).dataset.linkId;
-        if (linkId !== undefined && linkId !== '' && confirm('Are you sure you want to delete this link?')) {
+        if (
+          linkId !== undefined &&
+          linkId !== '' &&
+          confirm('Are you sure you want to delete this link?')
+        ) {
           this.callbacks.onDeleteLink(linkId);
         }
       });
     });
-  }
-
-  private escapeHtml(text: string): string {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
   }
 }

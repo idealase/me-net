@@ -4,7 +4,7 @@
  * Types for the validation engine and warning management.
  */
 
-import type { WarningType, ValidationWarning } from '@/types';
+import type { Network, WarningType, ValidationWarning } from '@/types';
 
 // ============================================================================
 // Warning Severity
@@ -108,6 +108,38 @@ export interface PathToValue {
  */
 export function generateWarningId(type: WarningType, nodeId: string): string {
   return `w-${type}-${nodeId}`;
+}
+
+const ALL_WARNING_TYPES: WarningType[] = [
+  'orphan-value',
+  'unexplained-behaviour',
+  'floating-outcome',
+  'outcome-level-conflict',
+  'value-level-conflict',
+];
+
+/**
+ * Drop snoozed/dismissed entries for nodes that no longer exist in the network.
+ * Returns a new WarningState; the input is not modified.
+ */
+export function pruneWarningState(state: WarningState, network: Network): WarningState {
+  const validIds = new Set<string>();
+  const nodes = [...network.behaviours, ...network.outcomes, ...network.values];
+  for (const node of nodes) {
+    for (const type of ALL_WARNING_TYPES) {
+      validIds.add(generateWarningId(type, node.id));
+    }
+  }
+
+  const snoozed: Record<string, string> = {};
+  for (const [id, until] of Object.entries(state.snoozed)) {
+    if (validIds.has(id)) snoozed[id] = until;
+  }
+  const dismissed: Record<string, boolean> = {};
+  for (const [id, flag] of Object.entries(state.dismissed)) {
+    if (validIds.has(id)) dismissed[id] = flag;
+  }
+  return { snoozed, dismissed };
 }
 
 /**

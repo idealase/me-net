@@ -5,6 +5,7 @@
  */
 
 import type { Network } from '@/types';
+import { escapeHtml } from '@/utils/html';
 import {
   Warning,
   WarningState,
@@ -121,7 +122,7 @@ export class ValidationPanel {
 
   private renderSummary(result: ValidationResult): string {
     const counts = result.counts;
-    
+
     if (counts.total === 0) {
       return `
         <div class="validation-summary validation-empty">
@@ -157,7 +158,7 @@ export class ValidationPanel {
       if (warnings.length === 0) continue;
 
       const isExpanded = this.expandedTypes.has(group.type);
-      
+
       html += `
         <div class="warning-group ${group.severity}">
           <div class="group-header" data-type="${group.type}">
@@ -178,7 +179,8 @@ export class ValidationPanel {
     return warnings.filter((w) => {
       const isDismissed = this.warningState.dismissed[w.id] === true;
       const snoozedUntil = this.warningState.snoozed[w.id];
-      const isSnoozed = snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
+      const isSnoozed =
+        snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
 
       if (!this.showDismissed && isDismissed) return false;
       if (!this.showDismissed && isSnoozed) return false;
@@ -202,35 +204,44 @@ export class ValidationPanel {
   private renderWarningItem(warning: Warning): string {
     const isDismissed = this.warningState.dismissed[warning.id] === true;
     const snoozedUntil = this.warningState.snoozed[warning.id];
-    const isSnoozed = snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
+    const isSnoozed =
+      snoozedUntil !== undefined && snoozedUntil !== '' && new Date(snoozedUntil) > new Date();
 
     const statusClass = isDismissed ? 'dismissed' : isSnoozed ? 'snoozed' : 'active';
 
     return `
-      <div class="warning-item ${statusClass}" data-warning-id="${warning.id}">
+      <div class="warning-item ${statusClass}" data-warning-id="${escapeHtml(warning.id)}">
         <div class="warning-content">
-          <div class="warning-message">${warning.message}</div>
-          ${warning.suggestion !== undefined && warning.suggestion !== '' ? `<div class="warning-suggestion">${warning.suggestion}</div>` : ''}
+          <div class="warning-message">${escapeHtml(warning.message)}</div>
+          ${warning.suggestion !== undefined && warning.suggestion !== '' ? `<div class="warning-suggestion">${escapeHtml(warning.suggestion)}</div>` : ''}
           ${isSnoozed && snoozedUntil !== undefined ? `<div class="warning-status">Snoozed until ${new Date(snoozedUntil).toLocaleString()}</div>` : ''}
           ${isDismissed ? '<div class="warning-status">Dismissed</div>' : ''}
         </div>
         <div class="warning-actions">
-          <button class="btn-icon btn-navigate" data-node-id="${warning.nodeId}" title="Go to node">
+          <button class="btn-icon btn-navigate" data-node-id="${escapeHtml(warning.nodeId)}" title="Go to node">
             👁
           </button>
-          ${!isDismissed && !isSnoozed ? `
-            <button class="btn-icon btn-snooze" data-warning-id="${warning.id}" title="Snooze for 24h">
+          ${
+            !isDismissed && !isSnoozed
+              ? `
+            <button class="btn-icon btn-snooze" data-warning-id="${escapeHtml(warning.id)}" title="Snooze for 24h">
               💤
             </button>
-            <button class="btn-icon btn-dismiss" data-warning-id="${warning.id}" title="Dismiss">
+            <button class="btn-icon btn-dismiss" data-warning-id="${escapeHtml(warning.id)}" title="Dismiss">
               ✕
             </button>
-          ` : ''}
-          ${isDismissed ? `
-            <button class="btn-icon btn-undismiss" data-warning-id="${warning.id}" title="Restore">
+          `
+              : ''
+          }
+          ${
+            isDismissed
+              ? `
+            <button class="btn-icon btn-undismiss" data-warning-id="${escapeHtml(warning.id)}" title="Restore">
               ↩
             </button>
-          ` : ''}
+          `
+              : ''
+          }
         </div>
       </div>
     `;
