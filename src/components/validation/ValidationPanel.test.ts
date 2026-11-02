@@ -1,6 +1,7 @@
-import type { Network } from '@/types';
 import { createEmptyNetwork } from '@/data/network';
 import { addValue } from '@/data/values';
+import type { Network } from '@/types';
+
 import { ValidationPanel } from './ValidationPanel';
 
 function networkWithOrphanValue(label: string): Network {

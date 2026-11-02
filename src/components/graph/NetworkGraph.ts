@@ -216,6 +216,26 @@ export class NetworkGraph {
   }
 
   /**
+   * Pan the view so the given node is centred, keeping the current zoom level.
+   */
+  public focusOnNode(nodeId: string): void {
+    const node = this.graphData.nodes.find((n) => n.id === nodeId);
+    if (node?.x === undefined || node.y === undefined) return;
+
+    const svgNode = this.svg.node();
+    const scale = svgNode !== null ? d3.zoomTransform(svgNode).k : 1;
+    const transform = d3.zoomIdentity
+      .translate(this.options.width / 2, this.options.height / 2)
+      .scale(scale)
+      .translate(-node.x, -node.y);
+
+    this.svg
+      .transition()
+      .duration(this.options.transitionDuration)
+      .call((selection) => this.zoom.transform(selection, transform));
+  }
+
+  /**
    * Reset zoom to default.
    */
   public resetZoom(): void {

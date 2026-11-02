@@ -18,6 +18,7 @@ import {
   getSeverity,
   getWarningTypeLabel,
   isWarningActive,
+  pruneWarningState,
   Warning,
   WarningState,
 } from './index';
@@ -228,6 +229,40 @@ describe('generateWarningId', () => {
   it('generates consistent IDs', () => {
     expect(generateWarningId('orphan-value', 'v-1')).toBe('w-orphan-value-v-1');
     expect(generateWarningId('unexplained-behaviour', 'b-1')).toBe('w-unexplained-behaviour-b-1');
+  });
+});
+
+describe('pruneWarningState', () => {
+  it('keeps entries for existing nodes and drops entries for deleted ones', () => {
+    const network = createTestNetwork();
+    const keepId = network.values[0]!.id;
+    const state: WarningState = {
+      snoozed: {
+        [generateWarningId('orphan-value', keepId)]: '2099-01-01T00:00:00.000Z',
+        [generateWarningId('orphan-value', 'v-deleted')]: '2099-01-01T00:00:00.000Z',
+      },
+      dismissed: {
+        [generateWarningId('value-level-conflict', keepId)]: true,
+        [generateWarningId('floating-outcome', 'o-deleted')]: true,
+      },
+    };
+
+    const pruned = pruneWarningState(state, network);
+
+    expect(Object.keys(pruned.snoozed)).toEqual([generateWarningId('orphan-value', keepId)]);
+    expect(Object.keys(pruned.dismissed)).toEqual([
+      generateWarningId('value-level-conflict', keepId),
+    ]);
+    // Input is not mutated
+    expect(Object.keys(state.snoozed)).toHaveLength(2);
+  });
+
+  it('returns an empty state for an empty network', () => {
+    const pruned = pruneWarningState(
+      { snoozed: { 'w-orphan-value-v-1': 'x' }, dismissed: { 'w-orphan-value-v-1': true } },
+      createEmptyNetwork()
+    );
+    expect(pruned).toEqual({ snoozed: {}, dismissed: {} });
   });
 });
 

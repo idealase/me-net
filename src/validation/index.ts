@@ -23,6 +23,7 @@ export {
   isWarningActive,
   createEmptyValidationResult,
   createEmptyWarningState,
+  pruneWarningState,
   DEFAULT_SNOOZE_DURATION_MS,
 } from './types';
 

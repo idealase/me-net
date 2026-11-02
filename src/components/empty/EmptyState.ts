@@ -7,6 +7,7 @@ export interface EmptyStateCallbacks {
   onAddBehaviour: () => void;
   onStartWhyLadder: () => void;
   onImportData: () => void;
+  onLoadExample: () => void;
 }
 
 export class EmptyState {
@@ -59,6 +60,9 @@ export class EmptyState {
           <button id="btn-empty-import" class="btn btn-secondary" aria-label="Import existing data">
             Import Data
           </button>
+          <button id="btn-empty-example" class="btn btn-secondary" aria-label="Load an example network to explore">
+            Load Example
+          </button>
         </div>
 
         <div class="empty-state-tips">
@@ -96,6 +100,11 @@ export class EmptyState {
         this.callbacks.onImportData();
       });
     }
+
+    const exampleBtn = this.element.querySelector<HTMLButtonElement>('#btn-empty-example');
+    exampleBtn?.addEventListener('click', () => {
+      this.callbacks.onLoadExample();
+    });
 
     // Focus the primary action
     addBehaviourBtn?.focus();
